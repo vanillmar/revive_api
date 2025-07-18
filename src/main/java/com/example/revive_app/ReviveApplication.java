@@ -1,6 +1,5 @@
 package com.example.revive_app;
 
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.context.annotation.Bean;
+
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
@@ -27,18 +24,6 @@ public class ReviveApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ReviveApplication.class, args);
-	}
-
-	@Bean
-	@RefreshScope
-	public DataSource dataSource(DBCredentials credentials) {
-		return DataSourceBuilder
-			.create()
-			.url(credentials.getUrl())
-			.username(credentials.getUsername())
-			.password(credentials.getPassword())
-			.driverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
-			.build();
 	}
 
 	@Override

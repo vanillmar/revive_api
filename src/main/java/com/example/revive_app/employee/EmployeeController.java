@@ -38,7 +38,6 @@ public class EmployeeController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
     // Create new employee
     @PostMapping
     public Employee createEmployee(@RequestBody Employee employee) {
