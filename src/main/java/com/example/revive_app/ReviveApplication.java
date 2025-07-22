@@ -1,39 +1,37 @@
 package com.example.revive_app;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import org.springframework.scheduling.annotation.EnableScheduling;
+import com.example.revive_app.config.DbCredentials;
 
 @SpringBootApplication
-@EnableScheduling
-@EnableConfigurationProperties(DBCredentials.class)
+@EnableConfigurationProperties(DbCredentials.class)
 public class ReviveApplication implements CommandLineRunner {
-	private final DBCredentials credentials;
 
-	@Autowired
-	public ReviveApplication(DBCredentials credentials) {
-		this.credentials = credentials;
-	}
+    private static final Logger logger = LoggerFactory.getLogger(ReviveApplication.class);
+    private final DbCredentials dbCredentials;
 
-	public static void main(String[] args) {
-		SpringApplication.run(ReviveApplication.class, args);
-	}
+    public ReviveApplication(DbCredentials dbCredentials) {
+        this.dbCredentials = dbCredentials;
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		Logger logger = LoggerFactory.getLogger(ReviveApplication.class);
-		logger.info("----------------------------------------");
-		logger.info("Configuration properties");
-		logger.info("   db.username is {}", credentials.getUsername());
-		logger.info("   db.password is {}", credentials.getPassword());
-		logger.info("   db.url is {}", credentials.getUrl());
-		logger.info("----------------------------------------");
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ReviveApplication.class, args);
+    }
+
+    @Override
+    public void run(String... args) {
+        logger.info("Application started successfully!");
+        if (dbCredentials != null) {
+            logger.info("Database URL: {}", dbCredentials.getUrl());
+            logger.info("Database Username: {}", dbCredentials.getUsername());
+        } else {
+            logger.warn("Database credentials are not configured!");
+        }
+    }
 }
