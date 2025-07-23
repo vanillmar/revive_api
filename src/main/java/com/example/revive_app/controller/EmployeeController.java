@@ -17,14 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.revive_app.model.Employee;
 import com.example.revive_app.repository.EmployeeRepository;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
     private final EmployeeRepository employeeRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public EmployeeController(EmployeeRepository employeeRepository) {
+    public EmployeeController(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Get all employees
@@ -45,6 +49,8 @@ public class EmployeeController {
     // Create new employee
     @PostMapping
     public Employee createEmployee(@RequestBody Employee employee) {
+        String encodedPassword = passwordEncoder.encode(employee.getPassword());
+        employee.setPassword(encodedPassword); // Encode password
         return employeeRepository.save(employee);
     }
 

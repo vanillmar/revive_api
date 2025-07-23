@@ -44,8 +44,8 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "AppUser_Role",
-        joinColumns = @JoinColumn(name = "role_id"),
-        inverseJoinColumns = @JoinColumn(name = "appuser_id")
+        joinColumns = @JoinColumn(name = "appuser_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
 
@@ -84,9 +84,12 @@ public class User {
         this.email = email;
     }
 
-    // Removed the password getter for security
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public boolean isEnabled() {
@@ -95,5 +98,13 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

@@ -10,15 +10,18 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Get all users
@@ -38,6 +41,8 @@ public class UserController {
     // Create new user
     @PostMapping
     public User createUser(@RequestBody User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword); // Encode password
         return userRepository.save(user);
     }
 
