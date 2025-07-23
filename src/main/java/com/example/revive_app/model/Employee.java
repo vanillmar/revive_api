@@ -1,11 +1,13 @@
 package com.example.revive_app.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Employee")
+@DiscriminatorValue("EMPLOYEE")
 public class Employee extends User {
     @Column(name = "firstname")
     private String firstname;
