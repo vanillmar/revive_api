@@ -16,7 +16,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService; // You'll create this service

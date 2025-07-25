@@ -14,6 +14,7 @@ public class JwtService {
 
     public String generateToken(UserDetails userDetails) {
         return JWT.create()
+                .withIssuer("auth-api")
                 .withSubject(userDetails.getUsername())
                 .withClaim("roles", userDetails.getAuthorities().toString())
                 .withIssuedAt(new Date())

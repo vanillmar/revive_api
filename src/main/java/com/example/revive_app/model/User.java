@@ -1,6 +1,7 @@
 package com.example.revive_app.model;
 
 import java.util.Set;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -19,12 +20,20 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.DiscriminatorType;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "AppUser")
+@Getter
+@Setter 
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
-public class User {
+public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -59,52 +68,37 @@ public class User {
         this.email = email;
     }
 
-    // Getters and Setters
-    public UUID getId() {
-        return id;
+    // UserDetails interface methods:
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        for (Role role : this.getRoles()) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+            for (Permission permission : role.getPermissions()) {
+                authorities.add(new SimpleGrantedAuthority(permission.getName()));
+            }
+        }
+        return authorities;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // or implement logic
     }
 
-    public String getUsername() {
-        return username;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // or implement logic
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // or implement logic
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
+    @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 }
