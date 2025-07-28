@@ -2,6 +2,7 @@ package com.example.revive_app.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,80 +16,56 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.revive_app.model.Employee;
-import com.example.revive_app.repository.EmployeeRepository;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.revive_app.service.EmployeeService;
 
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
-    private final EmployeeRepository employeeRepository;
-    private final PasswordEncoder passwordEncoder;
+
+    private final EmployeeService employeeService;
 
     @Autowired
-    public EmployeeController(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
-        this.employeeRepository = employeeRepository;
-        this.passwordEncoder = passwordEncoder;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
-    // Get all employees
     @GetMapping
     public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+        return employeeService.getAllEmployees();
     }
 
-    // Get employee by id
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
-        Optional<Employee> employee = employeeRepository.findById(id);
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable UUID id) {
+        Optional<Employee> employee = employeeService.getEmployeeById(id);
         return employee.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
-    // Create new employee
     @PostMapping
     public Employee createEmployee(@RequestBody Employee employee) {
-        String encodedPassword = passwordEncoder.encode(employee.getPassword());
-        employee.setPassword(encodedPassword); // Encode password
-        return employeeRepository.save(employee);
+        return employeeService.createEmployee(employee);
     }
 
-    // Create multiple employees
     @PostMapping("/batch")
     public List<Employee> createEmployees(@RequestBody List<Employee> employees) {
-        return employeeRepository.saveAll(employees);
+        return employeeService.createEmployees(employees);
     }
 
-    // Update employee
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee employeeDetails) {
-        return employeeRepository.findById(id)
-                .map(employee -> {
-                    employee.setFirstname(employeeDetails.getFirstname());
-                    employee.setLastname(employeeDetails.getLastname());
-                    employee.setEmail(employeeDetails.getEmail());
-                    Employee updated = employeeRepository.save(employee);
-                    return ResponseEntity.ok(updated);
-                })
+    public ResponseEntity<Employee> updateEmployee(@PathVariable UUID id, @RequestBody Employee employeeDetails) {
+        Optional<Employee> updated = employeeService.updateEmployee(id, employeeDetails);
+        return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Update multiple employees
     @PutMapping("/batch")
     public List<Employee> updateEmployees(@RequestBody List<Employee> employees) {
-        return employeeRepository.saveAll(employees);
+        return employeeService.updateEmployees(employees);
     }
 
-    // Delete employee
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteEmployee(@PathVariable Long id) {
-        return employeeRepository.findById(id)
-                .map(employee -> {
-                    employeeRepository.delete(employee);
-                    return ResponseEntity.noContent().build();
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Object> deleteEmployee(@PathVariable UUID id) {
+        boolean deleted = employeeService.deleteEmployee(id);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
-

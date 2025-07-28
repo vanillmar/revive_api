@@ -69,7 +69,6 @@ public class User implements UserDetails{
     }
 
     // UserDetails interface methods:
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();

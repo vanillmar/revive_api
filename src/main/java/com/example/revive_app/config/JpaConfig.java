@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+
 import javax.sql.DataSource;
+
 import java.util.Properties;
 
 @EnableConfigurationProperties(DbCredentials.class)

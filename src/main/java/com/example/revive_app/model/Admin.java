@@ -19,4 +19,19 @@ public class Admin extends User {
     public void setAdminLevel(String adminLevel) {
         this.adminLevel = adminLevel;
     }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 }

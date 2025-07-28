@@ -5,76 +5,66 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.example.revive_app.model.Address;
-import com.example.revive_app.repository.AddressRepository;
+import com.example.revive_app.data.dto.AddressRequestDTO;
+import com.example.revive_app.data.dto.AddressResponseDTO;
+import com.example.revive_app.service.AddressService;
 
 @RestController
 @RequestMapping("/api/addresses")
 public class AddressController {
-    private final AddressRepository addressRepository;
+    private final AddressService addressService;
 
     @Autowired
-    public AddressController(AddressRepository addressRepository) {
-        this.addressRepository = addressRepository;
+    public AddressController(AddressService addressService) {
+        this.addressService = addressService;
     }
 
-    // Get all addresses
     @GetMapping
-    public List<Address> getAllAddresses() {
-        return addressRepository.findAll();
+    public List<AddressResponseDTO> getAllAddresses() {
+        return addressService.getAllAddresses();
     }
 
-    // Get address by id
     @GetMapping("/{id}")
-    public ResponseEntity<Address> getAddressById(@PathVariable Long id) {
-        Optional<Address> address = addressRepository.findById(id);
+    public ResponseEntity<AddressResponseDTO> getAddressById(@PathVariable Long id) {
+        Optional<AddressResponseDTO> address = addressService.getAddressById(id);
         return address.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Create new address
     @PostMapping
-    public Address createAddress(@RequestBody Address address) {
-        return addressRepository.save(address);
+    public AddressResponseDTO createAddress(@RequestBody AddressRequestDTO address) {
+        return addressService.createAddress(address);
     }
 
-    // Create multiple addresses
     @PostMapping("/batch")
-    public List<Address> createAddresses(@RequestBody List<Address> addresses) {
-        return addressRepository.saveAll(addresses);
+    public List<AddressResponseDTO> createAddresses(@RequestBody List<AddressRequestDTO> addresses) {
+        return addressService.createAddresses(addresses);
     }
 
-    // Update address
     @PutMapping("/{id}")
-    public ResponseEntity<Address> updateAddress(@PathVariable Long id, @RequestBody Address addressDetails) {
-        return addressRepository.findById(id)
-                .map(address -> {
-                    address.setStreet(addressDetails.getStreet());
-                    address.setCity(addressDetails.getCity());
-                    address.setState(addressDetails.getState());
-                    address.setZipCode(addressDetails.getZipCode());
-                    Address updated = addressRepository.save(address);
-                    return ResponseEntity.ok(updated);
-                })
+    public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable Long id, @RequestBody AddressRequestDTO addressDetails) {
+        Optional<AddressResponseDTO> updated = addressService.updateAddress(id, addressDetails);
+        return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Update multiple addresses
     @PutMapping("/batch")
-    public List<Address> updateAddresses(@RequestBody List<Address> addresses) {
-        return addressRepository.saveAll(addresses);
+    public List<AddressResponseDTO> updateAddresses(@RequestBody List<AddressRequestDTO> addresses) {
+        return addressService.updateAddresses(addresses);
     }
 
-    // Delete address
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAddress(@PathVariable Long id) {
-        return addressRepository.findById(id)
-                .map(address -> {
-                    addressRepository.delete(address);
-                    return ResponseEntity.noContent().build();
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        boolean deleted = addressService.deleteAddress(id);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

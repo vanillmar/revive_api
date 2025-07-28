@@ -1,7 +1,7 @@
-package com.example.revive_app.data;
+package com.example.revive_app.data.dto;
 
 public class AuthResponse {
-    private String token;
+    private final String token;
 
     public AuthResponse(String token) {
         this.token = token;
