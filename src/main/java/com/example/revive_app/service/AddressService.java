@@ -16,6 +16,7 @@ import com.example.revive_app.repository.EmployeeRepository;
 @Service
 public class AddressService {
 
+    private static final String EMPLOYEE_NOT_FOUND_WITH_ID = "Employee not found with id: ";
     private final AddressRepository addressRepository;
     private final EmployeeRepository employeeRepository;
 
@@ -37,7 +38,7 @@ public class AddressService {
 
     public AddressResponseDTO createAddress(AddressRequestDTO address) {
         Employee employee = employeeRepository.findById(address.getEmployeeId())
-                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + address.getEmployeeId()));
+                .orElseThrow(() -> new RuntimeException(EMPLOYEE_NOT_FOUND_WITH_ID + address.getEmployeeId()));
         Address newAddress = new Address();
         newAddress.setStreet(address.getStreet());
         newAddress.setCity(address.getCity());
@@ -52,7 +53,7 @@ public class AddressService {
         List<Address> newAddresses = addresses.stream()
                 .map(address -> {
                     Employee employee = employeeRepository.findById(address.getEmployeeId())
-                            .orElseThrow(() -> new RuntimeException("Employee not found with id: " + address.getEmployeeId()));
+                            .orElseThrow(() -> new RuntimeException(EMPLOYEE_NOT_FOUND_WITH_ID + address.getEmployeeId()));
                     Address newAddress = new Address();
                     newAddress.setStreet(address.getStreet());
                     newAddress.setCity(address.getCity());
@@ -74,7 +75,7 @@ public class AddressService {
             existingAddress.setState(addressDetails.getState());
             existingAddress.setZipCode(addressDetails.getZipCode());
             Employee employee = employeeRepository.findById(addressDetails.getEmployeeId())
-                    .orElseThrow(() -> new RuntimeException("Employee not found with id: " + addressDetails.getEmployeeId()));
+                    .orElseThrow(() -> new RuntimeException(EMPLOYEE_NOT_FOUND_WITH_ID + addressDetails.getEmployeeId()));
             existingAddress.setEmployee(employee);
             return toDto(addressRepository.save(existingAddress));
         });
@@ -90,7 +91,7 @@ public class AddressService {
                     existingAddress.setState(address.getState());
                     existingAddress.setZipCode(address.getZipCode());
                     Employee employee = employeeRepository.findById(address.getEmployeeId())
-                            .orElseThrow(() -> new RuntimeException("Employee not found with id: " + address.getEmployeeId()));
+                            .orElseThrow(() -> new RuntimeException(EMPLOYEE_NOT_FOUND_WITH_ID + address.getEmployeeId()));
                     existingAddress.setEmployee(employee);
                     return existingAddress;
                 })

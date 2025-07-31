@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.revive_app.data.dto.EmployeeRequestDTO;
+import com.example.revive_app.data.dto.EmployeeResponseDTO;
 import com.example.revive_app.model.Employee;
 import com.example.revive_app.repository.EmployeeRepository;
 
@@ -23,35 +25,51 @@ public class EmployeeService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public List<EmployeeResponseDTO> getAllEmployees() {
+        return employeeRepository.findAll().stream()
+                .map(this::toDto)
+                .toList();
     }
 
-    public Optional<Employee> getEmployeeById(UUID id) {
-        return employeeRepository.findById(id);
+    public Optional<EmployeeResponseDTO> getEmployeeById(UUID id) {
+        return employeeRepository.findById(id)
+                .map(this::toDto);
     }
 
-    public Employee createEmployee(Employee employee) {
-        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
-        return employeeRepository.save(employee);
+    public EmployeeResponseDTO createEmployee(EmployeeRequestDTO employee) {
+        return toDto(employeeRepository.save(toEntity(employee)));
     }
 
-    public List<Employee> createEmployees(List<Employee> employees) {
-        return employeeRepository.saveAll(employees);
+    public List<EmployeeResponseDTO> createEmployees(List<EmployeeRequestDTO> employees) {
+        return employeeRepository.saveAll(employees.stream()
+                .map(this::toEntity)
+                .toList()).stream()
+                .map(this::toDto)
+                .toList();
     }
 
-    public Optional<Employee> updateEmployee(UUID id, Employee employeeDetails) {
+    public Optional<EmployeeResponseDTO> updateEmployee(UUID id, EmployeeRequestDTO employeeDetails) {
         return employeeRepository.findById(id)
                 .map(employee -> {
+                    employee.setUsername(employeeDetails.getUsername());
+                    employee.setEmail(employeeDetails.getEmail());
+
+                    String password = employeeDetails.getPassword() != null && !employeeDetails.getPassword().isEmpty() ?
+                    passwordEncoder.encode(employeeDetails.getPassword()) : employee.getPassword();
+                    
+                    employee.setPassword(password);   
                     employee.setFirstname(employeeDetails.getFirstname());
                     employee.setLastname(employeeDetails.getLastname());
-                    employee.setEmail(employeeDetails.getEmail());
-                    return employeeRepository.save(employee);
+                    return toDto(employeeRepository.save(employee));
                 });
     }
 
-    public List<Employee> updateEmployees(List<Employee> employees) {
-        return employeeRepository.saveAll(employees);
+    public List<EmployeeResponseDTO> updateEmployees(List<EmployeeRequestDTO> employees) {
+        return employeeRepository.saveAll(employees.stream()
+                .map(this::toEntity)
+                .toList()).stream()
+                .map(this::toDto)
+                .toList();
     }
 
     public boolean deleteEmployee(UUID id) {
@@ -61,5 +79,30 @@ public class EmployeeService {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    private EmployeeResponseDTO toDto(Employee employee) {
+        return EmployeeResponseDTO.builder()
+                .id(employee.getId())
+                .username(employee.getUsername())
+                .email(employee.getEmail())
+                .firstname(employee.getFirstname())
+                .lastname(employee.getLastname())
+                .enabled(employee.isEnabled())
+                .roles(employee.getRoles())
+                .build();
+    }
+
+    private Employee toEntity(EmployeeRequestDTO employeeRequest) {
+        Employee employee = new Employee(
+            employeeRequest.getUsername(),
+            passwordEncoder.encode(employeeRequest.getPassword()),
+            employeeRequest.getEmail(),
+            employeeRequest.getFirstname(),
+            employeeRequest.getLastname()
+        );
+        employee.setUsername(employeeRequest.getUsername());
+        employee.setEnabled(employeeRequest.isEnabled()); // Default to enabled
+        return employee;
     }
 }

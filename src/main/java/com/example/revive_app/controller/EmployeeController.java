@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.revive_app.model.Employee;
+import com.example.revive_app.data.dto.EmployeeRequestDTO;
+import com.example.revive_app.data.dto.EmployeeResponseDTO;
 import com.example.revive_app.service.EmployeeService;
 
 @RestController
@@ -30,36 +31,36 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> getAllEmployees() {
+    public List<EmployeeResponseDTO> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable UUID id) {
-        Optional<Employee> employee = employeeService.getEmployeeById(id);
+    public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable UUID id) {
+        Optional<EmployeeResponseDTO> employee = employeeService.getEmployeeById(id);
         return employee.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee) {
+    public EmployeeResponseDTO createEmployee(@RequestBody EmployeeRequestDTO employee) {
         return employeeService.createEmployee(employee);
     }
 
     @PostMapping("/batch")
-    public List<Employee> createEmployees(@RequestBody List<Employee> employees) {
+    public List<EmployeeResponseDTO> createEmployees(@RequestBody List<EmployeeRequestDTO> employees) {
         return employeeService.createEmployees(employees);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable UUID id, @RequestBody Employee employeeDetails) {
-        Optional<Employee> updated = employeeService.updateEmployee(id, employeeDetails);
+    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable UUID id, @RequestBody EmployeeRequestDTO employeeDetails) {
+        Optional<EmployeeResponseDTO> updated = employeeService.updateEmployee(id, employeeDetails);
         return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/batch")
-    public List<Employee> updateEmployees(@RequestBody List<Employee> employees) {
+    public List<EmployeeResponseDTO> updateEmployees(@RequestBody List<EmployeeRequestDTO> employees) {
         return employeeService.updateEmployees(employees);
     }
 

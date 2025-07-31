@@ -13,5 +13,5 @@ public class AddressResponseDTO {
     private final String city;
     private final String state;
     private final String zipCode;
-    private UUID employeeId; // Assuming this is used to link to an Employee entity
+    private final UUID employeeId; // Assuming this is used to link to an Employee entity
 }

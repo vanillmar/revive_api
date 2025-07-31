@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.revive_app.data.dto.UserRequestDTO;
+import com.example.revive_app.data.dto.UserResponseDTO;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
 
@@ -24,39 +26,53 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Optional<User> getMe(Object principal) {
-        return Optional.of((User) principal);
+    public Optional<UserResponseDTO> getMe(Object principal) {
+        return Optional.of((UserResponseDTO) principal);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponseDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::toDto)
+                .toList();
     }
 
-    public Optional<User> getUserById(UUID id) {
-        return userRepository.findById(id);
+    public Optional<UserResponseDTO> getUserById(UUID id) {
+        return userRepository.findById(id)
+                .map(this::toDto);
     }
 
-    public User createUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public UserResponseDTO createUser(UserRequestDTO user) {
+        return toDto(userRepository.save(toEntity(user)));
     }
 
-    public List<User> createUsers(List<User> users) {
-        users.forEach(u -> u.setPassword(passwordEncoder.encode(u.getPassword())));
-        return userRepository.saveAll(users);
+    public List<UserResponseDTO> createUsers(List<UserRequestDTO> users) {
+        return userRepository.saveAll(users.stream()
+                .map(this::toEntity)
+                .toList()).stream()
+                .map(this::toDto)
+                .toList();
     }
 
-    public Optional<User> updateUser(UUID id, User userDetails) {
+    public Optional<UserResponseDTO> updateUser(UUID id, UserRequestDTO userDetails) {
         return userRepository.findById(id)
                 .map(user -> {
                     user.setUsername(userDetails.getUsername());
                     user.setEmail(userDetails.getEmail());
-                    return userRepository.save(user);
+                    user.setEnabled(userDetails.isEnabled());
+                    user.setRoles(userDetails.getRoles());
+                    if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+                        user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+                    }
+                    return toDto(userRepository.save(user));
                 });
     }
 
-    public List<User> updateUsers(List<User> users) {
-        return userRepository.saveAll(users);
+    public List<UserResponseDTO> updateUsers(List<UserRequestDTO> users) {
+        return userRepository.saveAll(users.stream()
+                .map(this::toEntity)
+                .toList()).stream()
+                .map(this::toDto)
+                .toList();
     }
 
     public boolean deleteUser(UUID id) {
@@ -66,5 +82,25 @@ public class UserService {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    private UserResponseDTO toDto(User user) {
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .enabled(user.isEnabled())
+                .roles(user.getRoles())
+                .build();
+    }
+
+    private User toEntity(UserRequestDTO userRequest) {
+        User user = new User(
+            userRequest.getUsername(),
+            passwordEncoder.encode(userRequest.getPassword()),
+            userRequest.getEmail()
+        );
+        user.setRoles(userRequest.getRoles());
+        return user;
     }
 }
