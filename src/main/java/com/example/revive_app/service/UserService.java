@@ -27,7 +27,9 @@ public class UserService {
     }
 
     public Optional<UserResponseDTO> getMe(Object principal) {
-        return Optional.of((UserResponseDTO) principal);
+        User user = (User) principal;
+        UserResponseDTO userResponse = toDto(user);
+        return Optional.of(userResponse);
     }
 
     public List<UserResponseDTO> getAllUsers() {
