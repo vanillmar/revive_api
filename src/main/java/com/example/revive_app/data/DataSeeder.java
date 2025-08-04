@@ -32,6 +32,7 @@ public class DataSeeder implements ApplicationRunner {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -49,7 +50,7 @@ public class DataSeeder implements ApplicationRunner {
         empUser.setPassword(passwordEncoder.encode("test_test"));
         empUser.setFirstname("Vanilson");
         empUser.setLastname("Marcos");
-        empUser.setEmail("v,marcos@gmail.com");
+        empUser.setEmail("v.marcos@gmail.com");
    
         if (permissionRepository.count() == 0 && roleRepository.count() == 0) {
 
