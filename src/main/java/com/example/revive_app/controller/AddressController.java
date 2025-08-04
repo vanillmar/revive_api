@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.revive_app.data.Permissions;
 import com.example.revive_app.data.dto.AddressRequestDTO;
 import com.example.revive_app.data.dto.AddressResponseDTO;
-import com.example.revive_app.model.Permission;
 import com.example.revive_app.service.AddressService;
 
 @RestController
