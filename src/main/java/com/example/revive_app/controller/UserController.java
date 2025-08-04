@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.revive_app.data.Permissions;
 import com.example.revive_app.data.dto.UserRequestDTO;
 import com.example.revive_app.data.dto.UserResponseDTO;
 import com.example.revive_app.service.UserService;
@@ -31,7 +32,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasAuthority('READ_ME')")
+    @PreAuthorize("hasAuthority('"+ Permissions.READ_ME+"')")
     @GetMapping("/me")
     public ResponseEntity<UserResponseDTO> getMe(Authentication authentication) {
         return userService.getMe(authentication.getPrincipal())
@@ -39,13 +40,13 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.status(401).build());
     }
 
-    @PreAuthorize("hasAuthority('READ_USERS')")
+    @PreAuthorize("hasAuthority('" + Permissions.READ_USERS + "')")
     @GetMapping
     public List<UserResponseDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @PreAuthorize("hasAuthority('READ_USER')")
+    @PreAuthorize("hasAuthority('" + Permissions.READ_USER + "')")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable UUID id) {
         return userService.getUserById(id)
@@ -53,19 +54,19 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasAuthority('CREATE_USER')")
+    @PreAuthorize("hasAuthority('"+ Permissions.CREATE_USER +"')")
     @PostMapping
     public UserResponseDTO createUser(@RequestBody UserRequestDTO user) {
         return userService.createUser(user);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_USERS')")
+    @PreAuthorize("hasAuthority('"+ Permissions.CREATE_USERS +"')")
     @PostMapping("/batch")
     public List<UserResponseDTO> createUsers(@RequestBody List<UserRequestDTO> users) {
         return userService.createUsers(users);
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_USER')")
+    @PreAuthorize("hasAuthority('"+ Permissions.UPDATE_USER + "')")
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable UUID id, @RequestBody UserRequestDTO userDetails) {
         return userService.updateUser(id, userDetails)
@@ -73,13 +74,13 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_USER')")
+    @PreAuthorize("hasAuthority('"+ Permissions.UPDATE_USERS + "')")
     @PutMapping("/batch")
     public List<UserResponseDTO> updateUsers(@RequestBody List<UserRequestDTO> users) {
         return userService.updateUsers(users);
     }
 
-    @PreAuthorize("hasAuthority('DELETE_USER')")
+    @PreAuthorize("hasAuthority('"+ Permissions.DELETE_USER + "')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable UUID id) {
         boolean deleted = userService.deleteUser(id);
