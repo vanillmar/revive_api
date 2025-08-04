@@ -13,19 +13,20 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Employee extends User {
-    @Column(name = "firstname")
-    private String firstname;
+  @Column(name = "firstname")
+  private String firstname;
 
-    @Column(name = "lastname")
-    private String lastname;
+  @Column(name = "lastname")
+  private String lastname;
 
-    public Employee() {
-        super();
-    }
-    
-    public Employee(String username, String password, String email, String firstname, String lastname) {
-        super(username, password, email);
-        this.firstname = firstname;
-        this.lastname = lastname;
-    }
+  public Employee() {
+    super();
+  }
+
+  public Employee(
+      String username, String password, String email, String firstname, String lastname) {
+    super(username, password, email);
+    this.firstname = firstname;
+    this.lastname = lastname;
+  }
 }

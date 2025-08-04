@@ -10,28 +10,28 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Admin extends User {
-    private String adminLevel;
+  private String adminLevel;
 
-    public String getAdminLevel() {
-        return adminLevel;
-    }
+  public String getAdminLevel() {
+    return adminLevel;
+  }
 
-    public void setAdminLevel(String adminLevel) {
-        this.adminLevel = adminLevel;
-    }
+  public void setAdminLevel(String adminLevel) {
+    this.adminLevel = adminLevel;
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 }

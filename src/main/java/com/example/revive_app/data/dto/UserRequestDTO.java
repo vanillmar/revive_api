@@ -1,13 +1,11 @@
 package com.example.revive_app.data.dto;
 
+import com.example.revive_app.model.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
-import com.example.revive_app.model.Role;
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,17 +16,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDTO {
-    private UUID id;
+  private UUID id;
 
-    @NotBlank(message = "Username is required")
-    private String username;
+  @NotBlank(message = "Username is required")
+  private String username;
 
-    @Email(message = "Email must be valid")
-    private String email;
+  @Email(message = "Email must be valid")
+  private String email;
 
-    private String password;
+  private String password;
 
-    private boolean enabled;
+  private boolean enabled;
 
-    private Set<Role> roles = new HashSet<>(); 
+  private Set<Role> roles = new HashSet<>();
 }

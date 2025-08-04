@@ -13,16 +13,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String street;
-    private String city;
-    private String state;
-    private String zipCode;
+  private String street;
+  private String city;
+  private String state;
+  private String zipCode;
 
-    @OneToOne
-    @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;
+  @OneToOne
+  @JoinColumn(name = "employee_id", nullable = false)
+  private Employee employee;
 }
