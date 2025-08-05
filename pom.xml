@@ -125,17 +125,9 @@
 				<version>2.42.0</version>
 				<configuration>
 					<java>
-					<googleJavaFormat />
+						<googleJavaFormat />
 					</java>
 				</configuration>
-				<executions>
-					<execution>
-					<goals>
-						<goal>check</goal>
-						<goal>apply</goal>
-					</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
