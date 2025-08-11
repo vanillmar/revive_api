@@ -5,12 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter 
+@Getter
 @Setter
-@AllArgsConstructor 
+@AllArgsConstructor
 @NoArgsConstructor
 public class ApiResponse<T> {
-    private boolean success;
-    private String message;
-    private T data;
+  private boolean success;
+  private String message;
+  private T data;
 }

@@ -47,14 +47,16 @@ public class EmployeeController {
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_EMPLOYEE + "')")
   @PostMapping
-  public ResponseEntity<EmployeeResponseDTO> createEmployee(@RequestBody EmployeeRequestDTO employee) {
+  public ResponseEntity<EmployeeResponseDTO> createEmployee(
+      @RequestBody EmployeeRequestDTO employee) {
     EmployeeResponseDTO createdEmployee = employeeService.createEmployee(employee);
     return ResponseEntity.status(201).body(createdEmployee);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_EMPLOYEES + "')")
   @PostMapping("/batch")
-  public ResponseEntity<List<EmployeeResponseDTO>> createEmployees(@RequestBody List<EmployeeRequestDTO> employees) {
+  public ResponseEntity<List<EmployeeResponseDTO>> createEmployees(
+      @RequestBody List<EmployeeRequestDTO> employees) {
     List<EmployeeResponseDTO> createdEmployees = employeeService.createEmployees(employees);
     if (createdEmployees.isEmpty()) return ResponseEntity.noContent().build();
     return ResponseEntity.status(201).body(createdEmployees);
@@ -72,7 +74,7 @@ public class EmployeeController {
   @PutMapping("/batch")
   public ResponseEntity<List<EmployeeResponseDTO>> updateEmployees(
       @RequestBody List<EmployeeRequestDTO> employees) {
-        List<EmployeeResponseDTO> updatedEmployees = employeeService.updateEmployees(employees);
+    List<EmployeeResponseDTO> updatedEmployees = employeeService.updateEmployees(employees);
     if (updatedEmployees.isEmpty()) return ResponseEntity.noContent().build();
     return ResponseEntity.ok(updatedEmployees);
   }

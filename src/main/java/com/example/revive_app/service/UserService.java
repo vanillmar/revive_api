@@ -26,7 +26,7 @@ public class UserService {
 
   public UserResponseDTO getMe(Object principal) {
     User user = (User) principal;
-    if (user == null) throw new ResourceNotFoundException("User not Authenticated"); 
+    if (user == null) throw new ResourceNotFoundException("User not Authenticated");
     return toDto(user);
   }
 
@@ -38,7 +38,8 @@ public class UserService {
 
   public Optional<UserResponseDTO> getUserById(UUID id) {
     if (id == null) throw new IllegalArgumentException("User ID cannot be null");
-    if (!userRepository.existsById(id)) throw new ResourceNotFoundException("User not found with ID: " + id);
+    if (!userRepository.existsById(id))
+      throw new ResourceNotFoundException("User not found with ID: " + id);
 
     return userRepository.findById(id).map(this::toDto);
   }

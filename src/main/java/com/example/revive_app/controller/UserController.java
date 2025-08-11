@@ -1,8 +1,11 @@
 package com.example.revive_app.controller;
 
+import com.example.revive_app.data.Permissions;
+import com.example.revive_app.data.dto.UserRequestDTO;
+import com.example.revive_app.data.dto.UserResponseDTO;
+import com.example.revive_app.service.UserService;
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,11 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.revive_app.data.Permissions;
-import com.example.revive_app.data.dto.UserRequestDTO;
-import com.example.revive_app.data.dto.UserResponseDTO;
-import com.example.revive_app.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -64,7 +62,8 @@ public class UserController {
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_USERS + "')")
   @PostMapping("/batch")
-  public ResponseEntity<List<UserResponseDTO>> createUsers(@RequestBody List<UserRequestDTO> users) {
+  public ResponseEntity<List<UserResponseDTO>> createUsers(
+      @RequestBody List<UserRequestDTO> users) {
     List<UserResponseDTO> createdUsers = userService.createUsers(users);
     return ResponseEntity.status(201).body(createdUsers);
   }
@@ -81,7 +80,8 @@ public class UserController {
 
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USERS + "')")
   @PutMapping("/batch")
-  public ResponseEntity<List<UserResponseDTO>> updateUsers(@RequestBody List<UserRequestDTO> users) {
+  public ResponseEntity<List<UserResponseDTO>> updateUsers(
+      @RequestBody List<UserRequestDTO> users) {
     List<UserResponseDTO> updateUsers = userService.updateUsers(users);
     return ResponseEntity.ok(updateUsers);
   }

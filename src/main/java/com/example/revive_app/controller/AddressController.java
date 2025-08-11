@@ -51,7 +51,8 @@ public class AddressController {
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_ADDRESSES + "')")
   @PostMapping("/batch")
-  public ResponseEntity<List<AddressResponseDTO>> createAddresses(@RequestBody List<AddressRequestDTO> addresses) {
+  public ResponseEntity<List<AddressResponseDTO>> createAddresses(
+      @RequestBody List<AddressRequestDTO> addresses) {
     List<AddressResponseDTO> createdAddresses = addressService.createAddresses(addresses);
     if (createdAddresses.isEmpty()) return ResponseEntity.noContent().build();
     return ResponseEntity.status(201).body(createdAddresses);
@@ -67,7 +68,8 @@ public class AddressController {
 
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_ADDRESSES + "')")
   @PutMapping("/batch")
-  public ResponseEntity<List<AddressResponseDTO>> updateAddresses(@RequestBody List<AddressRequestDTO> addresses) {
+  public ResponseEntity<List<AddressResponseDTO>> updateAddresses(
+      @RequestBody List<AddressRequestDTO> addresses) {
     List<AddressResponseDTO> updatedAddresses = addressService.updateAddresses(addresses);
     if (updatedAddresses.isEmpty()) return ResponseEntity.noContent().build();
     return ResponseEntity.ok(updatedAddresses);
