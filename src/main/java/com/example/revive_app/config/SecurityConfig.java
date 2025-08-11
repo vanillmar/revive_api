@@ -1,6 +1,5 @@
 package com.example.revive_app.config;
 
-import com.example.revive_app.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-  @Autowired private CustomUserDetailsService userDetailsService;
-  @Autowired private SecurityFilter securityFilter;
+  private final SecurityFilter securityFilter;
+
+  @Autowired
+  public SecurityConfig(SecurityFilter securityFilter) {
+    this.securityFilter = securityFilter;
+  }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

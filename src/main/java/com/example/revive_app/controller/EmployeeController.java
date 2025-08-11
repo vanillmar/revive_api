@@ -32,8 +32,10 @@ public class EmployeeController {
 
   @PreAuthorize("hasAuthority('" + Permissions.READ_EMPLOYEES + "')")
   @GetMapping
-  public List<EmployeeResponseDTO> getAllEmployees() {
-    return employeeService.getAllEmployees();
+  public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees() {
+    List<EmployeeResponseDTO> employees = employeeService.getAllEmployees();
+    if (employees.isEmpty()) return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(employees);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.READ_EMPLOYEE + "')")
@@ -45,15 +47,17 @@ public class EmployeeController {
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_EMPLOYEE + "')")
   @PostMapping
-  public EmployeeResponseDTO createEmployee(@RequestBody EmployeeRequestDTO employee) {
-    return employeeService.createEmployee(employee);
+  public ResponseEntity<EmployeeResponseDTO> createEmployee(@RequestBody EmployeeRequestDTO employee) {
+    EmployeeResponseDTO createdEmployee = employeeService.createEmployee(employee);
+    return ResponseEntity.status(201).body(createdEmployee);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_EMPLOYEES + "')")
   @PostMapping("/batch")
-  public List<EmployeeResponseDTO> createEmployees(
-      @RequestBody List<EmployeeRequestDTO> employees) {
-    return employeeService.createEmployees(employees);
+  public ResponseEntity<List<EmployeeResponseDTO>> createEmployees(@RequestBody List<EmployeeRequestDTO> employees) {
+    List<EmployeeResponseDTO> createdEmployees = employeeService.createEmployees(employees);
+    if (createdEmployees.isEmpty()) return ResponseEntity.noContent().build();
+    return ResponseEntity.status(201).body(createdEmployees);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_EMPLOYEE + "')")
@@ -66,9 +70,11 @@ public class EmployeeController {
 
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_EMPLOYEES + "')")
   @PutMapping("/batch")
-  public List<EmployeeResponseDTO> updateEmployees(
+  public ResponseEntity<List<EmployeeResponseDTO>> updateEmployees(
       @RequestBody List<EmployeeRequestDTO> employees) {
-    return employeeService.updateEmployees(employees);
+        List<EmployeeResponseDTO> updatedEmployees = employeeService.updateEmployees(employees);
+    if (updatedEmployees.isEmpty()) return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(updatedEmployees);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.DELETE_EMPLOYEE + "')")

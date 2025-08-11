@@ -2,6 +2,7 @@ package com.example.revive_app.service;
 
 import com.example.revive_app.data.dto.UserRequestDTO;
 import com.example.revive_app.data.dto.UserResponseDTO;
+import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
 import java.util.List;
@@ -23,17 +24,22 @@ public class UserService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  public Optional<UserResponseDTO> getMe(Object principal) {
+  public UserResponseDTO getMe(Object principal) {
     User user = (User) principal;
-    UserResponseDTO userResponse = toDto(user);
-    return Optional.of(userResponse);
+    if (user == null) throw new ResourceNotFoundException("User not Authenticated"); 
+    return toDto(user);
   }
 
   public List<UserResponseDTO> getAllUsers() {
-    return userRepository.findAll().stream().map(this::toDto).toList();
+    List<UserResponseDTO> users = userRepository.findAll().stream().map(this::toDto).toList();
+    if (users.isEmpty()) throw new ResourceNotFoundException("No users found");
+    return users;
   }
 
   public Optional<UserResponseDTO> getUserById(UUID id) {
+    if (id == null) throw new IllegalArgumentException("User ID cannot be null");
+    if (!userRepository.existsById(id)) throw new ResourceNotFoundException("User not found with ID: " + id);
+
     return userRepository.findById(id).map(this::toDto);
   }
 

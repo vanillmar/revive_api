@@ -1,11 +1,8 @@
 package com.example.revive_app.controller;
 
-import com.example.revive_app.data.Permissions;
-import com.example.revive_app.data.dto.UserRequestDTO;
-import com.example.revive_app.data.dto.UserResponseDTO;
-import com.example.revive_app.service.UserService;
 import java.util.List;
 import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.revive_app.data.Permissions;
+import com.example.revive_app.data.dto.UserRequestDTO;
+import com.example.revive_app.data.dto.UserResponseDTO;
+import com.example.revive_app.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,16 +35,15 @@ public class UserController {
   @PreAuthorize("hasAuthority('" + Permissions.READ_ME + "')")
   @GetMapping("/me")
   public ResponseEntity<UserResponseDTO> getMe(Authentication authentication) {
-    return userService
-        .getMe(authentication.getPrincipal())
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.status(401).build());
+    UserResponseDTO user = userService.getMe(authentication.getPrincipal());
+    return ResponseEntity.ok(user);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.READ_USERS + "')")
   @GetMapping
-  public List<UserResponseDTO> getAllUsers() {
-    return userService.getAllUsers();
+  public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+    List<UserResponseDTO> users = userService.getAllUsers();
+    return ResponseEntity.ok(users);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.READ_USER + "')")
@@ -56,14 +57,16 @@ public class UserController {
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_USER + "')")
   @PostMapping
-  public UserResponseDTO createUser(@RequestBody UserRequestDTO user) {
-    return userService.createUser(user);
+  public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO user) {
+    UserResponseDTO createdUser = userService.createUser(user);
+    return ResponseEntity.status(201).body(createdUser);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_USERS + "')")
   @PostMapping("/batch")
-  public List<UserResponseDTO> createUsers(@RequestBody List<UserRequestDTO> users) {
-    return userService.createUsers(users);
+  public ResponseEntity<List<UserResponseDTO>> createUsers(@RequestBody List<UserRequestDTO> users) {
+    List<UserResponseDTO> createdUsers = userService.createUsers(users);
+    return ResponseEntity.status(201).body(createdUsers);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USER + "')")
@@ -78,8 +81,9 @@ public class UserController {
 
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USERS + "')")
   @PutMapping("/batch")
-  public List<UserResponseDTO> updateUsers(@RequestBody List<UserRequestDTO> users) {
-    return userService.updateUsers(users);
+  public ResponseEntity<List<UserResponseDTO>> updateUsers(@RequestBody List<UserRequestDTO> users) {
+    List<UserResponseDTO> updateUsers = userService.updateUsers(users);
+    return ResponseEntity.ok(updateUsers);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.DELETE_USER + "')")
