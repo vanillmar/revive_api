@@ -70,15 +70,69 @@ public class DataSeeder implements ApplicationRunner {
       readMe.setName(Permissions.READ_ME);
       readMe.setDescription("Allows viewing the authenticated user");
 
+      Permission readDepartment = new Permission();
+      readMe.setName(Permissions.READ_DEPARTMENT);
+      readMe.setDescription("Allows user read a department");
+
+      Permission readDepartments = new Permission();
+      readMe.setName(Permissions.READ_DEPARTMENTS);
+      readMe.setDescription("Allows user read departments");
+
+      Permission createDepartment = new Permission();
+      readMe.setName(Permissions.CREATE_DEPARTMENT);
+      readMe.setDescription("Allows create department");
+
+      Permission createDepartments = new Permission();
+      readMe.setName(Permissions.CREATE_DEPARTMENTS);
+      readMe.setDescription("Allows create departments");
+
+      Permission updateDepartment = new Permission();
+      readMe.setName(Permissions.UPDATE_DEPARTMENT);
+      readMe.setDescription("Allows user to update department");
+
+      Permission updateDepartments = new Permission();
+      readMe.setName(Permissions.UPDATE_DEPARTMENTS);
+      readMe.setDescription("Allows users to update departments");
+
+      Permission deleteDepartment = new Permission();
+      readMe.setName(Permissions.DELETE_DEPARTMENT);
+      readMe.setDescription("Allows users to delete department");
+
       permissionRepository.saveAll(
-          List.of(createUsers, createUser, deleteUser, readUsers, readUser, readMe));
+          List.of(
+              createUsers,
+              createUser,
+              deleteUser,
+              readUsers,
+              readUser,
+              readMe,
+              readDepartment,
+              readDepartments,
+              createDepartment,
+              createDepartments,
+              updateDepartment,
+              updateDepartments,
+              deleteDepartment));
 
       // Criar roles
       Role admin = new Role();
       admin.setName(Roles.ADMIN);
       admin.setDescription("Administrator with all permissions");
       admin.setPermissions(
-          Set.of(createUsers, createUser, deleteUser, readUsers, readUser, readMe));
+          Set.of(
+              createUsers,
+              createUser,
+              deleteUser,
+              readUsers,
+              readUser,
+              readMe,
+              readDepartment,
+              readDepartments,
+              createDepartment,
+              createDepartments,
+              updateDepartment,
+              updateDepartments,
+              deleteDepartment));
 
       Role moderator = new Role();
       moderator.setName(Roles.MODERATOR);

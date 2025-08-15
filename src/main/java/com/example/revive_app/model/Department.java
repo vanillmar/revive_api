@@ -1,8 +1,5 @@
 package com.example.revive_app.model;
 
-
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,19 +21,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Department {
-    @Id
-    @GeneratedValue
-    private Long id;
+  @Id @GeneratedValue private Long id;
 
-    @Column(nullable = false, unique = true) // enforce uniqueness
-    private String name;
-    
-    private String description; 
+  @Column(nullable = false, unique = true) // enforce uniqueness
+  private String name;
 
-    @OneToOne
-    @JoinColumn(name = "head_employee_id")
-    private Employee head; // The head of the department (also an Employee)
+  private String description;
 
-    @OneToMany(mappedBy = "department")
-    private List<Employee> employees; // All employees in this department
+  @OneToOne
+  @JoinColumn(name = "head_employee_id")
+  private Employee head; // The head of the department (also an Employee)
+
+  @OneToMany(mappedBy = "department")
+  private List<Employee> employees; // All employees in this department
 }

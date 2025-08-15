@@ -31,7 +31,6 @@ public class EmployeeRequestDTO {
 
   private boolean enabled;
 
-  @NotBlank(message = "Role is required")
   private Set<Role> roles = new HashSet<>();
 
   private DepartmentRequestDTO department;
