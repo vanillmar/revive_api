@@ -1,19 +1,18 @@
 package com.example.revive_app;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.revive_app.data.dto.AddressRequestDTO;
 import com.example.revive_app.data.dto.AddressResponseDTO;
 import com.example.revive_app.data.mapper.AddressMapper;
 import com.example.revive_app.model.Address;
 import com.example.revive_app.model.Employee;
-import com.example.revive_app.model.Permission;
-
-import java.util.UUID;
-import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
-import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class AddressMapperTest {
