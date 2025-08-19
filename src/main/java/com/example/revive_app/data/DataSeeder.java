@@ -1,20 +1,24 @@
 package com.example.revive_app.data;
 
-import com.example.revive_app.model.Employee;
-import com.example.revive_app.model.Permission;
-import com.example.revive_app.model.Role;
-import com.example.revive_app.model.User;
-import com.example.revive_app.repository.EmployeeRepository;
-import com.example.revive_app.repository.PermissionRepository;
-import com.example.revive_app.repository.RoleRepository;
-import com.example.revive_app.repository.UserRepository;
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.example.revive_app.model.Address;
+import com.example.revive_app.model.Employee;
+import com.example.revive_app.model.Permission;
+import com.example.revive_app.model.Role;
+import com.example.revive_app.model.User;
+import com.example.revive_app.repository.AddressRepository;
+import com.example.revive_app.repository.EmployeeRepository;
+import com.example.revive_app.repository.PermissionRepository;
+import com.example.revive_app.repository.RoleRepository;
+import com.example.revive_app.repository.UserRepository;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -26,6 +30,8 @@ public class DataSeeder implements ApplicationRunner {
   @Autowired private UserRepository userRepository;
 
   @Autowired private EmployeeRepository employeeRepository;
+
+  @Autowired private AddressRepository addressRepository;
 
   @Autowired private PasswordEncoder passwordEncoder;
 
@@ -43,6 +49,13 @@ public class DataSeeder implements ApplicationRunner {
     empUser.setFirstname("Vanilson");
     empUser.setLastname("Marcos");
     empUser.setEmail("v.marcos@gmail.com");
+
+    Address address = new Address();
+    address.setStreet("123 Main St");
+    address.setCity("Luanda");
+    address.setState("Luanda Province");
+    address.setZipCode("1000");
+    address.setEmployee(empUser);
 
     if (permissionRepository.count() == 0 && roleRepository.count() == 0) {
       // Criar permissões
@@ -210,5 +223,6 @@ public class DataSeeder implements ApplicationRunner {
 
     userRepository.save(adminUser);
     employeeRepository.save(empUser);
+    addressRepository.save(address);
   }
 }
