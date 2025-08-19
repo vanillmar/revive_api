@@ -4,6 +4,9 @@ import com.example.revive_app.data.Permissions;
 import com.example.revive_app.data.dto.AddressRequestDTO;
 import com.example.revive_app.data.dto.AddressResponseDTO;
 import com.example.revive_app.service.AddressService;
+
+import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +46,7 @@ public class AddressController {
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_ADDRESS + "')")
   @PostMapping
-  public ResponseEntity<AddressResponseDTO> createAddress(@RequestBody AddressRequestDTO address) {
+  public ResponseEntity<AddressResponseDTO> createAddress(@Valid @RequestBody AddressRequestDTO address) {
     AddressResponseDTO createdAddress = addressService.createAddress(address);
     if (createdAddress == null) return ResponseEntity.badRequest().build();
     return ResponseEntity.status(201).body(createdAddress);
@@ -52,7 +55,7 @@ public class AddressController {
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_ADDRESSES + "')")
   @PostMapping("/batch")
   public ResponseEntity<List<AddressResponseDTO>> createAddresses(
-      @RequestBody List<AddressRequestDTO> addresses) {
+    @Valid @RequestBody List<AddressRequestDTO> addresses) {
     List<AddressResponseDTO> createdAddresses = addressService.createAddresses(addresses);
     if (createdAddresses.isEmpty()) return ResponseEntity.noContent().build();
     return ResponseEntity.status(201).body(createdAddresses);
@@ -61,15 +64,15 @@ public class AddressController {
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_ADDRESS + "')")
   @PutMapping("/{id}")
   public ResponseEntity<AddressResponseDTO> updateAddress(
-      @PathVariable Long id, @RequestBody AddressRequestDTO addressDetails) {
-    Optional<AddressResponseDTO> updated = addressService.updateAddress(id, addressDetails);
-    return updated.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+      @PathVariable Long id, @Valid @RequestBody AddressRequestDTO dto) {
+    AddressResponseDTO updatedAddress = addressService.updateAddress(id, dto);
+    return ResponseEntity.ok(updatedAddress);
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_ADDRESSES + "')")
   @PutMapping("/batch")
   public ResponseEntity<List<AddressResponseDTO>> updateAddresses(
-      @RequestBody List<AddressRequestDTO> addresses) {
+    @Valid @RequestBody List<AddressRequestDTO> addresses) {
     List<AddressResponseDTO> updatedAddresses = addressService.updateAddresses(addresses);
     if (updatedAddresses.isEmpty()) return ResponseEntity.noContent().build();
     return ResponseEntity.ok(updatedAddresses);

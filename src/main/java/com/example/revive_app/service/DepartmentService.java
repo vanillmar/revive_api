@@ -5,7 +5,6 @@ import com.example.revive_app.data.dto.DepartmentResponseDTO;
 import com.example.revive_app.data.mapper.DepartmentMapper;
 import com.example.revive_app.model.Department;
 import com.example.revive_app.repository.DepartmentRepository;
-import com.example.revive_app.repository.EmployeeRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ public class DepartmentService {
   @Autowired
   public DepartmentService(
       DepartmentRepository departmentRepository,
-      EmployeeRepository employeeRepository,
       DepartmentMapper departmentMapper) {
     this.departmentRepository = departmentRepository;
     this.departmentMapper = departmentMapper;
