@@ -46,8 +46,8 @@ public class AddressController {
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_ADDRESS + "')")
   @PostMapping
-  public ResponseEntity<AddressResponseDTO> createAddress(@Valid @RequestBody AddressRequestDTO address) {
-    AddressResponseDTO createdAddress = addressService.createAddress(address);
+  public ResponseEntity<AddressResponseDTO> createAddress(@Valid @RequestBody AddressRequestDTO dto) {
+    AddressResponseDTO createdAddress = addressService.createAddress(dto);
     if (createdAddress == null) return ResponseEntity.badRequest().build();
     return ResponseEntity.status(201).body(createdAddress);
   }
