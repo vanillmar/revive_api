@@ -4,11 +4,8 @@ import com.example.revive_app.data.Permissions;
 import com.example.revive_app.data.dto.DepartmentRequestDTO;
 import com.example.revive_app.data.dto.DepartmentResponseDTO;
 import com.example.revive_app.service.DepartmentService;
-
 import jakarta.validation.Valid;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 @RequestMapping("/api/departments")
 public class DepartmentController {
@@ -30,6 +28,7 @@ public class DepartmentController {
   public DepartmentController(DepartmentService departmentService) {
     this.departmentService = departmentService;
   }
+
   @PreAuthorize("hasAuthority('" + Permissions.READ_DEPARTMENTS + "')")
   @GetMapping
   public ResponseEntity<List<DepartmentResponseDTO>> getAllDepartments() {

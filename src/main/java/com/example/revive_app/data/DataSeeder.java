@@ -1,6 +1,7 @@
 package com.example.revive_app.data;
 
 import com.example.revive_app.model.Address;
+import com.example.revive_app.model.Admin;
 import com.example.revive_app.model.Department;
 import com.example.revive_app.model.Employee;
 import com.example.revive_app.model.Permission;
@@ -12,17 +13,13 @@ import com.example.revive_app.repository.EmployeeRepository;
 import com.example.revive_app.repository.PermissionRepository;
 import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.UserRepository;
-
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import com.example.revive_app.model.Admin;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -60,7 +57,7 @@ public class DataSeeder implements ApplicationRunner {
     empOne.setLastname("Marcos");
     empOne.setEmail("v.marcos@gmail.com");
     empOne.setDepartment(department);
-    
+
     Employee empTwo = new Employee();
     empTwo.setUsername("j.silva");
     empTwo.setPassword(passwordEncoder.encode("test_two"));

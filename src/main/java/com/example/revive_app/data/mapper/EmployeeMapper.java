@@ -3,9 +3,7 @@ package com.example.revive_app.data.mapper;
 import com.example.revive_app.data.dto.EmployeeRequestDTO;
 import com.example.revive_app.data.dto.EmployeeResponseDTO;
 import com.example.revive_app.model.Employee;
-
 import java.util.List;
-
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")

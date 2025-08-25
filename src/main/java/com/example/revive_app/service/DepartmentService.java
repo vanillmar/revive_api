@@ -2,31 +2,23 @@ package com.example.revive_app.service;
 
 import com.example.revive_app.data.dto.DepartmentRequestDTO;
 import com.example.revive_app.data.dto.DepartmentResponseDTO;
-import com.example.revive_app.data.dto.EmployeeResponseDTO;
 import com.example.revive_app.data.mapper.DepartmentMapper;
 import com.example.revive_app.model.Department;
 import com.example.revive_app.repository.DepartmentRepository;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.example.revive_app.data.mapper.EmployeeMapper;
-import com.example.revive_app.model.Employee;
 
 @Service
 public class DepartmentService {
   private final DepartmentRepository departmentRepository;
   private final DepartmentMapper departmentMapper;
-  private final EmployeeMapper employeeMapper;
 
   @Autowired
   public DepartmentService(
-      DepartmentRepository departmentRepository, DepartmentMapper departmentMapper, EmployeeMapper employeeMapper) {
+      DepartmentRepository departmentRepository, DepartmentMapper departmentMapper) {
     this.departmentRepository = departmentRepository;
     this.departmentMapper = departmentMapper;
-    this.employeeMapper = employeeMapper;
   }
 
   public List<DepartmentResponseDTO> getAllDepartments() {
