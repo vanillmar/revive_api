@@ -20,9 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.revive_app.data.dto.EmployeeResponseDTO;
-
 @RestController
 @RequestMapping("/api/departments")
 public class DepartmentController {
@@ -33,10 +30,6 @@ public class DepartmentController {
   public DepartmentController(DepartmentService departmentService) {
     this.departmentService = departmentService;
   }
-
-
-
-
   @PreAuthorize("hasAuthority('" + Permissions.READ_DEPARTMENTS + "')")
   @GetMapping
   public ResponseEntity<List<DepartmentResponseDTO>> getAllDepartments() {

@@ -12,13 +12,17 @@ import com.example.revive_app.repository.EmployeeRepository;
 import com.example.revive_app.repository.PermissionRepository;
 import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.UserRepository;
+
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.example.revive_app.model.Admin;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -44,7 +48,7 @@ public class DataSeeder implements ApplicationRunner {
     department.setName("Human Resources");
     department.setDescription("Handles employee relations and benefits");
 
-    User adminUser = new User();
+    User adminUser = new Admin();
     adminUser.setUsername("admin");
     adminUser.setPassword(passwordEncoder.encode("admin123"));
     adminUser.setEmail("admins@system.com");
