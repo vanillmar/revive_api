@@ -7,7 +7,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +25,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Department {
-  @Id @GeneratedValue private Long id;
+  @Id 
+  @GeneratedValue 
+  private Long id;
 
   @Column(nullable = false, unique = true) // enforce uniqueness
   private String name;
@@ -29,9 +35,9 @@ public class Department {
   private String description;
 
   @OneToOne
-  @JoinColumn(name = "head_employee_id")
+  @JoinColumn(name = "head_employee_id", nullable = true)
   private Employee head; // The head of the department (also an Employee)
 
-  @OneToMany(mappedBy = "department")
-  private List<Employee> employees; // All employees in this department
+  @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Employee> employees = new ArrayList();
 }

@@ -16,5 +16,5 @@ public class EmployeeResponseDTO {
   private final String email;
   private final boolean enabled;
   private final Set<Role> roles;
-  private final DepartmentResponseDTO department;
+  private final Long department;
 }

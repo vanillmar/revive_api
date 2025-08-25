@@ -13,7 +13,6 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.HashSet;
@@ -54,10 +53,6 @@ public class User implements UserDetails {
       joinColumns = @JoinColumn(name = "appuser_id"),
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
-
-  @ManyToOne
-  @JoinColumn(name = "department_id")
-  private Department department; // The department this employee belongs to
 
   // Default Constructor (required by JPA)
   public User() {}

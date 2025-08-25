@@ -4,7 +4,11 @@ import com.example.revive_app.data.Permissions;
 import com.example.revive_app.data.dto.DepartmentRequestDTO;
 import com.example.revive_app.data.dto.DepartmentResponseDTO;
 import com.example.revive_app.service.DepartmentService;
+
+import jakarta.validation.Valid;
+
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.revive_app.data.dto.EmployeeResponseDTO;
+
 @RestController
 @RequestMapping("/api/departments")
 public class DepartmentController {
@@ -27,6 +33,9 @@ public class DepartmentController {
   public DepartmentController(DepartmentService departmentService) {
     this.departmentService = departmentService;
   }
+
+
+
 
   @PreAuthorize("hasAuthority('" + Permissions.READ_DEPARTMENTS + "')")
   @GetMapping
@@ -46,7 +55,7 @@ public class DepartmentController {
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_DEPARTMENT + "')")
   @PostMapping
   public ResponseEntity<DepartmentResponseDTO> createDepartment(
-      @RequestBody DepartmentRequestDTO department) {
+      @Valid @RequestBody DepartmentRequestDTO department) {
     DepartmentResponseDTO createdDepartment = departmentService.createDepartment(department);
     return ResponseEntity.status(201).body(createdDepartment);
   }
@@ -54,7 +63,7 @@ public class DepartmentController {
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_DEPARTMENTS + "')")
   @PostMapping("/batch")
   public ResponseEntity<List<DepartmentResponseDTO>> createDepartments(
-      @RequestBody List<DepartmentRequestDTO> departments) {
+      @Valid @RequestBody List<DepartmentRequestDTO> departments) {
     List<DepartmentResponseDTO> createdDepartments =
         departmentService.createDepartments(departments);
     if (createdDepartments.isEmpty()) return ResponseEntity.noContent().build();
@@ -64,7 +73,7 @@ public class DepartmentController {
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_DEPARTMENT + "')")
   @PutMapping("/{id}")
   public ResponseEntity<DepartmentResponseDTO> updateDepartment(
-      @PathVariable Long id, @RequestBody DepartmentRequestDTO departmentDetails) {
+      @PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO departmentDetails) {
     DepartmentResponseDTO updatedDepartment =
         departmentService.updateDepartment(id, departmentDetails);
     return ResponseEntity.status(201).body(updatedDepartment);
@@ -73,7 +82,7 @@ public class DepartmentController {
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_DEPARTMENTS + "')")
   @PutMapping("/batch")
   public ResponseEntity<List<DepartmentResponseDTO>> updateDepartments(
-      @RequestBody List<DepartmentRequestDTO> departments) {
+      @Valid @RequestBody List<DepartmentRequestDTO> departments) {
     List<DepartmentResponseDTO> updatedDepartments =
         departmentService.updateDepartments(departments);
     if (updatedDepartments.isEmpty()) return ResponseEntity.noContent().build();

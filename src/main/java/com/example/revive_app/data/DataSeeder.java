@@ -1,24 +1,24 @@
 package com.example.revive_app.data;
 
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-
 import com.example.revive_app.model.Address;
+import com.example.revive_app.model.Department;
 import com.example.revive_app.model.Employee;
 import com.example.revive_app.model.Permission;
 import com.example.revive_app.model.Role;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.AddressRepository;
+import com.example.revive_app.repository.DepartmentRepository;
 import com.example.revive_app.repository.EmployeeRepository;
 import com.example.revive_app.repository.PermissionRepository;
 import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.UserRepository;
+import java.util.List;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -33,29 +33,55 @@ public class DataSeeder implements ApplicationRunner {
 
   @Autowired private AddressRepository addressRepository;
 
+  @Autowired private DepartmentRepository departmentRepository;
+
   @Autowired private PasswordEncoder passwordEncoder;
 
   @Override
   public void run(ApplicationArguments args) {
+
+    Department department = new Department();
+    department.setName("Human Resources");
+    department.setDescription("Handles employee relations and benefits");
 
     User adminUser = new User();
     adminUser.setUsername("admin");
     adminUser.setPassword(passwordEncoder.encode("admin123"));
     adminUser.setEmail("admins@system.com");
 
-    Employee empUser = new Employee();
-    empUser.setUsername("v.marcos");
-    empUser.setPassword(passwordEncoder.encode("test_test"));
-    empUser.setFirstname("Vanilson");
-    empUser.setLastname("Marcos");
-    empUser.setEmail("v.marcos@gmail.com");
+    Employee empOne = new Employee();
+    empOne.setUsername("v.marcos");
+    empOne.setPassword(passwordEncoder.encode("test_test"));
+    empOne.setFirstname("Vanilson");
+    empOne.setLastname("Marcos");
+    empOne.setEmail("v.marcos@gmail.com");
+    empOne.setDepartment(department);
+    
+    Employee empTwo = new Employee();
+    empTwo.setUsername("j.silva");
+    empTwo.setPassword(passwordEncoder.encode("test_two"));
+    empTwo.setFirstname("João");
+    empTwo.setLastname("Silva");
+    empTwo.setEmail("j.silva@test.com");
+    empTwo.setDepartment(department);
+
+    // Set the head of the department
+    department.setHead(empOne);
+    department.setEmployees(List.of(empOne, empTwo));
 
     Address address = new Address();
     address.setStreet("123 Main St");
     address.setCity("Luanda");
     address.setState("Luanda Province");
     address.setZipCode("1000");
-    address.setEmployee(empUser);
+    address.setEmployee(empOne);
+
+    Address addressTwo = new Address();
+    addressTwo.setStreet("456 Elm St");
+    addressTwo.setCity("Luanda");
+    addressTwo.setState("Luanda Province");
+    addressTwo.setZipCode("2000");
+    addressTwo.setEmployee(empTwo);
 
     if (permissionRepository.count() == 0 && roleRepository.count() == 0) {
       // Criar permissões
@@ -83,10 +109,33 @@ public class DataSeeder implements ApplicationRunner {
       readMe.setName(Permissions.READ_ME);
       readMe.setDescription("Allows viewing the authenticated user");
 
-      Permission readDepartment = new Permission();
-      readDepartment.setName(Permissions.READ_DEPARTMENT);
-      readDepartment.setDescription("Allows user read a department");
+      Permission readEmployee = new Permission();
+      readEmployee.setName(Permissions.READ_EMPLOYEE);
+      readEmployee.setDescription("Allows user read employees");
 
+      Permission readEmployees = new Permission();
+      readEmployees.setName(Permissions.READ_EMPLOYEES);
+      readEmployees.setDescription("Allows user read employees");
+
+      Permission createEmployee = new Permission();
+      createEmployee.setName(Permissions.CREATE_EMPLOYEE);
+      createEmployee.setDescription("Allows create employee");
+
+      Permission createEmployees = new Permission();
+      createEmployees.setName(Permissions.CREATE_EMPLOYEES);
+      createEmployees.setDescription("Allows create employees");
+
+      Permission updateEmployee = new Permission();
+      updateEmployee.setName(Permissions.UPDATE_EMPLOYEE);
+      updateEmployee.setDescription("Allows user to update employee");
+
+      Permission updateEmployees = new Permission();
+      updateEmployees.setName(Permissions.UPDATE_EMPLOYEES);
+      updateEmployees.setDescription("Allows users to update employees");
+
+      Permission deleteEmployee = new Permission();
+      deleteEmployee.setName(Permissions.DELETE_EMPLOYEE);
+      deleteEmployee.setDescription("Allows users to delete Employee");
 
       Permission readAddress = new Permission();
       readAddress.setName(Permissions.READ_ADDRESS);
@@ -116,6 +165,9 @@ public class DataSeeder implements ApplicationRunner {
       deleteAddress.setName(Permissions.DELETE_ADDRESS);
       deleteAddress.setDescription("Allows users to delete Address");
 
+      Permission readDepartment = new Permission();
+      readDepartment.setName(Permissions.READ_DEPARTMENT);
+      readDepartment.setDescription("Allows user read a department");
 
       Permission readDepartments = new Permission();
       readDepartments.setName(Permissions.READ_DEPARTMENTS);
@@ -149,7 +201,13 @@ public class DataSeeder implements ApplicationRunner {
               readUsers,
               readUser,
               readMe,
-
+              readEmployee,
+              readEmployees,
+              createEmployee,
+              createEmployees,
+              updateEmployee,
+              updateEmployees,
+              deleteEmployee,
               readAddress,
               readAddresses,
               createAddress,
@@ -157,15 +215,13 @@ public class DataSeeder implements ApplicationRunner {
               updateAddress,
               updateAddresses,
               deleteAddress,
-
               readDepartment,
               readDepartments,
               createDepartment,
               createDepartments,
               updateDepartment,
               updateDepartments,
-              deleteDepartment
-              ));
+              deleteDepartment));
 
       // Criar roles
       Role admin = new Role();
@@ -179,7 +235,13 @@ public class DataSeeder implements ApplicationRunner {
               readUsers,
               readUser,
               readMe,
-              
+              readEmployee,
+              readEmployees,
+              createEmployee,
+              createEmployees,
+              updateEmployee,
+              updateEmployees,
+              deleteEmployee,
               readAddress,
               readAddresses,
               createAddress,
@@ -187,15 +249,13 @@ public class DataSeeder implements ApplicationRunner {
               updateAddress,
               updateAddresses,
               deleteAddress,
-
               readDepartment,
               readDepartments,
               createDepartment,
               createDepartments,
               updateDepartment,
               updateDepartments,
-              deleteDepartment
-              ));
+              deleteDepartment));
 
       Role moderator = new Role();
       moderator.setName(Roles.MODERATOR);
@@ -209,7 +269,7 @@ public class DataSeeder implements ApplicationRunner {
 
       roleRepository.saveAll(List.of(admin, moderator, user));
 
-      empUser.setRoles(
+      empOne.setRoles(
           Set.of(
               roleRepository
                   .findByName(Roles.MODERATOR)
@@ -222,7 +282,8 @@ public class DataSeeder implements ApplicationRunner {
     }
 
     userRepository.save(adminUser);
-    employeeRepository.save(empUser);
-    addressRepository.save(address);
+    departmentRepository.save(department);
+    employeeRepository.saveAll(List.of(empOne, empTwo));
+    addressRepository.saveAll(List.of(address, addressTwo));
   }
 }

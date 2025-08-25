@@ -31,6 +31,14 @@ public class EmployeeController {
   }
 
   @PreAuthorize("hasAuthority('" + Permissions.READ_EMPLOYEES + "')")
+  @GetMapping("/department/{id}")
+  public ResponseEntity<List<EmployeeResponseDTO>> getEmployeesByDepartmentId(@PathVariable Long id) {
+    List<EmployeeResponseDTO> employees = employeeService.getEmployeesByDepartmentId(id);
+    if (employees.isEmpty()) return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(employees);
+  }
+
+  @PreAuthorize("hasAuthority('" + Permissions.READ_EMPLOYEES + "')")
   @GetMapping
   public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees() {
     List<EmployeeResponseDTO> employees = employeeService.getAllEmployees();

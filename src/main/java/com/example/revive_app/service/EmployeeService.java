@@ -102,4 +102,9 @@ public class EmployeeService {
     employee.setEnabled(employeeRequest.isEnabled()); // Default to enabled
     return employee;
   }
+
+  public List<EmployeeResponseDTO> getEmployeesByDepartmentId(Long id) {
+    List<Employee> employees = employeeRepository.findEmployeesByDepartmentId(id);
+    return employees.stream().map(this::toDto).toList();
+  }
 }

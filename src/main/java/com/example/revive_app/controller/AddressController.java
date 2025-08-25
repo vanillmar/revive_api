@@ -4,9 +4,7 @@ import com.example.revive_app.data.Permissions;
 import com.example.revive_app.data.dto.AddressRequestDTO;
 import com.example.revive_app.data.dto.AddressResponseDTO;
 import com.example.revive_app.service.AddressService;
-
 import jakarta.validation.Valid;
-
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +44,8 @@ public class AddressController {
 
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_ADDRESS + "')")
   @PostMapping
-  public ResponseEntity<AddressResponseDTO> createAddress(@Valid @RequestBody AddressRequestDTO dto) {
+  public ResponseEntity<AddressResponseDTO> createAddress(
+      @Valid @RequestBody AddressRequestDTO dto) {
     AddressResponseDTO createdAddress = addressService.createAddress(dto);
     if (createdAddress == null) return ResponseEntity.badRequest().build();
     return ResponseEntity.status(201).body(createdAddress);
@@ -55,7 +54,7 @@ public class AddressController {
   @PreAuthorize("hasAuthority('" + Permissions.CREATE_ADDRESSES + "')")
   @PostMapping("/batch")
   public ResponseEntity<List<AddressResponseDTO>> createAddresses(
-    @Valid @RequestBody List<AddressRequestDTO> addresses) {
+      @Valid @RequestBody List<AddressRequestDTO> addresses) {
     List<AddressResponseDTO> createdAddresses = addressService.createAddresses(addresses);
     if (createdAddresses.isEmpty()) return ResponseEntity.noContent().build();
     return ResponseEntity.status(201).body(createdAddresses);
@@ -72,7 +71,7 @@ public class AddressController {
   @PreAuthorize("hasAuthority('" + Permissions.UPDATE_ADDRESSES + "')")
   @PutMapping("/batch")
   public ResponseEntity<List<AddressResponseDTO>> updateAddresses(
-    @Valid @RequestBody List<AddressRequestDTO> addresses) {
+      @Valid @RequestBody List<AddressRequestDTO> addresses) {
     List<AddressResponseDTO> updatedAddresses = addressService.updateAddresses(addresses);
     if (updatedAddresses.isEmpty()) return ResponseEntity.noContent().build();
     return ResponseEntity.ok(updatedAddresses);

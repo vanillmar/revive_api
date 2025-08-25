@@ -42,6 +42,7 @@ public class JpaConfig {
     Properties jpaProps = new Properties();
     jpaProps.setProperty("hibernate.hbm2ddl.auto", "create");
     jpaProps.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
+    jpaProps.setProperty("hibernate.show_sql", "true");
     em.setJpaProperties(jpaProps);
 
     return em;
