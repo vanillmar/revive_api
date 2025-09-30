@@ -5,8 +5,11 @@ import com.example.revive_app.model.Admin;
 import com.example.revive_app.model.Department;
 import com.example.revive_app.model.Employee;
 import com.example.revive_app.model.Exam;
+import com.example.revive_app.model.ExamStatus;
 import com.example.revive_app.model.Permission;
+import com.example.revive_app.model.Question;
 import com.example.revive_app.model.Role;
+import com.example.revive_app.model.Subject;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.AddressRepository;
 import com.example.revive_app.repository.DepartmentRepository;
@@ -15,19 +18,19 @@ import com.example.revive_app.repository.PermissionRepository;
 import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.UserRepository;
 
-import java.util.List;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.example.revive_app.model.ExamStatus;
 import com.example.revive_app.repository.ExamRepository;
 import com.example.revive_app.repository.ExamStatusRepository;
+import com.example.revive_app.repository.QuestionRepository;
+import com.example.revive_app.repository.SubjectRepository;
 
+import java.util.List;
+import java.util.Set;
 @Component
 public class DataSeeder implements ApplicationRunner {
 
@@ -48,6 +51,10 @@ public class DataSeeder implements ApplicationRunner {
   @Autowired private ExamStatusRepository examStatusRepository;
   
   @Autowired private ExamRepository examRepository;
+
+  @Autowired private QuestionRepository questionRepository;
+
+  @Autowired private SubjectRepository subjectRepository;
 
   @Override
   public void run(ApplicationArguments args) {
@@ -299,9 +306,7 @@ public class DataSeeder implements ApplicationRunner {
                   .findByName(Roles.ADMIN)
                   .orElseThrow(() -> new RuntimeException("Admin role not found"))));
     }
-    
-    
-    
+
     ExamStatus readyStatus = new ExamStatus(null, "Ready", "Ready to take");
     ExamStatus inProgressStatus = new ExamStatus(null, "In Progress", "Currently taking the exam");
     ExamStatus completedStatus = new ExamStatus(null, "Completed", "Exam completed");
@@ -318,13 +323,40 @@ public class DataSeeder implements ApplicationRunner {
         new Exam(null, "general-navigation", "General Navigation", "—", completedStatus),
         new Exam(null, "radio-aids", "Radio Aids", "—", readyStatus)
     );
+    Subject instrumentRating = new Subject(null, "instrument Rating ", "Instruments and Electronics", "—", readyStatus);
+
+    List<Subject> subjects = List.of(
+        instrumentRating,
+        new Subject(null, "airlaw", "Air Law", "—", readyStatus),
+        new Subject(null, "human-performance", "Human Performance", "—", readyStatus),
+        new Subject(null, "aircraft-technical", "Aircraft Technical General", "—", inProgressStatus),
+        new Subject(null, "flight-planning", "Flight Planning and Performance", "—", readyStatus),
+        new Subject(null, "meteorology", "Meteorology", "—", readyStatus),
+        new Subject(null, "general-navigation", "General Navigation", "—", completedStatus),
+        new Subject(null, "radio-aids", "Radio Aids", "—", readyStatus)
+    );
+        
+    List<Question> questions = List.of(
+        new Question(null, "The minimum sector altitude (MSA) on an instrument apppraoch chart is referenced to a radio navigation facility, usually within… o 5 NM 30 NM", List.of("25 NM", "20 NM", "o Question 3 of 122", "ID:"), 0, instrumentRating),
+        new Question(null, "QNH 1025 HPa ISA +10 deg. C IFR flight 135° magnetic course airway MSA 7800 ft o The minimum flight level is: o FL75 FL65", List.of("FL90", "FL80", "o Question 4 of 122", "ID:"), 0, instrumentRating),
+        new Question(null, "Excluding RVSM, an appropriate flight level (FL) for an IFR flight in accordance with the semi-circular height rules on a Magnetic Course 200 is: o FL320 FL310", List.of("FL300", "FL290", "o Question 5 of 122", "ID:"), 0, instrumentRating),
+        new Question(null, "Excluding RVSM, an appropriate flight level (FL) for an IFR flight in accordance with the semi-circular height rules on a Magnetic Course 180 is: o FL85 FL90", List.of("FL100", "FL115", "o Question 6 of 122", "ID:"), 0, instrumentRating),
+        new Question(null, "(See attachment IC-033-032) When following the track 185(M) from TALLA (TLA N55°30.0′, W003°21.2′), the aircraft is following what type of route? o RNAV route RNP route", List.of("Non-RNAV route", "Direct route", "o Question 7 of 122", "ID:"), 0, instrumentRating),
+        new Question(null, "(See attachment ic-033-095) The airway with designator UG851 is what type of airway? o Conditional route RNAV ATS route", List.of("Route usable by non B-RNAV equipped aircraft", "Direct route", "o Question 8 of 122", "ID:"), 0, instrumentRating),
+        new Question(null, "o According GM1 CAT.OP.MPA.145 (b), MOCA is the sum of the maximum terrain or obstacle elevation plus (1) ____ for elevation up to and including 6000 ft, or (2) ____ for elevation exceeding 6000 ft rounded up to the next 100 ft. o (1) 3000 ft, (2) 2000 ft (1) 500 ft, (2) 1000 ft", List.of("(1) 1000 ft, (2) 2000 ft", "(1) 2000 ft, (2) 1000 ft", "o Question 9 of 122", "ID:"), 0, instrumentRating),
+        new Question(null, "According GM1 CAT.OP.MPA.145 (b), the lowest MOCA to be indicated is… o 1000 ft (300 m) 500 ft (150 m)", List.of("2000 ft (600 m)", "5000 ft (450 m)", "o Question 10 of 122", "ID:"), 0, instrumentRating),
+        new Question(null, "An airway is marked “3500T 2100 a” means the: o Minimum En-route Altitude (MEA) is 3500 ft. Airway is a low level link route from 2100 ft to 3500 ft AMSL", List.of("Minimum Obstacle Clearance Altitude (MOCA) is 3500 ft.", "Base of the Airway is 3500 ft MSL.", "o Question 11 of 122", "ID:"), 0, instrumentRating),
+        new Question(null, "An airway is marked “FL80 1500 a” means the… o Base of the airway is 1500 ft MSL. Airway extends from 1500 ft MSL to FL80.", List.of("Minimum En-route Altitude (MEA) is FL80.", "Minimum radio reception altitude (MRA) is 1500 ft AMSL.", "o Question 12 of 122", "o ID:"), 0, instrumentRating),
+        new Question(null, "An airway is marked “5000 2900a” means the… o Maximum Authorised Altitude (MAA). Minimum En-route Altitude (MEA).", List.of("Minimum Obstacle Clearance Altitude (MOCA).", "Minimum Holding Altitude (MHA).", "o Question 13 of 122", "ID:"), 0, instrumentRating)
+    );
 
     userRepository.save(adminUser);
     departmentRepository.save(department);
     employeeRepository.saveAll(List.of(empOne, empTwo));
     addressRepository.saveAll(List.of(address, addressTwo));
-    examStatusRepository.saveAll(
-        List.of(readyStatus, inProgressStatus, completedStatus, reviewedStatus));
+    examStatusRepository.saveAll(List.of(readyStatus, inProgressStatus, completedStatus, reviewedStatus));
     examRepository.saveAll(exams);
+    subjectRepository.saveAll(subjects);
+    questionRepository.saveAll(questions);
   }
 }

@@ -47,14 +47,14 @@ public class ExamController {
             response.setData(null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-        
+
         List<ExamResponseDTO> examDTOs = examMapper.toResponseDTOs(exams);
-        response.setMessage("No exams found");
+        response.setMessage("Exams retrieved successfully");
         response.setStatus(HttpStatus.NO_CONTENT.value());
-        response.setSuccess(false);
+        response.setSuccess(true);
         response.setData(null);
         response.setData(examDTOs);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{subject}")
