@@ -4,6 +4,7 @@ import com.example.revive_app.model.Address;
 import com.example.revive_app.model.Admin;
 import com.example.revive_app.model.Department;
 import com.example.revive_app.model.Employee;
+import com.example.revive_app.model.Exam;
 import com.example.revive_app.model.Permission;
 import com.example.revive_app.model.Role;
 import com.example.revive_app.model.User;
@@ -13,13 +14,19 @@ import com.example.revive_app.repository.EmployeeRepository;
 import com.example.revive_app.repository.PermissionRepository;
 import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.UserRepository;
+
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.example.revive_app.model.ExamStatus;
+import com.example.revive_app.repository.ExamRepository;
+import com.example.revive_app.repository.ExamStatusRepository;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -37,6 +44,10 @@ public class DataSeeder implements ApplicationRunner {
   @Autowired private DepartmentRepository departmentRepository;
 
   @Autowired private PasswordEncoder passwordEncoder;
+
+  @Autowired private ExamStatusRepository examStatusRepository;
+  
+  @Autowired private ExamRepository examRepository;
 
   @Override
   public void run(ApplicationArguments args) {
@@ -194,6 +205,11 @@ public class DataSeeder implements ApplicationRunner {
       deleteDepartment.setName(Permissions.DELETE_DEPARTMENT);
       deleteDepartment.setDescription("Allows users to delete department");
 
+      Permission readExams = new Permission();
+      readExams.setName(Permissions.READ_EXAMS);
+      readExams.setDescription("Allows user read exams");
+
+
       permissionRepository.saveAll(
           List.of(
               createUsers,
@@ -222,7 +238,8 @@ public class DataSeeder implements ApplicationRunner {
               createDepartments,
               updateDepartment,
               updateDepartments,
-              deleteDepartment));
+              deleteDepartment,
+              readExams));
 
       // Criar roles
       Role admin = new Role();
@@ -256,17 +273,18 @@ public class DataSeeder implements ApplicationRunner {
               createDepartments,
               updateDepartment,
               updateDepartments,
-              deleteDepartment));
+              deleteDepartment, 
+              readExams));
 
       Role moderator = new Role();
       moderator.setName(Roles.MODERATOR);
       moderator.setDescription("Moderator with limited permissions");
-      moderator.setPermissions(Set.of(readUser, readMe, readAddress, readDepartment));
+      moderator.setPermissions(Set.of(readUser, readMe, readAddress, readDepartment, readExams));
 
       Role user = new Role();
       user.setName(Roles.USER);
       user.setDescription("Regular user with view-only permissions");
-      user.setPermissions(Set.of(readMe, readAddress, readDepartment));
+      user.setPermissions(Set.of(readMe, readAddress, readDepartment, readExams));
 
       roleRepository.saveAll(List.of(admin, moderator, user));
 
@@ -281,10 +299,32 @@ public class DataSeeder implements ApplicationRunner {
                   .findByName(Roles.ADMIN)
                   .orElseThrow(() -> new RuntimeException("Admin role not found"))));
     }
+    
+    
+    
+    ExamStatus readyStatus = new ExamStatus(null, "Ready", "Ready to take");
+    ExamStatus inProgressStatus = new ExamStatus(null, "In Progress", "Currently taking the exam");
+    ExamStatus completedStatus = new ExamStatus(null, "Completed", "Exam completed");
+    ExamStatus reviewedStatus = new ExamStatus(null, "Reviewed", "Exam has been reviewed");
+
+        // exams to insert
+    List<Exam> exams = List.of(
+        new Exam(null, "airlaw", "Air Law", "—", readyStatus),
+        new Exam(null, "human-performance", "Human Performance", "—", readyStatus),
+        new Exam(null, "aircraft-technical", "Aircraft Technical General", "—", inProgressStatus),
+        new Exam(null, "flight-planning", "Flight Planning and Performance", "—", readyStatus),
+        new Exam(null, "instruments", "Instruments and Electronics", "—", readyStatus),
+        new Exam(null, "meteorology", "Meteorology", "—", readyStatus),
+        new Exam(null, "general-navigation", "General Navigation", "—", completedStatus),
+        new Exam(null, "radio-aids", "Radio Aids", "—", readyStatus)
+    );
 
     userRepository.save(adminUser);
     departmentRepository.save(department);
     employeeRepository.saveAll(List.of(empOne, empTwo));
     addressRepository.saveAll(List.of(address, addressTwo));
+    examStatusRepository.saveAll(
+        List.of(readyStatus, inProgressStatus, completedStatus, reviewedStatus));
+    examRepository.saveAll(exams);
   }
 }

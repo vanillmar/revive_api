@@ -1,5 +1,4 @@
 package com.example.revive_app.data.dto;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
@@ -7,8 +6,6 @@ import lombok.AllArgsConstructor;
 @Getter
 @Setter
 @AllArgsConstructor
-public class AuthResponse {
-    private String id;
-    private String token;
-    private String username;
+public class AuthTokenValidResponseDTO {
+  private boolean isValid;
 }

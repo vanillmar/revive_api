@@ -1,10 +1,12 @@
 package com.example.revive_app.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import java.util.Date;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 
 @Service
 public class JwtService {
@@ -26,5 +28,14 @@ public class JwtService {
 
   public boolean isTokenValid(String token, UserDetails userDetails) {
     return extractUsername(token).equals(userDetails.getUsername());
+  }
+
+  public boolean isTokenValid(String token) {
+    try {
+      JWT.require(algorithm).build().verify(token);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 }

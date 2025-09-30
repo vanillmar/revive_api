@@ -38,6 +38,8 @@ public class Permissions {
   public static final String DELETE_ADDRESSES = "DELETE_ADDRESSES";
   public static final String DELETE_DEPARTMENT = "DELETE_DEPARTMENT";
 
+  public static final String READ_EXAMS = "READ_EXAMS";
+
   private Permissions() {
     // Private constructor to prevent instantiation
   }
