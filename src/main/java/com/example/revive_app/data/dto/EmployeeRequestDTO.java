@@ -1,13 +1,11 @@
 package com.example.revive_app.data.dto;
 
+import com.example.revive_app.model.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
-import com.example.revive_app.model.Role;
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 

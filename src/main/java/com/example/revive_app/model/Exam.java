@@ -19,20 +19,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Exam {
-    @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String subject;
+  @Column(nullable = false, unique = true)
+  private String subject;
 
-    @Column(nullable = false, unique = true)
-    private String title;
+  @Column(nullable = false, unique = true)
+  private String title;
 
-    private String result;
+  private String result;
 
-    // ...changed: status is now a relation to ExamStatus table...
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id")
-    private ExamStatus status;
+  // ...changed: status is now a relation to ExamStatus table...
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "status_id")
+  private ExamStatus status;
 }

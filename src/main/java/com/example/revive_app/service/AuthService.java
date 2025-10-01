@@ -1,20 +1,18 @@
 package com.example.revive_app.service;
 
+import com.example.revive_app.data.dto.AuthRegisterRequestDTO;
+import com.example.revive_app.data.dto.AuthRequest;
+import com.example.revive_app.data.dto.AuthResponse;
+import com.example.revive_app.data.dto.UserRequestDTO;
+import com.example.revive_app.data.dto.UserResponseDTO;
+import com.example.revive_app.data.mapper.AuthRegisterMapper;
+import com.example.revive_app.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
-
-import com.example.revive_app.data.dto.AuthRegisterRequestDTO;
-import com.example.revive_app.data.dto.AuthRequest;
-import com.example.revive_app.data.dto.AuthResponse;
-import com.example.revive_app.data.dto.UserRequestDTO;
-import com.example.revive_app.data.dto.UserRequestDTO;
-import com.example.revive_app.data.dto.UserResponseDTO;
-import com.example.revive_app.model.User;
-import com.example.revive_app.data.mapper.AuthRegisterMapper;
 
 @Service
 public class AuthService {
@@ -24,7 +22,11 @@ public class AuthService {
   private final AuthRegisterMapper authRegisterMapper;
 
   @Autowired
-  public AuthService(AuthenticationManager authenticationManager, JwtService jwtService, UserService userService, AuthRegisterMapper authRegisterMapper ) {
+  public AuthService(
+      AuthenticationManager authenticationManager,
+      JwtService jwtService,
+      UserService userService,
+      AuthRegisterMapper authRegisterMapper) {
     this.authenticationManager = authenticationManager;
     this.jwtService = jwtService;
     this.userService = userService;
@@ -38,11 +40,7 @@ public class AuthService {
     User user = (User) authentication.getPrincipal();
     String jwt = jwtService.generateToken(user);
 
-    return new AuthResponse( 
-      user.getId().toString(),
-      jwt, 
-      user.getUsername()
-      );
+    return new AuthResponse(user.getId().toString(), jwt, user.getUsername());
   }
 
   public AuthResponse register(AuthRegisterRequestDTO request) {
@@ -50,10 +48,6 @@ public class AuthService {
     UserResponseDTO newUser = userService.createUser(userDTO);
     String jwt = "";
 
-    return new AuthResponse(
-      newUser.getId().toString(),
-      jwt,
-      newUser.getUsername()
-      );
+    return new AuthResponse(newUser.getId().toString(), jwt, newUser.getUsername());
   }
 }

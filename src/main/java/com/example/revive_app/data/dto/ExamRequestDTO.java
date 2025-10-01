@@ -10,9 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExamRequestDTO {
-    private String subject;
-    private String title;
-    private String result;
-    // send the status id on create/update requests
-    private Long statusId;
+  private String subject;
+  private String title;
+  private String result;
+  // send the status id on create/update requests
+  private Long statusId;
 }

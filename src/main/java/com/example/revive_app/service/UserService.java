@@ -1,18 +1,16 @@
 package com.example.revive_app.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.example.revive_app.data.dto.UserRequestDTO;
 import com.example.revive_app.data.dto.UserResponseDTO;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {

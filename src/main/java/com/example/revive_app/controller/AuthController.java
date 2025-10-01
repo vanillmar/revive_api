@@ -1,13 +1,13 @@
 package com.example.revive_app.controller;
 
+import com.example.revive_app.data.dto.AuthRegisterRequestDTO;
 import com.example.revive_app.data.dto.AuthRequest;
 import com.example.revive_app.data.dto.AuthResponse;
+import com.example.revive_app.data.dto.ResponseDTO;
+import com.example.revive_app.data.dto.RoleResponseDTO;
 import com.example.revive_app.service.AuthService;
 import com.example.revive_app.service.RoleService;
-import com.example.revive_app.data.dto.ResponseDTO;
-
 import java.time.Instant;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.revive_app.data.dto.AuthRegisterRequestDTO;
-import com.example.revive_app.data.dto.RoleResponseDTO;
-
 
 @RestController
 @RequestMapping("/api/auth")
@@ -62,7 +58,7 @@ public class AuthController {
   }
 
   @PostMapping("/roles")
-  public ResponseEntity<ResponseDTO<RoleResponseDTO>> getRoles() { 
+  public ResponseEntity<ResponseDTO<RoleResponseDTO>> getRoles() {
     ResponseDTO<RoleResponseDTO> response = new ResponseDTO<>();
     RoleResponseDTO data = new RoleResponseDTO(roleService.getAllRoles());
     response.setTimestamp(Instant.now());
@@ -72,5 +68,4 @@ public class AuthController {
     response.setData(data);
     return ResponseEntity.ok(response);
   }
-
 }
