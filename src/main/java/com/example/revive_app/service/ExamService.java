@@ -1,5 +1,6 @@
 package com.example.revive_app.service;
 
+import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.Exam;
 import com.example.revive_app.repository.ExamRepository;
 import java.util.*;
@@ -21,7 +22,7 @@ public class ExamService {
 
   public Optional<Exam> findBySubject(String subject) {
     return examRepository.findAll().stream()
-        .filter(exam -> exam.getSubject().equals(subject))
+        .filter(exam -> exam.getSubject().getName().equals(subject))
         .findFirst();
   }
 
@@ -30,7 +31,7 @@ public class ExamService {
   }
 
   public boolean existsBySubject(String subject) {
-    return examRepository.findAll().stream().anyMatch(exam -> exam.getSubject().equals(subject));
+    return examRepository.findAll().stream().anyMatch(exam -> exam.getSubject().getName().equals(subject));
   }
 
   public boolean existsByTitle(String title) {
@@ -41,7 +42,7 @@ public class ExamService {
     if (exam.getId() != null && examRepository.existsById(exam.getId())) {
       throw new IllegalArgumentException("Exam with id " + exam.getId() + " already exists");
     }
-    if (exam.getSubject() == null || exam.getSubject().isBlank()) {
+    if (exam.getSubject() == null) {
       throw new IllegalArgumentException("Subject is required");
     }
     if (existsByTitle(exam.getTitle())) {
@@ -55,11 +56,11 @@ public class ExamService {
     if (!existsBySubject(subject)) {
       throw new IllegalArgumentException("Exam with subject: " + subject + " does not exist");
     }
-    Exam finalUpdate = examRepository.findBySubject(subject);
-    if (update.getTitle() != null) finalUpdate.setTitle(update.getTitle());
-    if (update.getResult() != null) finalUpdate.setResult(update.getResult());
-    if (update.getStatus() != null) finalUpdate.setStatus(update.getStatus());
-    return examRepository.save(finalUpdate);
+    if (!exists(update.getId())) {
+      throw new IllegalArgumentException("Exam with subject: " + subject + " does not exist");
+    }
+
+    return examRepository.save(update);
   }
 
   public boolean delete(long id) {
@@ -67,6 +68,6 @@ public class ExamService {
   }
 
   public boolean deleteBySubject(String subject) {
-    return examRepository.findAll().removeIf(exam -> exam.getSubject().equals(subject));
+    return examRepository.findAll().removeIf(exam -> exam.getSubject().getName().equals(subject));
   }
 }

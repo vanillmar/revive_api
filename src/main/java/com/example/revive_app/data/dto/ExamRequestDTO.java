@@ -10,9 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExamRequestDTO {
-  private String subject;
+  private Long subjectId;
   private String title;
   private String result;
+  private int timeLimit;
+  private int passMark;
   // send the status id on create/update requests
   private Long statusId;
 }

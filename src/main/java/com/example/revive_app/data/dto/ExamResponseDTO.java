@@ -9,8 +9,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ExamResponseDTO {
   private Long id;
-  private String subject;
+  private SubjectResponseDTO subject;
   private String title;
   private String result;
+  private int timeLimit;
+  private int passMark;
   private ExamStatusResponseDTO examStatus;
 }

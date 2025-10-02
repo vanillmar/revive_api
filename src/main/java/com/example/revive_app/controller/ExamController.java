@@ -55,10 +55,10 @@ public class ExamController {
   }
 
   @GetMapping("/{subject}")
-  public ResponseEntity<ResponseDTO<ExamResponseDTO>> getBySubject(@PathVariable String subject) {
+  public ResponseEntity<ResponseDTO<ExamResponseDTO>> getBySubject(@PathVariable String subjectName) {
     ResponseDTO<ExamResponseDTO> response = new ResponseDTO<>();
     ExamResponseDTO exam =
-        examService.findBySubject(subject).map(examMapper::toResponseDTO).orElse(null);
+        examService.findBySubject(subjectName).map(examMapper::toResponseDTO).orElse(null);
     if (exam == null) {
       response.setMessage("Exam not found");
       response.setStatus(HttpStatus.NOT_FOUND.value());

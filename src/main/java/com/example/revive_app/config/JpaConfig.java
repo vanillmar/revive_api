@@ -1,9 +1,7 @@
 package com.example.revive_app.config;
 
 import java.util.Properties;
-
 import javax.sql.DataSource;
-
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;

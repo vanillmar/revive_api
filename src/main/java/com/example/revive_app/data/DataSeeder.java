@@ -1,14 +1,5 @@
 package com.example.revive_app.data;
 
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-
 import com.example.revive_app.model.Address;
 import com.example.revive_app.model.Admin;
 import com.example.revive_app.model.Department;
@@ -30,6 +21,13 @@ import com.example.revive_app.repository.QuestionRepository;
 import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.SubjectRepository;
 import com.example.revive_app.repository.UserRepository;
+import java.util.List;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -311,33 +309,61 @@ public class DataSeeder implements ApplicationRunner {
     ExamStatus completedStatus = new ExamStatus(null, "Completed", "Exam completed");
     ExamStatus reviewedStatus = new ExamStatus(null, "Reviewed", "Exam has been reviewed");
 
-    // exams to insert
-    List<Exam> exams =
-        List.of(
-            new Exam(null, "airlaw", "Air Law", "—", readyStatus),
-            new Exam(null, "human-performance", "Human Performance", "—", readyStatus),
-            new Exam(
-                null, "aircraft-technical", "Aircraft Technical General", "—", inProgressStatus),
-            new Exam(null, "flight-planning", "Flight Planning and Performance", "—", readyStatus),
-            new Exam(null, "instrument Rating", "Instruments and Electronics", "—", readyStatus),
-            new Exam(null, "meteorology", "Meteorology", "—", readyStatus),
-            new Exam(null, "general-navigation", "General Navigation", "—", completedStatus),
-            new Exam(null, "radio-aids", "Radio Aids", "—", readyStatus));
     Subject instrumentRating =
         new Subject(null, "instrument Rating", "Instruments and Electronics", "—", readyStatus);
+    Subject airlaw = new Subject(null, "airlaw", "Air Law", "—", readyStatus);
+    Subject humanPerformance =
+        new Subject(null, "human-performance", "Human Performance", "—", readyStatus);
+    Subject aircraftTechnical =
+        new Subject(
+            null, "aircraft-technical", "Aircraft Technical General", "—", inProgressStatus);
+    Subject flightPlanning =
+        new Subject(null, "flight-planning", "Flight Planning and Performance", "—", readyStatus);
+    Subject meteorology = new Subject(null, "meteorology", "Meteorology", "—", readyStatus);
+    Subject generalNavigation =
+        new Subject(null, "general-navigation", "General Navigation", "—", completedStatus);
+    Subject radioAids = new Subject(null, "radio-aids", "Radio Aids", "—", readyStatus);
 
     List<Subject> subjects =
         List.of(
             instrumentRating,
-            new Subject(null, "airlaw", "Air Law", "—", readyStatus),
-            new Subject(null, "human-performance", "Human Performance", "—", readyStatus),
-            new Subject(
-                null, "aircraft-technical", "Aircraft Technical General", "—", inProgressStatus),
-            new Subject(
-                null, "flight-planning", "Flight Planning and Performance", "—", readyStatus),
-            new Subject(null, "meteorology", "Meteorology", "—", readyStatus),
-            new Subject(null, "general-navigation", "General Navigation", "—", completedStatus),
-            new Subject(null, "radio-aids", "Radio Aids", "—", readyStatus));
+            airlaw,
+            humanPerformance,
+            aircraftTechnical,
+            flightPlanning,
+            meteorology,
+            generalNavigation,
+            radioAids);
+
+    Exam instrumentsRatingExam =
+        new Exam(null, instrumentRating, instrumentRating.getName(), "—", 72, 9_000, readyStatus);
+    Exam airlawExam = new Exam(null, airlaw, airlaw.getName(), "—", 72, 9_000, readyStatus);
+    Exam humanPerformanceExam =
+        new Exam(null, humanPerformance, humanPerformance.getName(), "—", 72, 9_000, readyStatus);
+    Exam aircraftTechnicalExam =
+        new Exam(
+            null, aircraftTechnical, aircraftTechnical.getName(), "—", 72, 9_000, inProgressStatus);
+    Exam flightPlanningExam =
+        new Exam(null, flightPlanning, flightPlanning.getName(), "—", 72, 9_000, readyStatus);
+    Exam meteorologyExam =
+        new Exam(null, meteorology, meteorology.getName(), "—", 72, 9_000, readyStatus);
+    Exam generalNavigationExam =
+        new Exam(
+            null, generalNavigation, generalNavigation.getName(), "—", 72, 9_000, completedStatus);
+    Exam radioAidsExam =
+        new Exam(null, radioAids, radioAids.getName(), "—", 72, 9_000, readyStatus);
+
+    // exams to insert
+    List<Exam> exams =
+        List.of(
+            instrumentsRatingExam,
+            airlawExam,
+            humanPerformanceExam,
+            aircraftTechnicalExam,
+            flightPlanningExam,
+            meteorologyExam,
+            generalNavigationExam,
+            radioAidsExam);
 
     List<Question> questions =
         List.of(
@@ -434,8 +460,8 @@ public class DataSeeder implements ApplicationRunner {
     addressRepository.saveAll(List.of(address, addressTwo));
     examStatusRepository.saveAll(
         List.of(readyStatus, inProgressStatus, completedStatus, reviewedStatus));
-    examRepository.saveAll(exams);
     subjectRepository.saveAll(subjects);
+    examRepository.saveAll(exams);
     questionRepository.saveAll(questions);
   }
 }
