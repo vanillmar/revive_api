@@ -1,5 +1,14 @@
 package com.example.revive_app.data;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
 import com.example.revive_app.model.Address;
 import com.example.revive_app.model.Admin;
 import com.example.revive_app.model.Department;
@@ -21,13 +30,6 @@ import com.example.revive_app.repository.QuestionRepository;
 import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.SubjectRepository;
 import com.example.revive_app.repository.UserRepository;
-import java.util.List;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -317,12 +319,12 @@ public class DataSeeder implements ApplicationRunner {
             new Exam(
                 null, "aircraft-technical", "Aircraft Technical General", "—", inProgressStatus),
             new Exam(null, "flight-planning", "Flight Planning and Performance", "—", readyStatus),
-            new Exam(null, "instruments", "Instruments and Electronics", "—", readyStatus),
+            new Exam(null, "instrument Rating", "Instruments and Electronics", "—", readyStatus),
             new Exam(null, "meteorology", "Meteorology", "—", readyStatus),
             new Exam(null, "general-navigation", "General Navigation", "—", completedStatus),
             new Exam(null, "radio-aids", "Radio Aids", "—", readyStatus));
     Subject instrumentRating =
-        new Subject(null, "instrument Rating ", "Instruments and Electronics", "—", readyStatus);
+        new Subject(null, "instrument Rating", "Instruments and Electronics", "—", readyStatus);
 
     List<Subject> subjects =
         List.of(
