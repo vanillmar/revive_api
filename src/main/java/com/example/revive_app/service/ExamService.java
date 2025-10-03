@@ -1,6 +1,5 @@
 package com.example.revive_app.service;
 
-import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.Exam;
 import com.example.revive_app.repository.ExamRepository;
 import java.util.*;
