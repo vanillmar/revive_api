@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import jakarta.persistence.CascadeType;
@@ -21,17 +22,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Department {
-  @Id @GeneratedValue private Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-  @Column(nullable = false, unique = true) // enforce uniqueness
-  private String name;
+    @Column(nullable = false, unique = true) // enforce uniqueness
+    private String name;
 
-  private String description;
+    private String description;
 
-  @OneToOne
-  @JoinColumn(name = "head_employee_id", nullable = true)
-  private Employee head; // The head of the department (also an Employee)
+    @OneToOne
+    @JoinColumn(name = "head_employee_id", nullable = true)
+    private Employee head; // The head of the department (also an Employee)
 
-  @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Employee> employees = new ArrayList();
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Employee> employees = new ArrayList<Employee>();
 }

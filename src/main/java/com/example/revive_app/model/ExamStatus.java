@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import jakarta.persistence.Column;
@@ -16,12 +17,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExamStatus {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(nullable = false, unique = true)
-  private String name;
+    @Column(nullable = false, unique = true)
+    private String name;
 
-  private String description;
+    private String description;
 }

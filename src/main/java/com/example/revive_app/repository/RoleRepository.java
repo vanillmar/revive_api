@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.repository;
 
 import com.example.revive_app.model.Role;
@@ -7,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-  Optional<Role> findByName(String name);
+    Optional<Role> findByName(String name);
 }

@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.dto;
 
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExamStatusResponseDTO {
-  private Long id;
-  private String name;
-  private String description;
+    private Long id;
+    private String name;
+    private String description;
 }

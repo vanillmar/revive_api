@@ -143,7 +143,15 @@
 				<version>2.42.0</version>
 				<configuration>
 					<java>
-						<googleJavaFormat />
+						<eclipse>
+							<file>${project.basedir}/baeldung-style.xml</file>
+						</eclipse>
+						<licenseHeader>
+							<content>/* Copyright (C)$YEAR  Vanilson Marcos */</content>
+						</licenseHeader>
+						<importOrder/>
+						<removeUnusedImports />
+						<formatAnnotations />
 					</java>
 				</configuration>
 			</plugin>

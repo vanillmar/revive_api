@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.dto;
 
 import lombok.AllArgsConstructor;
@@ -10,11 +11,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExamRequestDTO {
-  private Long subjectId;
-  private String title;
-  private String result;
-  private int timeLimit;
-  private int passMark;
-  // send the status id on create/update requests
-  private Long statusId;
+    private Long subjectId;
+    private String title;
+    private String result;
+    private int timeLimit;
+    private int passMark;
+    // send the status id on create/update requests
+    private Long statusId;
 }

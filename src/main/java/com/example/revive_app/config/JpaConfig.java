@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.config;
 
 import java.util.Properties;
@@ -14,42 +15,39 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @Configuration
 public class JpaConfig {
 
-  private final DbCredentials dbCredentials;
+    private final DbCredentials dbCredentials;
 
-  public JpaConfig(DbCredentials dbCredentials) {
-    this.dbCredentials = dbCredentials;
-  }
+    public JpaConfig(DbCredentials dbCredentials) {
+        this.dbCredentials = dbCredentials;
+    }
 
-  @Bean
-  public DataSource dataSource() {
-    return DataSourceBuilder.create()
-        .url(dbCredentials.getUrl())
-        .driverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
-        .username(dbCredentials.getUsername())
-        .password(dbCredentials.getPassword())
-        .build();
-  }
+    @Bean
+    public DataSource dataSource() {
+        return DataSourceBuilder.create().url(dbCredentials.getUrl())
+                .driverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver").username(dbCredentials.getUsername())
+                .password(dbCredentials.getPassword()).build();
+    }
 
-  @Bean
-  public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-    LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-    em.setDataSource(dataSource);
-    em.setPackagesToScan("com.example.revive_app.model"); // Adjust to your package
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource);
+        em.setPackagesToScan("com.example.revive_app.model"); // Adjust to your package
 
-    HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-    em.setJpaVendorAdapter(vendorAdapter);
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
 
-    Properties jpaProps = new Properties();
-    jpaProps.setProperty("hibernate.hbm2ddl.auto", "create");
-    jpaProps.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
-    jpaProps.setProperty("hibernate.show_sql", "true");
-    em.setJpaProperties(jpaProps);
+        Properties jpaProps = new Properties();
+        jpaProps.setProperty("hibernate.hbm2ddl.auto", "create");
+        jpaProps.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
+        jpaProps.setProperty("hibernate.show_sql", "true");
+        em.setJpaProperties(jpaProps);
 
-    return em;
-  }
+        return em;
+    }
 
-  @Bean
-  public JpaTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean emf) {
-    return new JpaTransactionManager(emf.getObject());
-  }
+    @Bean
+    public JpaTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean emf) {
+        return new JpaTransactionManager(emf.getObject());
+    }
 }

@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.dto;
 
 import lombok.AllArgsConstructor;
@@ -8,5 +9,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class AuthTokenValidResponseDTO {
-  private boolean isValid;
+    private boolean isValid;
 }

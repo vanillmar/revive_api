@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.controller;
 
 import com.example.revive_app.data.Permissions;
@@ -6,7 +7,6 @@ import com.example.revive_app.data.dto.DepartmentResponseDTO;
 import com.example.revive_app.service.DepartmentService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,69 +22,67 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/departments")
 public class DepartmentController {
 
-  private final DepartmentService departmentService;
+    private final DepartmentService departmentService;
 
-  @Autowired
-  public DepartmentController(DepartmentService departmentService) {
-    this.departmentService = departmentService;
-  }
+    public DepartmentController(DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.READ_DEPARTMENTS + "')")
-  @GetMapping
-  public ResponseEntity<List<DepartmentResponseDTO>> getAllDepartments() {
-    List<DepartmentResponseDTO> departments = departmentService.getAllDepartments();
-    if (departments.isEmpty()) return ResponseEntity.noContent().build();
-    return ResponseEntity.ok(departments);
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.READ_DEPARTMENTS + "')")
+    @GetMapping
+    public ResponseEntity<List<DepartmentResponseDTO>> getAllDepartments() {
+        List<DepartmentResponseDTO> departments = departmentService.getAllDepartments();
+        if (departments.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(departments);
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.READ_DEPARTMENT + "')")
-  @GetMapping("/{id}")
-  public ResponseEntity<DepartmentResponseDTO> getDepartmentById(@PathVariable Long id) {
-    DepartmentResponseDTO department = departmentService.getDepartmentById(id);
-    return ResponseEntity.ok(department);
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.READ_DEPARTMENT + "')")
+    @GetMapping("/{id}")
+    public ResponseEntity<DepartmentResponseDTO> getDepartmentById(@PathVariable Long id) {
+        DepartmentResponseDTO department = departmentService.getDepartmentById(id);
+        return ResponseEntity.ok(department);
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.CREATE_DEPARTMENT + "')")
-  @PostMapping
-  public ResponseEntity<DepartmentResponseDTO> createDepartment(
-      @Valid @RequestBody DepartmentRequestDTO department) {
-    DepartmentResponseDTO createdDepartment = departmentService.createDepartment(department);
-    return ResponseEntity.status(201).body(createdDepartment);
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.CREATE_DEPARTMENT + "')")
+    @PostMapping
+    public ResponseEntity<DepartmentResponseDTO> createDepartment(@Valid @RequestBody DepartmentRequestDTO department) {
+        DepartmentResponseDTO createdDepartment = departmentService.createDepartment(department);
+        return ResponseEntity.status(201).body(createdDepartment);
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.CREATE_DEPARTMENTS + "')")
-  @PostMapping("/batch")
-  public ResponseEntity<List<DepartmentResponseDTO>> createDepartments(
-      @Valid @RequestBody List<DepartmentRequestDTO> departments) {
-    List<DepartmentResponseDTO> createdDepartments =
-        departmentService.createDepartments(departments);
-    if (createdDepartments.isEmpty()) return ResponseEntity.noContent().build();
-    return ResponseEntity.status(201).body(createdDepartments);
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.CREATE_DEPARTMENTS + "')")
+    @PostMapping("/batch")
+    public ResponseEntity<List<DepartmentResponseDTO>> createDepartments(
+            @Valid @RequestBody List<DepartmentRequestDTO> departments) {
+        List<DepartmentResponseDTO> createdDepartments = departmentService.createDepartments(departments);
+        if (createdDepartments.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.status(201).body(createdDepartments);
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.UPDATE_DEPARTMENT + "')")
-  @PutMapping("/{id}")
-  public ResponseEntity<DepartmentResponseDTO> updateDepartment(
-      @PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO departmentDetails) {
-    DepartmentResponseDTO updatedDepartment =
-        departmentService.updateDepartment(id, departmentDetails);
-    return ResponseEntity.status(201).body(updatedDepartment);
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.UPDATE_DEPARTMENT + "')")
+    @PutMapping("/{id}")
+    public ResponseEntity<DepartmentResponseDTO> updateDepartment(@PathVariable Long id,
+            @Valid @RequestBody DepartmentRequestDTO departmentDetails) {
+        DepartmentResponseDTO updatedDepartment = departmentService.updateDepartment(id, departmentDetails);
+        return ResponseEntity.status(201).body(updatedDepartment);
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.UPDATE_DEPARTMENTS + "')")
-  @PutMapping("/batch")
-  public ResponseEntity<List<DepartmentResponseDTO>> updateDepartments(
-      @Valid @RequestBody List<DepartmentRequestDTO> departments) {
-    List<DepartmentResponseDTO> updatedDepartments =
-        departmentService.updateDepartments(departments);
-    if (updatedDepartments.isEmpty()) return ResponseEntity.noContent().build();
-    return ResponseEntity.ok(updatedDepartments);
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.UPDATE_DEPARTMENTS + "')")
+    @PutMapping("/batch")
+    public ResponseEntity<List<DepartmentResponseDTO>> updateDepartments(
+            @Valid @RequestBody List<DepartmentRequestDTO> departments) {
+        List<DepartmentResponseDTO> updatedDepartments = departmentService.updateDepartments(departments);
+        if (updatedDepartments.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(updatedDepartments);
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.DELETE_DEPARTMENT + "')")
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Object> deleteEmployee(@PathVariable Long id) {
-    boolean deleted = departmentService.deleteEmployee(id);
-    return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.DELETE_DEPARTMENT + "')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteEmployee(@PathVariable Long id) {
+        boolean deleted = departmentService.deleteEmployee(id);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
 }

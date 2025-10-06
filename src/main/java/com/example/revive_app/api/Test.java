@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.api;
 
 import com.example.revive_app.config.DbCredentials;
@@ -10,22 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/test")
 @EnableConfigurationProperties(DbCredentials.class)
 public class Test {
-  private final DbCredentials dbCredentials;
+    private final DbCredentials dbCredentials;
 
-  public Test(DbCredentials dbCredentials) {
-    // Constructor logic if needed
-    this.dbCredentials = dbCredentials;
-  }
+    public Test(DbCredentials dbCredentials) {
+        // Constructor logic if needed
+        this.dbCredentials = dbCredentials;
+    }
 
-  @GetMapping
-  public String getTest() {
-    return "Test endpoint is working!";
-  }
+    @GetMapping
+    public String getTest() {
+        return "Test endpoint is working!";
+    }
 
-  @GetMapping("/credentials")
-  public String getCredentials() {
-    return String.format(
-        "Database URL: %s, Database Username: %s, and Database Password: %s",
-        dbCredentials.getUrl(), dbCredentials.getUsername(), dbCredentials.getPassword());
-  }
+    @GetMapping("/credentials")
+    public String getCredentials() {
+        return String.format("Database URL: %s, Database Username: %s, and Database Password: %s",
+                dbCredentials.getUrl(), dbCredentials.getUsername(), dbCredentials.getPassword());
+    }
 }

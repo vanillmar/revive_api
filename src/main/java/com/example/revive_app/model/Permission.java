@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import jakarta.persistence.Column;
@@ -15,10 +16,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Permission {
-  @Id @GeneratedValue private Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-  @Column(nullable = false, unique = true)
-  private String name; // e.g. READ_USER
+    @Column(nullable = false, unique = true)
+    private String name; // e.g. READ_USER
 
-  private String description; // e.g. "Permission to read user data"
+    private String description; // e.g. "Permission to read user data"
 }

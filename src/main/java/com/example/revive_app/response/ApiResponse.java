@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.response;
 
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApiResponse<T> {
-  private boolean success;
-  private String message;
-  private T data;
+    private boolean success;
+    private String message;
+    private T data;
 }

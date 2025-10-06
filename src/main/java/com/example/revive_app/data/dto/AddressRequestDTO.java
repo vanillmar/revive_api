@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.dto;
 
 import jakarta.validation.constraints.NotBlank;
@@ -13,23 +14,23 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressRequestDTO {
-  private Long id;
+    private Long id;
 
-  @NotBlank(message = "street is mandatory")
-  @Size(min = 2, max = 50, message = "street must be between 2 and 50 characters")
-  private String street;
+    @NotBlank(message = "street is mandatory")
+    @Size(min = 2, max = 50, message = "street must be between 2 and 50 characters")
+    private String street;
 
-  @NotBlank(message = "City is mandatory")
-  @Size(min = 2, max = 50, message = "City must be between 2 and 50 characters")
-  private String city;
+    @NotBlank(message = "City is mandatory")
+    @Size(min = 2, max = 50, message = "City must be between 2 and 50 characters")
+    private String city;
 
-  @NotBlank(message = "State is mandatory")
-  @Size(min = 2, max = 50, message = "State must be between 2 and 50 characters")
-  private String state;
+    @NotBlank(message = "State is mandatory")
+    @Size(min = 2, max = 50, message = "State must be between 2 and 50 characters")
+    private String state;
 
-  @NotBlank(message = "Zip Code is mandatory")
-  private String zipCode;
+    @NotBlank(message = "Zip Code is mandatory")
+    private String zipCode;
 
-  @NotBlank(message = "Name is mandatory")
-  private UUID employeeId; // Assuming this is used to link to an Employee entity
+    @NotBlank(message = "Name is mandatory")
+    private UUID employeeId; // Assuming this is used to link to an Employee entity
 }

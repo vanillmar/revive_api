@@ -1,6 +1,6 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,50 +18,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-  private final SecurityFilter securityFilter;
+    private final SecurityFilter securityFilter;
 
-  @Autowired
-  public SecurityConfig(SecurityFilter securityFilter) {
-    this.securityFilter = securityFilter;
-  }
+    public SecurityConfig(SecurityFilter securityFilter) {
+        this.securityFilter = securityFilter;
+    }
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    return http.csrf(csrf -> csrf.disable())
-        .cors(cors -> cors.disable())
-        .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(
-            auth ->
-                auth.requestMatchers("/api/auth/**")
-                    .permitAll()
-                    .requestMatchers("/api/exams/**")
-                    .permitAll()
-                    .requestMatchers("/api/questions/**")
-                    .permitAll()
-                    .requestMatchers("/api/admin/**")
-                    .hasRole("ADMIN")
-                    .requestMatchers("/api/users/**")
-                    .authenticated()
-                    .requestMatchers("/api/employees/**")
-                    .authenticated()
-                    .requestMatchers("/api/departments/**")
-                    .authenticated()
-                    .requestMatchers("/api/addresses/**")
-                    .authenticated()
-                    .anyRequest()
-                    .authenticated())
-        .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-        .build();
-  }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable())
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/exams/**").permitAll().requestMatchers("/api/questions/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN").requestMatchers("/api/users/**")
+                        .authenticated().requestMatchers("/api/employees/**").authenticated()
+                        .requestMatchers("/api/departments/**").authenticated().requestMatchers("/api/addresses/**")
+                        .authenticated().anyRequest().authenticated())
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
+    }
 
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-      throws Exception {
-    return config.getAuthenticationManager();
-  }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.dto;
 
 import com.example.revive_app.model.Role;
@@ -16,17 +17,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDTO {
-  private UUID id;
+    private UUID id;
 
-  @NotBlank(message = "Username is required")
-  private String username;
+    @NotBlank(message = "Username is required")
+    private String username;
 
-  @Email(message = "Email must be valid")
-  private String email;
+    @Email(message = "Email must be valid")
+    private String email;
 
-  private String password;
+    private String password;
 
-  private boolean enabled;
+    private boolean enabled;
 
-  private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 }

@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import jakarta.persistence.Column;
@@ -15,30 +16,29 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Employee extends User {
-  @Column(name = "firstname")
-  private String firstname;
+    @Column(name = "firstname")
+    private String firstname;
 
-  @Column(name = "lastname")
-  private String lastname;
+    @Column(name = "lastname")
+    private String lastname;
 
-  @Column(name = "job_title")
-  private String jobTitle;
+    @Column(name = "job_title")
+    private String jobTitle;
 
-  private Double salary;
+    private Double salary;
 
-  // Many employees can belong to one department
-  @ManyToOne
-  @JoinColumn(name = "department_id", nullable = true)
-  private Department department;
+    // Many employees can belong to one department
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = true)
+    private Department department;
 
-  public Employee() {
-    super();
-  }
+    public Employee() {
+        super();
+    }
 
-  public Employee(
-      String username, String password, String email, String firstname, String lastname) {
-    super(username, password, email);
-    this.firstname = firstname;
-    this.lastname = lastname;
-  }
+    public Employee(String username, String password, String email, String firstname, String lastname) {
+        super(username, password, email);
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
 }

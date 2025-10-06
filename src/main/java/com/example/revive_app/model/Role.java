@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import jakarta.persistence.Entity;
@@ -20,14 +21,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
-  @Id @GeneratedValue private Long id;
-  private String name; // e.g. ROLE_ADMIN
-  private String description; // e.g. "Administrator role with full access"
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name; // e.g. ROLE_ADMIN
+    private String description; // e.g. "Administrator role with full access"
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(
-      name = "Role_Permission",
-      joinColumns = @JoinColumn(name = "role_id"),
-      inverseJoinColumns = @JoinColumn(name = "permission_id"))
-  private Set<Permission> permissions = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "Role_Permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private Set<Permission> permissions = new HashSet<>();
 }

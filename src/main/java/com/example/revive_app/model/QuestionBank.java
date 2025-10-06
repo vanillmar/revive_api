@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionBank {
-  private String subject;
-  private int questionCount;
-  private List<Question> questions;
+    private String subject;
+    private int questionCount;
+    private List<Question> questions;
 }

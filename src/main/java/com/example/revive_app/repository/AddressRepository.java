@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.repository;
 
 import com.example.revive_app.model.Address;
@@ -6,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
-  // You can add custom query methods here if needed
+    // You can add custom query methods here if needed
 }

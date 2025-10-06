@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import jakarta.persistence.Entity;
@@ -14,16 +15,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Address {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private String street;
-  private String city;
-  private String state;
-  private String zipCode;
+    private String street;
+    private String city;
+    private String state;
+    private String zipCode;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "employee_id", nullable = false)
-  private Employee employee;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
 }

@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.mapper;
 
 import com.example.revive_app.data.dto.EmployeeRequestDTO;
@@ -9,13 +10,13 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
-  @Mapping(target = "roles", ignore = true)
-  @Mapping(source = "department.id", target = "department")
-  EmployeeResponseDTO toResponseDTO(Employee employee);
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(source = "department.id", target = "department")
+    EmployeeResponseDTO toResponseDTO(Employee employee);
 
-  @Mapping(target = "roles", ignore = true)
-  @Mapping(target = "authorities", ignore = true)
-  Employee toEntity(EmployeeRequestDTO dto);
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "authorities", ignore = true)
+    Employee toEntity(EmployeeRequestDTO dto);
 
-  List<EmployeeResponseDTO> toResponseDTOs(List<Employee> employees);
+    List<EmployeeResponseDTO> toResponseDTOs(List<Employee> employees);
 }

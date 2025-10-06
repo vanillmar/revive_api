@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.dto;
 
 import com.example.revive_app.model.Role;
@@ -10,5 +11,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class RoleResponseDTO {
-  private Set<Role> roles;
+    private Set<Role> roles;
 }

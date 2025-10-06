@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.repository;
 
 import com.example.revive_app.model.Employee;
@@ -8,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
-  List<Employee> findEmployeesByDepartmentId(Long id);
+    List<Employee> findEmployeesByDepartmentId(Long id);
 }

@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import jakarta.persistence.Column;
@@ -19,26 +20,26 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Exam {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "subject_id")
-  private Subject subject;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
 
-  @Column(nullable = false, unique = true)
-  private String title;
+    @Column(nullable = false, unique = true)
+    private String title;
 
-  private String result;
+    private String result;
 
-  @Column(nullable = false)
-  private int passMark;
+    @Column(nullable = false)
+    private int passMark;
 
-  private int timeLimit; // the limit should be represented in seconds
+    private int timeLimit; // the limit should be represented in seconds
 
-  // ...changed: status is now a relation to ExamStatus table...
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "status_id")
-  private ExamStatus status;
+    // ...changed: status is now a relation to ExamStatus table...
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id")
+    private ExamStatus status;
 }

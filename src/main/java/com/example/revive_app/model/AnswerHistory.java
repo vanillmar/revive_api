@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import jakarta.persistence.*;
@@ -12,12 +13,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class AnswerHistory {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private Long examAttemptId;
-  private Long questionId;
-  private Integer previousOptionIndex;
-  private LocalDateTime changedAt;
+    private Long examAttemptId;
+    private Long questionId;
+    private Integer previousOptionIndex;
+    private LocalDateTime changedAt;
 }

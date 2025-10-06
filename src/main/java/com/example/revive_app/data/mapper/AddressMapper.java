@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.mapper;
 
 import com.example.revive_app.data.dto.AddressRequestDTO;
@@ -11,22 +12,22 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "Spring")
 public interface AddressMapper {
 
-  @Mapping(target = "employeeId", source = "employee.id")
-  AddressResponseDTO toResponseDTO(Address address);
+    @Mapping(target = "employeeId", source = "employee.id")
+    AddressResponseDTO toResponseDTO(Address address);
 
-  List<AddressResponseDTO> toAddressResponseDTOList(List<Address> addresses);
+    List<AddressResponseDTO> toAddressResponseDTOList(List<Address> addresses);
 
-  @Mapping(target = "employee", expression = "java(employeeFromId(dto.getEmployeeId()))")
-  Address toEntity(AddressRequestDTO dto);
+    @Mapping(target = "employee", expression = "java(employeeFromId(dto.getEmployeeId()))")
+    Address toEntity(AddressRequestDTO dto);
 
-  List<Address> toListEntitiy(List<AddressRequestDTO> dtos);
+    List<Address> toListEntitiy(List<AddressRequestDTO> dtos);
 
-  default Employee employeeFromId(java.util.UUID id) {
-    if (id == null) {
-      return null;
+    default Employee employeeFromId(java.util.UUID id) {
+        if (id == null) {
+            return null;
+        }
+        Employee e = new Employee();
+        e.setId(id);
+        return e;
     }
-    Employee e = new Employee();
-    e.setId(id);
-    return e;
-  }
 }

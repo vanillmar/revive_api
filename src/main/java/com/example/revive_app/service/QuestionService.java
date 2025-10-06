@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.service;
 
 import com.example.revive_app.model.Question;
@@ -10,29 +11,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuestionService {
 
-  @Autowired private QuestionRepository questionRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
 
-  public List<Question> findAll() {
-    return questionRepository.findAll();
-  }
+    public List<Question> findAll() {
+        return questionRepository.findAll();
+    }
 
-  public Optional<Question> findById(Long id) {
-    return questionRepository.findById(id);
-  }
+    public Optional<Question> findById(Long id) {
+        return questionRepository.findById(id);
+    }
 
-  // public List<Question> findBySubjectName(String subject) {
-  //     return questionRepository.findBySubjectName(subject);
-  // }
+    // public List<Question> findBySubjectName(String subject) {
+    // return questionRepository.findBySubjectName(subject);
+    // }
 
-  public Question save(Question question) {
-    return questionRepository.save(question);
-  }
+    public Question save(Question question) {
+        return questionRepository.save(question);
+    }
 
-  public void deleteById(Long id) {
-    questionRepository.deleteById(id);
-  }
+    public void deleteById(Long id) {
+        questionRepository.deleteById(id);
+    }
 
-  public List<Question> findBySubjectName(String subject) {
-    return questionRepository.findBySubjectName(subject);
-  }
+    public List<Question> findBySubjectName(String subject) {
+        return questionRepository.findBySubjectName(subject);
+    }
 }

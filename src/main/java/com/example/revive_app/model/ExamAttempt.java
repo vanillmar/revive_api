@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import jakarta.persistence.*;
@@ -14,23 +15,23 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ExamAttempt {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  private Student student;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Student student;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "subject_id")
-  private Subject subject;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
 
-  private LocalDateTime startTime;
-  private LocalDateTime endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-  private Double score; // optional
+    private Double score; // optional
 
-  @OneToMany(mappedBy = "examAttempt", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Answer> answers = new ArrayList<>();
+    @OneToMany(mappedBy = "examAttempt", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Answer> answers = new ArrayList<>();
 }

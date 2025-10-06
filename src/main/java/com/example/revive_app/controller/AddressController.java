@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.controller;
 
 import com.example.revive_app.data.Permissions;
@@ -7,7 +8,6 @@ import com.example.revive_app.service.AddressService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,65 +22,66 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/addresses")
 public class AddressController {
-  private final AddressService addressService;
+    private final AddressService addressService;
 
-  @Autowired
-  public AddressController(AddressService addressService) {
-    this.addressService = addressService;
-  }
+    public AddressController(AddressService addressService) {
+        this.addressService = addressService;
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.READ_ADDRESSES + "')")
-  @GetMapping
-  public List<AddressResponseDTO> getAllAddresses() {
-    return addressService.getAllAddresses();
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.READ_ADDRESSES + "')")
+    @GetMapping
+    public List<AddressResponseDTO> getAllAddresses() {
+        return addressService.getAllAddresses();
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.READ_ADDRESS + "')")
-  @GetMapping("/{id}")
-  public ResponseEntity<AddressResponseDTO> getAddressById(@PathVariable Long id) {
-    Optional<AddressResponseDTO> address = addressService.getAddressById(id);
-    return address.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.READ_ADDRESS + "')")
+    @GetMapping("/{id}")
+    public ResponseEntity<AddressResponseDTO> getAddressById(@PathVariable Long id) {
+        Optional<AddressResponseDTO> address = addressService.getAddressById(id);
+        return address.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.CREATE_ADDRESS + "')")
-  @PostMapping
-  public ResponseEntity<AddressResponseDTO> createAddress(
-      @Valid @RequestBody AddressRequestDTO dto) {
-    AddressResponseDTO createdAddress = addressService.createAddress(dto);
-    if (createdAddress == null) return ResponseEntity.badRequest().build();
-    return ResponseEntity.status(201).body(createdAddress);
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.CREATE_ADDRESS + "')")
+    @PostMapping
+    public ResponseEntity<AddressResponseDTO> createAddress(@Valid @RequestBody AddressRequestDTO dto) {
+        AddressResponseDTO createdAddress = addressService.createAddress(dto);
+        if (createdAddress == null)
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(201).body(createdAddress);
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.CREATE_ADDRESSES + "')")
-  @PostMapping("/batch")
-  public ResponseEntity<List<AddressResponseDTO>> createAddresses(
-      @Valid @RequestBody List<AddressRequestDTO> addresses) {
-    List<AddressResponseDTO> createdAddresses = addressService.createAddresses(addresses);
-    if (createdAddresses.isEmpty()) return ResponseEntity.noContent().build();
-    return ResponseEntity.status(201).body(createdAddresses);
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.CREATE_ADDRESSES + "')")
+    @PostMapping("/batch")
+    public ResponseEntity<List<AddressResponseDTO>> createAddresses(
+            @Valid @RequestBody List<AddressRequestDTO> addresses) {
+        List<AddressResponseDTO> createdAddresses = addressService.createAddresses(addresses);
+        if (createdAddresses.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.status(201).body(createdAddresses);
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.UPDATE_ADDRESS + "')")
-  @PutMapping("/{id}")
-  public ResponseEntity<AddressResponseDTO> updateAddress(
-      @PathVariable Long id, @Valid @RequestBody AddressRequestDTO dto) {
-    AddressResponseDTO updatedAddress = addressService.updateAddress(id, dto);
-    return ResponseEntity.ok(updatedAddress);
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.UPDATE_ADDRESS + "')")
+    @PutMapping("/{id}")
+    public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable Long id,
+            @Valid @RequestBody AddressRequestDTO dto) {
+        AddressResponseDTO updatedAddress = addressService.updateAddress(id, dto);
+        return ResponseEntity.ok(updatedAddress);
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.UPDATE_ADDRESSES + "')")
-  @PutMapping("/batch")
-  public ResponseEntity<List<AddressResponseDTO>> updateAddresses(
-      @Valid @RequestBody List<AddressRequestDTO> addresses) {
-    List<AddressResponseDTO> updatedAddresses = addressService.updateAddresses(addresses);
-    if (updatedAddresses.isEmpty()) return ResponseEntity.noContent().build();
-    return ResponseEntity.ok(updatedAddresses);
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.UPDATE_ADDRESSES + "')")
+    @PutMapping("/batch")
+    public ResponseEntity<List<AddressResponseDTO>> updateAddresses(
+            @Valid @RequestBody List<AddressRequestDTO> addresses) {
+        List<AddressResponseDTO> updatedAddresses = addressService.updateAddresses(addresses);
+        if (updatedAddresses.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(updatedAddresses);
+    }
 
-  @PreAuthorize("hasAuthority('" + Permissions.DELETE_ADDRESS + "')")
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Object> deleteAddress(@PathVariable Long id) {
-    boolean deleted = addressService.deleteAddress(id);
-    return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
-  }
+    @PreAuthorize("hasAuthority('" + Permissions.DELETE_ADDRESS + "')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteAddress(@PathVariable Long id) {
+        boolean deleted = addressService.deleteAddress(id);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
 }
