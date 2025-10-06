@@ -5,6 +5,7 @@ import com.example.revive_app.data.dto.ExamResponseDTO;
 import com.example.revive_app.data.dto.ResponseDTO;
 import com.example.revive_app.data.mapper.ExamMapper;
 import com.example.revive_app.model.Exam;
+import com.example.revive_app.service.ExamEvaluationService;
 import com.example.revive_app.service.ExamService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExamController {
 
   private final ExamService examService;
+  private final ExamEvaluationService examEvaluationService;
   private final ExamMapper examMapper;
 
   @Autowired
-  public ExamController(ExamService examService, ExamMapper examMapper) {
+  public ExamController(
+      ExamService examService, ExamEvaluationService examEvaluationService, ExamMapper examMapper) {
     this.examService = examService;
+    this.examEvaluationService = examEvaluationService;
     this.examMapper = examMapper;
   }
 
@@ -55,7 +59,8 @@ public class ExamController {
   }
 
   @GetMapping("/{subject}")
-  public ResponseEntity<ResponseDTO<ExamResponseDTO>> getBySubject(@PathVariable String subjectName) {
+  public ResponseEntity<ResponseDTO<ExamResponseDTO>> getBySubject(
+      @PathVariable String subjectName) {
     ResponseDTO<ExamResponseDTO> response = new ResponseDTO<>();
     ExamResponseDTO exam =
         examService.findBySubject(subjectName).map(examMapper::toResponseDTO).orElse(null);
@@ -106,5 +111,11 @@ public class ExamController {
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+  }
+
+  @PostMapping("/{attemptId}/submit")
+  public String submitExam(@PathVariable Long attemptId) {
+    double score = examEvaluationService.evaluateExam(attemptId);
+    return "Exam submitted successfully! Score: " + score + "%";
   }
 }

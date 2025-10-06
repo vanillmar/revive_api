@@ -30,7 +30,8 @@ public class ExamService {
   }
 
   public boolean existsBySubject(String subject) {
-    return examRepository.findAll().stream().anyMatch(exam -> exam.getSubject().getName().equals(subject));
+    return examRepository.findAll().stream()
+        .anyMatch(exam -> exam.getSubject().getName().equals(subject));
   }
 
   public boolean existsByTitle(String title) {

@@ -7,6 +7,7 @@ import com.example.revive_app.data.dto.UserRequestDTO;
 import com.example.revive_app.data.dto.UserResponseDTO;
 import com.example.revive_app.data.mapper.AuthRegisterMapper;
 import com.example.revive_app.model.User;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,7 +41,7 @@ public class AuthService {
     User user = (User) authentication.getPrincipal();
     String jwt = jwtService.generateToken(user);
 
-    return new AuthResponse(user.getId().toString(), jwt, user.getUsername());
+    return new AuthResponse(user.getId().toString(), jwt, user.getUsername(), user.getRoles());
   }
 
   public AuthResponse register(AuthRegisterRequestDTO request) {
@@ -48,6 +49,6 @@ public class AuthService {
     UserResponseDTO newUser = userService.createUser(userDTO);
     String jwt = "";
 
-    return new AuthResponse(newUser.getId().toString(), jwt, newUser.getUsername());
+    return new AuthResponse(newUser.getId().toString(), jwt, newUser.getUsername(), Set.of());
   }
 }
