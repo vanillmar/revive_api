@@ -22,13 +22,18 @@ import com.example.revive_app.repository.QuestionRepository;
 import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.SubjectRepository;
 import com.example.revive_app.repository.UserRepository;
+import com.example.revive_app.repository.StudentRepository;
+
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.example.revive_app.model.Student;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -41,6 +46,9 @@ public class DataSeeder implements ApplicationRunner {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -97,6 +105,14 @@ public class DataSeeder implements ApplicationRunner {
         // Set the head of the department
         department.setHead(empOne);
         department.setEmployees(List.of(empOne, empTwo));
+
+
+        Student studentOne = new Student();
+        studentOne.setUsername("marcos");
+        studentOne.setPassword(passwordEncoder.encode(""));
+        studentOne.setFirstname("Vanilson");
+        studentOne.setLastname("Marcos");
+        studentOne.setEmail("vanilson@marcos.ao");
 
         Address address = new Address();
         address.setStreet("123 Main St");
@@ -258,6 +274,8 @@ public class DataSeeder implements ApplicationRunner {
                     .orElseThrow(() -> new RuntimeException("Moderator role not found"))));
             adminUser.setRoles(Set.of(roleRepository.findByName(Roles.ADMIN)
                     .orElseThrow(() -> new RuntimeException("Admin role not found"))));
+            studentOne.setRoles(Set.of(roleRepository.findByName(Roles.USER)
+                    .orElseThrow(() -> new RuntimeException("User role not found"))));
         }
 
         ExamStatus readyStatus = new ExamStatus(null, "Ready", "Ready to take");
@@ -302,6 +320,7 @@ public class DataSeeder implements ApplicationRunner {
         userRepository.save(adminUser);
         departmentRepository.save(department);
         employeeRepository.saveAll(List.of(empOne, empTwo));
+        studentRepository.saveAll(List.of(studentOne));
         addressRepository.saveAll(List.of(address, addressTwo));
         examStatusRepository.saveAll(List.of(readyStatus, inProgressStatus, completedStatus, reviewedStatus));
         subjectRepository.saveAll(subjects);
