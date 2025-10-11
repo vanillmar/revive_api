@@ -1,6 +1,15 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
 import com.example.revive_app.model.Address;
 import com.example.revive_app.model.Admin;
 import com.example.revive_app.model.Department;
@@ -10,6 +19,7 @@ import com.example.revive_app.model.ExamStatus;
 import com.example.revive_app.model.Permission;
 import com.example.revive_app.model.Question;
 import com.example.revive_app.model.Role;
+import com.example.revive_app.model.Student;
 import com.example.revive_app.model.Subject;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.AddressRepository;
@@ -20,20 +30,9 @@ import com.example.revive_app.repository.ExamStatusRepository;
 import com.example.revive_app.repository.PermissionRepository;
 import com.example.revive_app.repository.QuestionRepository;
 import com.example.revive_app.repository.RoleRepository;
+import com.example.revive_app.repository.StudentRepository;
 import com.example.revive_app.repository.SubjectRepository;
 import com.example.revive_app.repository.UserRepository;
-import com.example.revive_app.repository.StudentRepository;
-
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-
-import com.example.revive_app.model.Student;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -109,7 +108,7 @@ public class DataSeeder implements ApplicationRunner {
 
         Student studentOne = new Student();
         studentOne.setUsername("marcos");
-        studentOne.setPassword(passwordEncoder.encode(""));
+        studentOne.setPassword(passwordEncoder.encode("test_"));
         studentOne.setFirstname("Vanilson");
         studentOne.setLastname("Marcos");
         studentOne.setEmail("vanilson@marcos.ao");
