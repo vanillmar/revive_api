@@ -7,7 +7,6 @@ import com.example.revive_app.model.QuestionBank;
 import com.example.revive_app.service.QuestionService;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/questions")
 public class QuestionController {
 
-    @Autowired
-    private QuestionService questionService;
+    private final QuestionService questionService;
+
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
 
     @GetMapping
     public ResponseEntity<ResponseDTO<List<Question>>> getAllQuestions() {
@@ -90,14 +92,4 @@ public class QuestionController {
         Question updatedQuestion = questionService.save(question);
         return ResponseEntity.ok(updatedQuestion);
     }
-
-    // @DeleteMapping("/{id}")
-    // public ResponseEntity<Void> deleteQuestion(@PathVariable String id) {
-    // Optional<Question> question = questionService.findById(id);
-    // if (question.isEmpty()) {
-    // return ResponseEntity.notFound().build();
-    // }
-    // questionService.deleteById(id);
-    // return ResponseEntity.noContent().build();
-    // }
 }
