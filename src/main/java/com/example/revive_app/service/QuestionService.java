@@ -1,13 +1,10 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.example.revive_app.model.Question;
 import com.example.revive_app.repository.QuestionRepository;
+import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class QuestionService {
@@ -22,11 +19,19 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public Optional<Question> findById(Long id) {
-        return questionRepository.findById(id);
+    public Question findById(Long id) {
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Question not found with ID: " + id));
     }
 
     public Question save(Question question) {
+        return questionRepository.save(question);
+    }
+
+    public Question update(Long id, Question question) {
+        if (!existsById(id)) {
+            throw new IllegalArgumentException("Question with id: " + id.toString() + " does not exist");
+        }
         return questionRepository.save(question);
     }
 
@@ -36,5 +41,9 @@ public class QuestionService {
 
     public List<Question> findBySubjectName(String subject) {
         return questionRepository.findBySubjectName(subject);
+    }
+
+    public boolean existsById(Long id) {
+        return questionRepository.existsById(id);
     }
 }
