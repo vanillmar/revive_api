@@ -28,6 +28,6 @@ public class Role {
     private String description; // e.g. "Administrator role with full access"
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "Role_Permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    @JoinTable(name = "RolePermission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private Set<Permission> permissions = new HashSet<>();
 }

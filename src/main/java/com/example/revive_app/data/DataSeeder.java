@@ -81,7 +81,7 @@ public class DataSeeder implements ApplicationRunner {
         User adminUser = new Admin();
         adminUser.setUsername("admin");
         adminUser.setPassword(passwordEncoder.encode("admin123"));
-        adminUser.setEmail("admins@system.com");
+        adminUser.setEmail("admin@system.com");
 
         Employee empOne = new Employee();
         empOne.setUsername("v.marcos");
