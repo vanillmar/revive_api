@@ -15,16 +15,16 @@ public class SubjectService {
         this.subjectRepository = subjectRepository;
     }
 
-    public List<Subject> findAllSubjects() {
+    public List<Subject> findAll() {
         return subjectRepository.findAll();
     }
 
     public Subject findById(Long id) {
         return subjectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Question not found with ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Subject not found with ID: " + id));
     }
 
-    public Subject create(Subject subject) {
+    public Subject save(Subject subject) {
         return subjectRepository.save(subject);
     }
 

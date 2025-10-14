@@ -1,3 +1,4 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.dto.answer;
 
 import lombok.Data;

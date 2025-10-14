@@ -1,15 +1,14 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.mapper;
-
-import java.util.List;
-
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import com.example.revive_app.data.dto.answer.AnswerRequestDTO;
 import com.example.revive_app.data.dto.answer.AnswerResponseDTO;
 import com.example.revive_app.model.Answer;
 import com.example.revive_app.model.ExamAttempt;
 import com.example.revive_app.model.Question;
+import java.util.List;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AnswerMapper {

@@ -1,15 +1,11 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 
 import com.example.revive_app.data.dto.answer.AnswerRequestDTO;
 import com.example.revive_app.data.dto.answer.AnswerResponseDTO;
@@ -17,6 +13,10 @@ import com.example.revive_app.data.mapper.AnswerMapper;
 import com.example.revive_app.model.Answer;
 import com.example.revive_app.model.ExamAttempt;
 import com.example.revive_app.model.Question;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
 class AnswerMapperTest {
 

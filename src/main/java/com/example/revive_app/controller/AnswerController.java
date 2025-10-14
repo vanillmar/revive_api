@@ -1,20 +1,16 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.controller;
 
-import com.example.revive_app.model.Answer;
-import com.example.revive_app.repository.AnswerRepository;
-import com.example.revive_app.service.AnswerService;
-
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.*;
-
 import com.example.revive_app.data.dto.ResponseDTO;
 import com.example.revive_app.data.dto.answer.AnswerResponseDTO;
 import com.example.revive_app.data.mapper.AnswerMapper;
+import com.example.revive_app.model.Answer;
+import com.example.revive_app.repository.AnswerRepository;
+import com.example.revive_app.service.AnswerService;
+import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/answers")
@@ -29,10 +25,10 @@ public class AnswerController {
         this.answerRepository = answerRepository;
         this.answerMapper = answerMapper;
     }
-    
+
     @PostMapping("/save")
-    public ResponseEntity<ResponseDTO<AnswerResponseDTO>> saveAnswer(@RequestParam Long attemptId, @RequestParam Long questionId,
-            @RequestParam Integer selectedOptionIndex) {
+    public ResponseEntity<ResponseDTO<AnswerResponseDTO>> saveAnswer(@RequestParam Long attemptId,
+            @RequestParam Long questionId, @RequestParam Integer selectedOptionIndex) {
         Answer answer = answerService.saveOrUpdateAnswer(attemptId, questionId, selectedOptionIndex);
         AnswerResponseDTO answerResponseDTO = answerMapper.toResponse(answer);
         ResponseDTO<AnswerResponseDTO> responseDTO = new ResponseDTO<>();

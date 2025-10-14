@@ -279,17 +279,14 @@ public class DataSeeder implements ApplicationRunner {
         ExamStatus completedStatus = new ExamStatus(null, "Completed", "Exam completed");
         ExamStatus reviewedStatus = new ExamStatus(null, "Reviewed", "Exam has been reviewed");
 
-        Subject instrumentRating = new Subject(null, "instrument Rating", "Instruments and Electronics", "—",
-                readyStatus);
-        Subject airlaw = new Subject(null, "airlaw", "Air Law", "—", readyStatus);
-        Subject humanPerformance = new Subject(null, "human-performance", "Human Performance", "—", readyStatus);
-        Subject aircraftTechnical = new Subject(null, "aircraft-technical", "Aircraft Technical General", "—",
-                inProgressStatus);
-        Subject flightPlanning = new Subject(null, "flight-planning", "Flight Planning and Performance", "—",
-                readyStatus);
-        Subject meteorology = new Subject(null, "meteorology", "Meteorology", "—", readyStatus);
-        Subject generalNavigation = new Subject(null, "general-navigation", "General Navigation", "—", completedStatus);
-        Subject radioAids = new Subject(null, "radio-aids", "Radio Aids", "—", readyStatus);
+        Subject instrumentRating = new Subject(null, "instrument Rating", "Instruments and Electronics", "—");
+        Subject airlaw = new Subject(null, "airlaw", "Air Law", "—");
+        Subject humanPerformance = new Subject(null, "human-performance", "Human Performance", "—");
+        Subject aircraftTechnical = new Subject(null, "aircraft-technical", "Aircraft Technical General", "—");
+        Subject flightPlanning = new Subject(null, "flight-planning", "Flight Planning and Performance", "—");
+        Subject meteorology = new Subject(null, "meteorology", "Meteorology", "—");
+        Subject generalNavigation = new Subject(null, "general-navigation", "General Navigation", "—");
+        Subject radioAids = new Subject(null, "radio-aids", "Radio Aids", "—");
 
         List<Subject> subjects = List.of(instrumentRating, airlaw, humanPerformance, aircraftTechnical, flightPlanning,
                 meteorology, generalNavigation, radioAids);
