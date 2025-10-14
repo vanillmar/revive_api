@@ -1,6 +1,15 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
 import com.example.revive_app.model.Address;
 import com.example.revive_app.model.Admin;
 import com.example.revive_app.model.Department;
@@ -24,13 +33,6 @@ import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.StudentRepository;
 import com.example.revive_app.repository.SubjectRepository;
 import com.example.revive_app.repository.UserRepository;
-import java.util.List;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -109,6 +111,7 @@ public class DataSeeder implements ApplicationRunner {
         studentOne.setFirstname("Vanilson");
         studentOne.setLastname("Marcos");
         studentOne.setEmail("vanilson@marcos.ao");
+        
 
         Address address = new Address();
         address.setStreet("123 Main St");
@@ -245,33 +248,33 @@ public class DataSeeder implements ApplicationRunner {
                     createDepartments, updateDepartment, updateDepartments, deleteDepartment, readExams));
 
             // Criar roles
-            Role admin = new Role();
-            admin.setName(Roles.ADMIN);
-            admin.setDescription("Administrator with all permissions");
-            admin.setPermissions(Set.of(createUsers, createUser, deleteUser, readUsers, readUser, readMe, readEmployee,
+            Role adminRole = new Role();
+            adminRole.setName(Roles.ADMIN);
+            adminRole.setDescription("Administrator with all permissions");
+            adminRole.setPermissions(Set.of(createUsers, createUser, deleteUser, readUsers, readUser, readMe, readEmployee,
                     readEmployees, createEmployee, createEmployees, updateEmployee, updateEmployees, deleteEmployee,
                     readAddress, readAddresses, createAddress, createAddresses, updateAddress, updateAddresses,
                     deleteAddress, readDepartment, readDepartments, createDepartment, createDepartments,
                     updateDepartment, updateDepartments, deleteDepartment, readExams));
 
-            Role moderator = new Role();
-            moderator.setName(Roles.MODERATOR);
-            moderator.setDescription("Moderator with limited permissions");
-            moderator.setPermissions(Set.of(readUser, readMe, readAddress, readDepartment, readExams));
+            Role studentRole = new Role();
+            studentRole.setName(Roles.STUDENT);
+            studentRole.setDescription("Student Role with limited permissions");
+            studentRole.setPermissions(Set.of(readUser, readMe, readAddress, readDepartment, readExams));
 
-            Role user = new Role();
-            user.setName(Roles.USER);
-            user.setDescription("Regular user with view-only permissions");
-            user.setPermissions(Set.of(readMe, readAddress, readDepartment, readExams));
+            Role userRole = new Role();
+            userRole.setName(Roles.USER);
+            userRole.setDescription("Regular user with view-only permissions");
+            userRole.setPermissions(Set.of(readMe, readAddress, readDepartment, readExams));
 
-            roleRepository.saveAll(List.of(admin, moderator, user));
+            roleRepository.saveAll(List.of(adminRole, studentRole, userRole));
 
-            empOne.setRoles(Set.of(roleRepository.findByName(Roles.MODERATOR)
-                    .orElseThrow(() -> new RuntimeException("Moderator role not found"))));
+            empOne.setRoles(Set.of(roleRepository.findByName(Roles.USER)
+                    .orElseThrow(() -> new RuntimeException("User role not found"))));
             adminUser.setRoles(Set.of(roleRepository.findByName(Roles.ADMIN)
                     .orElseThrow(() -> new RuntimeException("Admin role not found"))));
-            studentOne.setRoles(Set.of(roleRepository.findByName(Roles.USER)
-                    .orElseThrow(() -> new RuntimeException("User role not found"))));
+            studentOne.setRoles(Set.of(roleRepository.findByName(Roles.STUDENT)
+                    .orElseThrow(() -> new RuntimeException("Student role not found"))));
         }
 
         ExamStatus readyStatus = new ExamStatus(null, "Ready", "Ready to take");

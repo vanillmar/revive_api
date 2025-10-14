@@ -1,14 +1,8 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.controller;
 
-import com.example.revive_app.data.dto.ExamRequestDTO;
-import com.example.revive_app.data.dto.ExamResponseDTO;
-import com.example.revive_app.data.dto.ResponseDTO;
-import com.example.revive_app.data.mapper.ExamMapper;
-import com.example.revive_app.model.Exam;
-import com.example.revive_app.service.ExamEvaluationService;
-import com.example.revive_app.service.ExamService;
 import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +13,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.revive_app.data.dto.ExamRequestDTO;
+import com.example.revive_app.data.dto.ExamResponseDTO;
+import com.example.revive_app.data.dto.ResponseDTO;
+import com.example.revive_app.data.mapper.ExamMapper;
+import com.example.revive_app.model.Exam;
+import com.example.revive_app.service.ExamEvaluationService;
+import com.example.revive_app.service.ExamService;
 
 @RestController
 @RequestMapping("/api/exams")
@@ -36,7 +38,7 @@ public class ExamController {
 
     // @PreAuthorize("hasAuthority('" + Permissions.READ_EXAMS + "')")
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<ExamResponseDTO>>> list() {
+    public ResponseEntity<ResponseDTO<List<ExamResponseDTO>>> getAll() {
         ResponseDTO<List<ExamResponseDTO>> response = new ResponseDTO<>();
         List<Exam> exams = examService.findAll();
         if (exams.isEmpty()) {
@@ -49,14 +51,14 @@ public class ExamController {
 
         List<ExamResponseDTO> examDTOs = examMapper.toResponseDTOs(exams);
         response.setMessage("Exams retrieved successfully");
-        response.setStatus(HttpStatus.NO_CONTENT.value());
+        response.setStatus(HttpStatus.OK.value());
         response.setSuccess(true);
         response.setData(null);
         response.setData(examDTOs);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{subject}")
+    @GetMapping("/subject/{subjectName}")
     public ResponseEntity<ResponseDTO<ExamResponseDTO>> getBySubject(@PathVariable String subjectName) {
         ResponseDTO<ExamResponseDTO> response = new ResponseDTO<>();
         ExamResponseDTO exam = examService.findBySubject(subjectName).map(examMapper::toResponseDTO).orElse(null);
