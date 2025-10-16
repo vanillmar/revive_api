@@ -10,7 +10,13 @@ import com.example.revive_app.model.QuestionBank;
 import com.example.revive_app.model.Subject;
 import com.example.revive_app.service.QuestionService;
 import com.example.revive_app.service.SubjectService;
+
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -38,24 +45,34 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<QuestionResponseDTO>>> getAllQuestions() {
-        List<Question> questions = questionService.findAll();
+    public ResponseEntity<ResponseDTO<List<QuestionResponseDTO>>> getAll(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int pageSize,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String sortOrder,
+        @RequestParam(defaultValue = "") String search
+    ) {
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc")
+            ? Sort.Direction.DESC
+            : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(direction, sortBy));
+        
+        Page<Question> questionPage = questionService.findAllWithFilters(search, pageable);
+
         ResponseDTO<List<QuestionResponseDTO>> responseDTO = new ResponseDTO<>();
-        responseDTO.setData(questionMapper.toResponseList(questions));
-        if (questions.isEmpty()) {
-            responseDTO.setMessage("No questions found");
-            responseDTO.setStatus(HttpStatus.NO_CONTENT.value());
-            responseDTO.setSuccess(false);
-            return ResponseEntity.ok(responseDTO);
-        }
+        responseDTO.setData(questionMapper.toResponseList(questionPage.getContent()));
         responseDTO.setMessage("Questions retrieved successfully");
         responseDTO.setStatus(HttpStatus.OK.value());
         responseDTO.setSuccess(true);
+
+        responseDTO.setTotal((int) questionPage.getTotalElements());
+        responseDTO.setPage(page);
+        responseDTO.setPageSize(pageSize);
         return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO<QuestionResponseDTO>> getQuestionById(@PathVariable Long id) {
+    public ResponseEntity<ResponseDTO<QuestionResponseDTO>> getById(@PathVariable Long id) {
         Question question = questionService.findById(id);
         ResponseDTO<QuestionResponseDTO> responseDTO = new ResponseDTO<>();
         responseDTO.setMessage("Questions retrieved successfully");
@@ -66,7 +83,7 @@ public class QuestionController {
     }
 
     @GetMapping("/subject/{subject}")
-    public ResponseEntity<ResponseDTO<QuestionBank>> getQuestionBySubject(@PathVariable String subject) {
+    public ResponseEntity<ResponseDTO<QuestionBank>> getBySubject(@PathVariable String subject) {
         List<Question> questions = questionService.findBySubjectName(subject);
         QuestionBank questionBank = new QuestionBank();
         ResponseDTO<QuestionBank> responseDTO = new ResponseDTO<>();
@@ -91,7 +108,7 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<QuestionResponseDTO>> createQuestion(
+    public ResponseEntity<ResponseDTO<QuestionResponseDTO>> create(
             @RequestBody QuestionRequestDTO questionRequest) {
         Subject subject = subjectService.findById(questionRequest.getSubjectId());
         Question question = questionMapper.toEntity(questionRequest, subject);
@@ -105,7 +122,7 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseDTO<QuestionResponseDTO>> updateQuestion(@PathVariable Long id,
+    public ResponseEntity<ResponseDTO<QuestionResponseDTO>> update(@PathVariable Long id,
             @RequestBody QuestionRequestDTO questionDetails) {
         ResponseDTO<QuestionResponseDTO> responseDTO = new ResponseDTO<>();
         Subject subject = subjectService.findById(questionDetails.getSubjectId());
@@ -120,7 +137,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!questionService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

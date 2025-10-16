@@ -4,6 +4,9 @@ package com.example.revive_app.service;
 import com.example.revive_app.model.Question;
 import com.example.revive_app.repository.QuestionRepository;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,5 +48,12 @@ public class QuestionService {
 
     public boolean existsById(Long id) {
         return questionRepository.existsById(id);
+    }
+
+    public Page<Question> findAllWithFilters(String search, Pageable pageable) {
+        if (search == null || search.isEmpty()) {
+            return questionRepository.findAll(pageable);
+        }
+        return questionRepository.findByQuestionContainingIgnoreCase(search, pageable);
     }
 }
