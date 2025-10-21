@@ -1,18 +1,26 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import java.util.Date;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.example.revive_app.model.User;
 
 @Service
 public class JwtService {
     private final Algorithm algorithm = Algorithm.HMAC256("my_secret");
 
     public String generateToken(UserDetails userDetails) {
-        return JWT.create().withIssuer("auth-api").withSubject(userDetails.getUsername())
+        User user = (User) userDetails;
+        return JWT.create()
+                .withIssuer("auth-api")
+                .withSubject(userDetails.getUsername())
+                .withClaim("id", user.getId().toString()).withIssuedAt(new Date())
+                .withClaim("email", user.getEmail()).withIssuedAt(new Date())
                 .withClaim("roles", userDetails.getAuthorities().toString()).withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 86400000)).sign(algorithm);
     }
