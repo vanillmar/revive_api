@@ -5,8 +5,10 @@ import com.example.revive_app.data.Permissions;
 import com.example.revive_app.data.dto.UserRequestDTO;
 import com.example.revive_app.data.dto.UserResponseDTO;
 import com.example.revive_app.service.UserService;
+
 import java.util.List;
 import java.util.UUID;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -18,28 +20,48 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.revive_app.data.dto.ResponseDTO;
+import com.example.revive_app.data.mapper.UserMapper;
+import com.example.revive_app.model.User;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @PreAuthorize("hasAuthority('" + Permissions.READ_ME + "')")
     @GetMapping("/me")
-    public ResponseEntity<UserResponseDTO> getMe(Authentication authentication) {
-        UserResponseDTO user = userService.getMe(authentication.getPrincipal());
-        return ResponseEntity.ok(user);
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> getMe(Authentication authentication) {
+        ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();  
+        User user = userService.getMe(authentication.getPrincipal());
+        UserResponseDTO userDto = userMapper.toResponse(user);
+        response.setSuccess(true);
+        response.setMessage("User retrieved successfully");
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(userDto);
+        
+        return ResponseEntity.ok().body(response);
     }
 
     @PreAuthorize("hasAuthority('" + Permissions.READ_USERS + "')")
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-        List<UserResponseDTO> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        List<UserResponseDTO> usersDTO = userMapper.toResponseList(users);
+        ResponseDTO<List<UserResponseDTO>> response = new ResponseDTO<>();
+        response.setSuccess(true);
+        response.setMessage("Users retrieved successfully");
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(usersDTO);
+        return ResponseEntity.ok().body(response);
     }
 
     @PreAuthorize("hasAuthority('" + Permissions.READ_USER + "')")
@@ -50,30 +72,54 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('" + Permissions.CREATE_USER + "')")
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO user) {
-        UserResponseDTO createdUser = userService.createUser(user);
-        return ResponseEntity.status(201).body(createdUser);
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> createUser(@RequestBody UserRequestDTO userDTO) {
+        User createdUser = userService.createUser(userDTO);
+        UserResponseDTO createdUserDTO = userMapper.toResponse(createdUser);
+        ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
+        response.setSuccess(true);
+        response.setMessage("User created successfully");
+        response.setStatus(HttpStatus.CREATED.value());
+        response.setData(createdUserDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PreAuthorize("hasAuthority('" + Permissions.CREATE_USERS + "')")
     @PostMapping("/batch")
-    public ResponseEntity<List<UserResponseDTO>> createUsers(@RequestBody List<UserRequestDTO> users) {
-        List<UserResponseDTO> createdUsers = userService.createUsers(users);
-        return ResponseEntity.status(201).body(createdUsers);
+    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> createUsers(@RequestBody List<UserRequestDTO> users) {
+        List<User> createdUsers = userService.createUsers(users);
+        List<UserResponseDTO> createdUsersDTO = userMapper.toResponseList(createdUsers);
+        ResponseDTO<List<UserResponseDTO>> response = new ResponseDTO<>();
+        response.setSuccess(true);
+        response.setMessage("Users created successfully");
+        response.setStatus(HttpStatus.CREATED.value());
+        response.setData(createdUsersDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USER + "')")
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable UUID id, @RequestBody UserRequestDTO userDetails) {
-        return userService.updateUser(id, userDetails).map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> updateUser(@PathVariable UUID id, @RequestBody UserRequestDTO userDetails) {
+        ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
+        User updatedUser = userService.updateUser(id, userDetails); 
+        UserResponseDTO updatedUserDTO = userMapper.toResponse(updatedUser);
+        response.setSuccess(true);
+        response.setMessage("User updated successfully");
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(updatedUserDTO);
+        return ResponseEntity.ok().body(response);
     }
 
     @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USERS + "')")
     @PutMapping("/batch")
-    public ResponseEntity<List<UserResponseDTO>> updateUsers(@RequestBody List<UserRequestDTO> users) {
-        List<UserResponseDTO> updateUsers = userService.updateUsers(users);
-        return ResponseEntity.ok(updateUsers);
+    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> updateUsers(@RequestBody List<UserRequestDTO> users) {
+        List<User> updateUsers = userService.updateUsers(users);
+        List<UserResponseDTO> updatedUsersDTO = userMapper.toResponseList(updateUsers);
+        ResponseDTO<List<UserResponseDTO>> response = new ResponseDTO<>();
+        response.setSuccess(true);
+        response.setMessage("Users updated successfully");
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(updatedUsersDTO);
+        return ResponseEntity.ok().body(response);
     }
 
     @PreAuthorize("hasAuthority('" + Permissions.DELETE_USER + "')")

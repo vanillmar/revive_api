@@ -6,9 +6,11 @@ import com.example.revive_app.data.dto.UserResponseDTO;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,19 +25,23 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public boolean existsById(UUID id) {
+        return userRepository.existsById(id);
+    }
+
     public Optional<UserDetails> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    public UserResponseDTO getMe(Object principal) {
+    public User getMe(Object principal) {
         User user = (User) principal;
         if (user == null)
             throw new ResourceNotFoundException("User not Authenticated");
-        return toDto(user);
+       return user;
     }
 
-    public List<UserResponseDTO> getAllUsers() {
-        List<UserResponseDTO> users = userRepository.findAll().stream().map(this::toDto).toList();
+    public List<User> getAllUsers() {
+        List<User> users = userRepository.findAll();
         if (users.isEmpty())
             throw new ResourceNotFoundException("No users found");
         return users;
@@ -50,29 +56,29 @@ public class UserService {
         return userRepository.findById(id).map(this::toDto);
     }
 
-    public UserResponseDTO createUser(UserRequestDTO user) {
-        return toDto(userRepository.save(toEntity(user)));
+    public User createUser(UserRequestDTO user) {
+        return userRepository.save(toEntity(user));
     }
 
-    public List<UserResponseDTO> createUsers(List<UserRequestDTO> users) {
-        return userRepository.saveAll(users.stream().map(this::toEntity).toList()).stream().map(this::toDto).toList();
+    public List<User> createUsers(List<UserRequestDTO> usersDTO) {
+        return userRepository.saveAll(usersDTO.stream().map(this::toEntity).toList());
     }
 
-    public Optional<UserResponseDTO> updateUser(UUID id, UserRequestDTO userDetails) {
-        return userRepository.findById(id).map(user -> {
-            user.setUsername(userDetails.getUsername());
-            user.setEmail(userDetails.getEmail());
-            user.setEnabled(userDetails.isEnabled());
-            user.setRoles(userDetails.getRoles());
-            if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-                user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
-            }
-            return toDto(userRepository.save(user));
-        });
+    public User updateUser(UUID id, UserRequestDTO userDetails) {
+        if (id == null)
+            throw new IllegalArgumentException("User ID cannot be null");  
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+        user.setUsername(userDetails.getUsername());
+        user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+        user.setEmail(userDetails.getEmail());
+        user.setRoles(userDetails.getRoles());
+        user.setEnabled(userDetails.isEnabled());
+        return userRepository.save(user);
+        
     }
 
-    public List<UserResponseDTO> updateUsers(List<UserRequestDTO> users) {
-        return userRepository.saveAll(users.stream().map(this::toEntity).toList()).stream().map(this::toDto).toList();
+    public List<User> updateUsers(List<UserRequestDTO> users) {
+        return userRepository.saveAll(users.stream().map(this::toEntity).toList());
     }
 
     public boolean deleteUser(UUID id) {
@@ -93,4 +99,5 @@ public class UserService {
         user.setRoles(userRequest.getRoles());
         return user;
     }
+
 }

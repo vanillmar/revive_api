@@ -6,7 +6,9 @@ import com.example.revive_app.data.dto.AuthRequest;
 import com.example.revive_app.data.dto.AuthResponse;
 import com.example.revive_app.data.mapper.AuthRegisterMapper;
 import com.example.revive_app.model.User;
+
 import java.util.Optional;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.example.revive_app.data.dto.UserRequestDTO;
 @Service
 public class AuthService {
     private final UserService userService;
@@ -41,8 +45,15 @@ public class AuthService {
     }
 
     public AuthResponse register(AuthRegisterRequestDTO request) {
-        String jwt = "";
-        return new AuthResponse(jwt, "", 0L);
+        UserRequestDTO userRequestDTO = authRegisterMapper.toUserRequestDTO(request);
+        User userCreated = userService.createUser(userRequestDTO);
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userCreated.getUsername(), userCreated.getPassword()));
+        UserDetails authenticatedUser = (UserDetails) auth.getPrincipal();
+        String jwt = jwtService.generateAccessToken(authenticatedUser);
+        String refreshToken = jwtService.generateRefreshToken(authenticatedUser);
+        long expiresIn = jwtService.getAccessTokenExpirationSeconds();
+        return new AuthResponse(jwt, refreshToken, expiresIn);
     }
 
     public Optional<UserDetails> findByUsername(String username) {

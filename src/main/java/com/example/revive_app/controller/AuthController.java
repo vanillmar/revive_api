@@ -31,16 +31,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody AuthRegisterRequestDTO request) {
-        AuthResponse response = authService.register(request);
+    public ResponseEntity<AuthResponse> register(@RequestBody AuthRegisterRequestDTO authDTO) {
+        AuthResponse response = authService.register(authDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO<AuthResponse>> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<ResponseDTO<AuthResponse>> login(@RequestBody AuthRequest authDTO) {
         ResponseDTO<AuthResponse> response = new ResponseDTO<>();
         try {
-            AuthResponse data = authService.authenticate(request);
+            AuthResponse data = authService.authenticate(authDTO);
             response.setStatus(HttpStatus.OK.value());
             response.setMessage("Login successful");
             response.setSuccess(true);
