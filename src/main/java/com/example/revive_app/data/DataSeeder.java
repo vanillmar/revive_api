@@ -3,8 +3,6 @@ package com.example.revive_app.data;
 
 import com.example.revive_app.model.Address;
 import com.example.revive_app.model.Admin;
-import com.example.revive_app.model.Department;
-import com.example.revive_app.model.Employee;
 import com.example.revive_app.model.Exam;
 import com.example.revive_app.model.ExamStatus;
 import com.example.revive_app.model.Permission;
@@ -14,8 +12,6 @@ import com.example.revive_app.model.Student;
 import com.example.revive_app.model.Subject;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.AddressRepository;
-import com.example.revive_app.repository.DepartmentRepository;
-import com.example.revive_app.repository.EmployeeRepository;
 import com.example.revive_app.repository.ExamRepository;
 import com.example.revive_app.repository.ExamStatusRepository;
 import com.example.revive_app.repository.PermissionRepository;
@@ -24,13 +20,23 @@ import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.StudentRepository;
 import com.example.revive_app.repository.SubjectRepository;
 import com.example.revive_app.repository.UserRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.example.revive_app.model.ContactInfo;
+import com.example.revive_app.model.EnrollmentStatus;
+import com.example.revive_app.model.Gender;
+import com.example.revive_app.model.MaritalStatus;
+import com.example.revive_app.model.Person;
+import com.example.revive_app.repository.PersonRepository;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -42,19 +48,17 @@ public class DataSeeder implements ApplicationRunner {
     private RoleRepository roleRepository;
 
     @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
     private AddressRepository addressRepository;
 
-    @Autowired
-    private DepartmentRepository departmentRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -73,56 +77,58 @@ public class DataSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-
-        Department department = new Department();
-        department.setName("Human Resources");
-        department.setDescription("Handles employee relations and benefits");
-
-        User adminUser = new Admin();
-        adminUser.setUsername("admin");
-        adminUser.setPassword(passwordEncoder.encode("admin123"));
-        adminUser.setEmail("admin@system.com");
-
-        Employee empOne = new Employee();
-        empOne.setUsername("v.marcos");
-        empOne.setPassword(passwordEncoder.encode("test_test"));
-        empOne.setFirstname("Vanilson");
-        empOne.setLastname("Marcos");
-        empOne.setEmail("v.marcos@gmail.com");
-        empOne.setDepartment(department);
-
-        Employee empTwo = new Employee();
-        empTwo.setUsername("j.silva");
-        empTwo.setPassword(passwordEncoder.encode("test_two"));
-        empTwo.setFirstname("João");
-        empTwo.setLastname("Silva");
-        empTwo.setEmail("j.silva@test.com");
-        empTwo.setDepartment(department);
-
-        // Set the head of the department
-        department.setHead(empOne);
-        department.setEmployees(List.of(empOne, empTwo));
-
-        Student studentOne = new Student();
-        studentOne.setUsername("marcos");
-        studentOne.setPassword(passwordEncoder.encode("test_"));
-        studentOne.setFirstname("Vanilson");
-        studentOne.setLastname("Marcos");
-        studentOne.setEmail("vanilson@marcos.ao");
-
-        Address address = new Address();
-        address.setStreet("123 Main St");
-        address.setCity("Luanda");
-        address.setState("Luanda Province");
-        address.setZipCode("1000");
-        address.setEmployee(empOne);
+        Address addressOne = new Address();
+        addressOne.setStreet("123 Main St");
+        addressOne.setCity("Luanda");
+        addressOne.setState("Luanda Province");
+        addressOne.setZipCode("1000");
+        addressOne.setPrimary(true);
 
         Address addressTwo = new Address();
         addressTwo.setStreet("456 Elm St");
         addressTwo.setCity("Luanda");
         addressTwo.setState("Luanda Province");
         addressTwo.setZipCode("2000");
-        addressTwo.setEmployee(empTwo);
+        addressTwo.setPrimary(false);
+
+        ContactInfo contactOne = new ContactInfo();
+        contactOne.setEmail("test@google.com");
+        contactOne.setPhoneNumber("+244 923 456 789");
+        ContactInfo contactTwo = new ContactInfo();
+        contactTwo.setEmail("qa@google.com");
+        contactTwo.setPhoneNumber("+244 923 333 789");
+
+        Person person = new Person();
+
+        person.setFirstName("Vanilson");
+        person.setLastName("Marcos");
+        person.setGender(Gender.MALE);
+        person.setNationalId("AB1234567");
+        person.setDateOfBirth(LocalDate.of(1989, 11, 16));
+        person.setMaritalStatus(MaritalStatus.SINGLE);
+        person.setContactInfos(List.of(contactOne,contactTwo));
+        person.setAddresses(List.of(addressOne, addressTwo));
+
+        personRepository.save(person);
+                
+        User adminUser = new Admin();
+        adminUser.setUsername("admin");
+        adminUser.setPassword(passwordEncoder.encode("admin123"));
+        adminUser.setEmail("admin@system.com");
+
+        Student studentOne = new Student();
+        studentOne.setUsername("marcos");
+        studentOne.setPassword(passwordEncoder.encode("test_"));
+        studentOne.setEmail("vanilson@marcos.ao");
+        studentOne.setPerson(person);
+        studentOne.setEnrollmentStatus(EnrollmentStatus.ACTIVE);
+        studentOne.setLicenseNumber("PLD-35675");
+        studentOne.setLicenseExpiryDate(LocalDate.of(2020, 5, 20));
+        studentOne.setMedicalCertificateExpiryDate(LocalDate.of(2022, 12, 22));
+        studentOne.setStudentId("STU-1001");
+        studentOne.setQualification("Private Pilot License (PPL)");
+        studentOne.setAircraftTypeRating("Cessna 172");
+        studentOne.setMedicalCertificateNumber("MC-98765");
 
         if (permissionRepository.count() == 0 && roleRepository.count() == 0) {
             // Criar permissões
@@ -266,8 +272,6 @@ public class DataSeeder implements ApplicationRunner {
 
             roleRepository.saveAll(List.of(adminRole, studentRole, userRole));
 
-            empOne.setRoles(Set.of(roleRepository.findByName(Roles.USER)
-                    .orElseThrow(() -> new RuntimeException("User role not found"))));
             adminUser.setRoles(Set.of(roleRepository.findByName(Roles.ADMIN)
                     .orElseThrow(() -> new RuntimeException("Admin role not found"))));
             studentOne.setRoles(Set.of(roleRepository.findByName(Roles.STUDENT)
@@ -311,10 +315,8 @@ public class DataSeeder implements ApplicationRunner {
         List<Question> questions = InstrumentRatingQuestions.getQuestions(instrumentRating);
 
         userRepository.save(adminUser);
-        departmentRepository.save(department);
-        employeeRepository.saveAll(List.of(empOne, empTwo));
         studentRepository.saveAll(List.of(studentOne));
-        addressRepository.saveAll(List.of(address, addressTwo));
+        addressRepository.saveAll(List.of(addressOne, addressTwo));
         examStatusRepository.saveAll(List.of(readyStatus, inProgressStatus, completedStatus, reviewedStatus));
         subjectRepository.saveAll(subjects);
         examRepository.saveAll(exams);

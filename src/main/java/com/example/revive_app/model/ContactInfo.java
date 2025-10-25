@@ -1,4 +1,3 @@
-/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
 import jakarta.persistence.Column;
@@ -17,18 +16,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Address extends BaseAuditableEntity {
+public class ContactInfo extends BaseAuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String street;
-    private String city;
-    private String state;
-    private String zipCode;
-
-    @Column(nullable = false)
-    private boolean isPrimary = false;
+    @Column(unique = true, nullable = false)
+    private String phoneNumber;
+    @Column(unique = true, nullable = false)
+    private String email;
+    private String alternateEmail;
+    private String emergencyContactName;
+    private String emergencyContactPhone;
 
     // --- RELATIONSHIP ---
     @ManyToOne(fetch = FetchType.LAZY)
