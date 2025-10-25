@@ -1,15 +1,6 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data;
 
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-
 import com.example.revive_app.model.Address;
 import com.example.revive_app.model.Admin;
 import com.example.revive_app.model.Department;
@@ -33,6 +24,13 @@ import com.example.revive_app.repository.RoleRepository;
 import com.example.revive_app.repository.StudentRepository;
 import com.example.revive_app.repository.SubjectRepository;
 import com.example.revive_app.repository.UserRepository;
+import java.util.List;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 @Component
 public class DataSeeder implements ApplicationRunner {
@@ -111,7 +109,6 @@ public class DataSeeder implements ApplicationRunner {
         studentOne.setFirstname("Vanilson");
         studentOne.setLastname("Marcos");
         studentOne.setEmail("vanilson@marcos.ao");
-        
 
         Address address = new Address();
         address.setStreet("123 Main St");
@@ -251,11 +248,11 @@ public class DataSeeder implements ApplicationRunner {
             Role adminRole = new Role();
             adminRole.setName(Roles.ADMIN);
             adminRole.setDescription("Administrator with all permissions");
-            adminRole.setPermissions(Set.of(createUsers, createUser, deleteUser, readUsers, readUser, readMe, readEmployee,
-                    readEmployees, createEmployee, createEmployees, updateEmployee, updateEmployees, deleteEmployee,
-                    readAddress, readAddresses, createAddress, createAddresses, updateAddress, updateAddresses,
-                    deleteAddress, readDepartment, readDepartments, createDepartment, createDepartments,
-                    updateDepartment, updateDepartments, deleteDepartment, readExams));
+            adminRole.setPermissions(Set.of(createUsers, createUser, deleteUser, readUsers, readUser, readMe,
+                    readEmployee, readEmployees, createEmployee, createEmployees, updateEmployee, updateEmployees,
+                    deleteEmployee, readAddress, readAddresses, createAddress, createAddresses, updateAddress,
+                    updateAddresses, deleteAddress, readDepartment, readDepartments, createDepartment,
+                    createDepartments, updateDepartment, updateDepartments, deleteDepartment, readExams));
 
             Role studentRole = new Role();
             studentRole.setName(Roles.STUDENT);

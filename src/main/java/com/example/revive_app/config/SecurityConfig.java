@@ -30,13 +30,12 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/exams/**").permitAll().requestMatchers("/api/questions/**").permitAll()
-                        .requestMatchers("/api/subjects/**").permitAll()
-                        .requestMatchers("/api/exams/**").permitAll()
-                        .requestMatchers("/api/exam-statuses/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN").requestMatchers("/api/users/**")
-                        .authenticated().requestMatchers("/api/employees/**").authenticated()
-                        .requestMatchers("/api/departments/**").authenticated().requestMatchers("/api/addresses/**")
-                        .authenticated().anyRequest().authenticated())
+                        .requestMatchers("/api/subjects/**").permitAll().requestMatchers("/api/exams/**").permitAll()
+                        .requestMatchers("/api/exam-statuses/**").permitAll().requestMatchers("/api/admin/**")
+                        .hasRole("ADMIN").requestMatchers("/api/users/**").authenticated()
+                        .requestMatchers("/api/employees/**").authenticated().requestMatchers("/api/departments/**")
+                        .authenticated().requestMatchers("/api/addresses/**").authenticated().anyRequest()
+                        .authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 

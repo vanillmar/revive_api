@@ -1,21 +1,20 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.controller;
 
+import com.example.revive_app.data.dto.ResponseDTO;
+import com.example.revive_app.model.ExamStatus;
+import com.example.revive_app.service.ExamStatusService;
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.revive_app.data.dto.ResponseDTO;
-import com.example.revive_app.model.ExamStatus;
-import com.example.revive_app.service.ExamStatusService;
-
 @RestController
 @RequestMapping("/api/exam-statuses")
 public class ExamStatusController {
-    
+
     private final ExamStatusService examStatusService;
 
     public ExamStatusController(ExamStatusService examStatusService) {

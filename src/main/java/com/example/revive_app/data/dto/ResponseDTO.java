@@ -16,9 +16,9 @@ public class ResponseDTO<T> {
     private Boolean success;
     private T data;
 
-    private int total;     // total items count
-    private int page;      // current page number
-    private int pageSize;  // size per page
+    private int total; // total items count
+    private int page; // current page number
+    private int pageSize; // size per page
 
     public ResponseDTO() {
         this.timestamp = Instant.now();

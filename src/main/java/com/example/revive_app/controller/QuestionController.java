@@ -10,9 +10,7 @@ import com.example.revive_app.model.QuestionBank;
 import com.example.revive_app.model.Subject;
 import com.example.revive_app.service.QuestionService;
 import com.example.revive_app.service.SubjectService;
-
 import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,18 +43,12 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<QuestionResponseDTO>>> getAll(
-        @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "10") int pageSize,
-        @RequestParam(defaultValue = "id") String sortBy,
-        @RequestParam(defaultValue = "asc") String sortOrder,
-        @RequestParam(defaultValue = "") String search
-    ) {
-        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc")
-            ? Sort.Direction.DESC
-            : Sort.Direction.ASC;
+    public ResponseEntity<ResponseDTO<List<QuestionResponseDTO>>> getAll(@RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortOrder, @RequestParam(defaultValue = "") String search) {
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(direction, sortBy));
-        
+
         Page<Question> questionPage = questionService.findAllWithFilters(search, pageable);
 
         ResponseDTO<List<QuestionResponseDTO>> responseDTO = new ResponseDTO<>();
@@ -108,8 +100,7 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<QuestionResponseDTO>> create(
-            @RequestBody QuestionRequestDTO questionRequest) {
+    public ResponseEntity<ResponseDTO<QuestionResponseDTO>> create(@RequestBody QuestionRequestDTO questionRequest) {
         Subject subject = subjectService.findById(questionRequest.getSubjectId());
         Question question = questionMapper.toEntity(questionRequest, subject);
         Question savedQuestion = questionService.save(question);
