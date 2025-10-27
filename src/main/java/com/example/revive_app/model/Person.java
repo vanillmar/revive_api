@@ -1,10 +1,5 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,9 +13,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "Persons")
@@ -58,7 +57,7 @@ public class Person extends BaseAuditableEntity {
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Address> addresses = new ArrayList<>();
 
-        // --- UTILITY METHODS ---
+    // --- UTILITY METHODS ---
     public void addAddress(Address address) {
         address.setPerson(this);
         if (address.isPrimary()) {
@@ -73,10 +72,7 @@ public class Person extends BaseAuditableEntity {
     }
 
     public Address getPrimaryAddress() {
-        return this.addresses.stream()
-                .filter(Address::isPrimary)
-                .findFirst()
-                .orElse(null);
+        return this.addresses.stream().filter(Address::isPrimary).findFirst().orElse(null);
     }
 
 }

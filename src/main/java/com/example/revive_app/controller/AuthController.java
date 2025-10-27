@@ -31,9 +31,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody AuthRegisterRequestDTO authDTO) {
+    public ResponseEntity<ResponseDTO<AuthResponse>> register(@RequestBody AuthRegisterRequestDTO authDTO) {
         AuthResponse response = authService.register(authDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        ResponseDTO<AuthResponse> resp = new ResponseDTO<>();
+        resp.setStatus(HttpStatus.CREATED.value());
+        resp.setMessage("User registered successfully");
+        resp.setSuccess(true);
+        resp.setData(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PostMapping("/login")
@@ -54,10 +59,10 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/refresh")
+    @PostMapping("/refresh-token")
     public ResponseEntity<ResponseDTO<AuthResponse>> refresh(@RequestBody Map<String, String> body) {
         ResponseDTO<AuthResponse> response = new ResponseDTO<>();
-        String refreshToken = body.get("refresh_token");
+        String refreshToken = body.get("refreshToken");
 
         if (!jwtService.isTokenValid(refreshToken)) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());

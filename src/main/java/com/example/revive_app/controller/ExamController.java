@@ -34,6 +34,17 @@ public class ExamController {
         this.examMapper = examMapper;
     }
 
+    @GetMapping("/stats/total")
+    public ResponseEntity<ResponseDTO<Long>> getTotalExams() {
+        ResponseDTO<Long> response = new ResponseDTO<>();
+        Long totalExams = examService.getTotalExams();
+        response.setData(totalExams);
+        response.setSuccess(true);
+        response.setMessage("Total exams retrived successfully.");
+        response.setStatus(HttpStatus.OK.value());
+        return ResponseEntity.ok(response);
+    }
+
     // @PreAuthorize("hasAuthority('" + Permissions.READ_EXAMS + "')")
     @GetMapping
     public ResponseEntity<ResponseDTO<List<ExamResponseDTO>>> getAll() {

@@ -8,6 +8,7 @@ import com.example.revive_app.data.mapper.SubjectMapper;
 import com.example.revive_app.model.Subject;
 import com.example.revive_app.service.SubjectService;
 import java.util.List;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,17 @@ public class SubjectController {
     public SubjectController(SubjectService subjectService, SubjectMapper subjectMapper) {
         this.subjectService = subjectService;
         this.subjectMapper = subjectMapper;
+    }
+
+    @GetMapping("/stats/total")
+    public ResponseEntity<ResponseDTO<Map<String, Long>>> getTotalSubjects() {
+        ResponseDTO<Map<String, Long>> response = new ResponseDTO<>();
+        Long totalSubjects = subjectService.getTotalSubjects();
+        response.setData(Map.of("total", totalSubjects));
+        response.setMessage("Total subjects loaded sucessfully.");
+        response.setStatus(HttpStatus.OK.value());
+        response.setSuccess(true);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping

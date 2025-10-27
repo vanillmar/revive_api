@@ -4,11 +4,13 @@ package com.example.revive_app.service;
 import com.example.revive_app.data.dto.AuthRegisterRequestDTO;
 import com.example.revive_app.data.dto.AuthRequest;
 import com.example.revive_app.data.dto.AuthResponse;
+import com.example.revive_app.data.dto.UserRequestDTO;
 import com.example.revive_app.data.mapper.AuthRegisterMapper;
+import com.example.revive_app.model.Role;
 import com.example.revive_app.model.User;
-
 import java.util.Optional;
-
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,21 +18,21 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.example.revive_app.data.dto.UserRequestDTO;
 @Service
 public class AuthService {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final AuthRegisterMapper authRegisterMapper;
-
+    private final RoleService roleService;
     public AuthService(AuthenticationManager authenticationManager, JwtService jwtService, UserService userService,
-            AuthRegisterMapper authRegisterMapper) {
+            AuthRegisterMapper authRegisterMapper, RoleService roleService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userService = userService;
         this.authRegisterMapper = authRegisterMapper;
+        this.roleService = roleService;
+
     }
 
     public AuthResponse authenticate(AuthRequest request) throws AuthenticationException {
@@ -45,10 +47,15 @@ public class AuthService {
     }
 
     public AuthResponse register(AuthRegisterRequestDTO request) {
+        Set<Role> roles = roleService.getAllRoles().stream().filter(role -> role.getId() == request.getRoleId())
+                .collect(Collectors.toSet());
+
         UserRequestDTO userRequestDTO = authRegisterMapper.toUserRequestDTO(request);
-        User userCreated = userService.createUser(userRequestDTO);
+        userRequestDTO.setRoles(roles);
+        User user = userService.createUser(userRequestDTO);
+
         Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userCreated.getUsername(), userCreated.getPassword()));
+                new UsernamePasswordAuthenticationToken(user.getUsername(), userRequestDTO.getPassword()));
         UserDetails authenticatedUser = (UserDetails) auth.getPrincipal();
         String jwt = jwtService.generateAccessToken(authenticatedUser);
         String refreshToken = jwtService.generateRefreshToken(authenticatedUser);

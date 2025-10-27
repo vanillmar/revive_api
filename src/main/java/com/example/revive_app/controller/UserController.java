@@ -2,11 +2,14 @@
 package com.example.revive_app.controller;
 
 import com.example.revive_app.data.Permissions;
+import com.example.revive_app.data.dto.ResponseDTO;
 import com.example.revive_app.data.dto.UserRequestDTO;
 import com.example.revive_app.data.dto.UserResponseDTO;
+import com.example.revive_app.data.mapper.UserMapper;
+import com.example.revive_app.model.User;
 import com.example.revive_app.service.UserService;
-
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.revive_app.data.dto.ResponseDTO;
-import com.example.revive_app.data.mapper.UserMapper;
-import com.example.revive_app.model.User;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -37,17 +36,28 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
+    @GetMapping("/stats/total")
+    public ResponseEntity<ResponseDTO<Map<String, Long>>> getTotalQuestions() {
+        ResponseDTO<Map<String, Long>> response = new ResponseDTO<>();
+        Long totalUsers = userService.getTotalUsers();
+        response.setData(Map.of("total", totalUsers));
+        response.setSuccess(true);
+        response.setMessage("Total users retrived successfully.");
+        response.setStatus(HttpStatus.OK.value());
+        return ResponseEntity.ok(response);
+    }
+
     @PreAuthorize("hasAuthority('" + Permissions.READ_ME + "')")
     @GetMapping("/me")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> getMe(Authentication authentication) {
-        ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();  
+        ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
         User user = userService.getMe(authentication.getPrincipal());
         UserResponseDTO userDto = userMapper.toResponse(user);
         response.setSuccess(true);
         response.setMessage("User retrieved successfully");
         response.setStatus(HttpStatus.OK.value());
         response.setData(userDto);
-        
+
         return ResponseEntity.ok().body(response);
     }
 
@@ -98,9 +108,10 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USER + "')")
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseDTO<UserResponseDTO>> updateUser(@PathVariable UUID id, @RequestBody UserRequestDTO userDetails) {
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> updateUser(@PathVariable UUID id,
+            @RequestBody UserRequestDTO userDetails) {
         ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
-        User updatedUser = userService.updateUser(id, userDetails); 
+        User updatedUser = userService.updateUser(id, userDetails);
         UserResponseDTO updatedUserDTO = userMapper.toResponse(updatedUser);
         response.setSuccess(true);
         response.setMessage("User updated successfully");

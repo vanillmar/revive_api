@@ -11,6 +11,7 @@ import com.example.revive_app.model.Subject;
 import com.example.revive_app.service.QuestionService;
 import com.example.revive_app.service.SubjectService;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,16 @@ public class QuestionController {
         this.questionService = questionService;
         this.questionMapper = questionMapper;
         this.subjectService = subjectService;
+    }
+    @GetMapping("/stats/total")
+    public ResponseEntity<ResponseDTO<Map<String, Long>>> getTotalQuestions() {
+        ResponseDTO<Map<String, Long>> response = new ResponseDTO<>();
+        Long totalQuestions = questionService.getTotalQuestions();
+        response.setData(Map.of("total", totalQuestions));
+        response.setSuccess(true);
+        response.setMessage("Total questions retrived successfully.");
+        response.setStatus(HttpStatus.OK.value());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping

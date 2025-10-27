@@ -55,4 +55,8 @@ public class QuestionService {
         }
         return questionRepository.findByQuestionContainingIgnoreCase(search, pageable);
     }
+
+    public Long getTotalQuestions() {
+        return questionRepository.count();
+    }
 }

@@ -11,12 +11,11 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
-        registry.addMapping("/**") // Apply to all endpoints
-                .allowedOrigins("http://localhost:3000", "http://127.0.0.1:3000") // Your frontend origin
+        registry.addMapping("/api/**") // Apply to all endpoints
+                .allowedOrigins("http://127.0.0.1:3000", "http://localhost:3000") // Your frontend origin
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allowed HTTP methods
                 .allowedHeaders("*", "Access-Control-Allow-Origin', 'http://localhost:3000") // Allow all headers
                 .allowedHeaders("*", "Access-Control-Allow-Origin', 'http://127.0.0.1:3000") // Allow all headers
-
                 .allowCredentials(true); // If you need cookies/sessions
     }
 }

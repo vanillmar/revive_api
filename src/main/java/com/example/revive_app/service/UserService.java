@@ -6,11 +6,10 @@ import com.example.revive_app.data.dto.UserResponseDTO;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+import org.springframework.data.domain.Example;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,10 @@ public class UserService {
         return userRepository.existsById(id);
     }
 
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
     public Optional<UserDetails> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -37,7 +40,7 @@ public class UserService {
         User user = (User) principal;
         if (user == null)
             throw new ResourceNotFoundException("User not Authenticated");
-       return user;
+        return user;
     }
 
     public List<User> getAllUsers() {
@@ -57,6 +60,16 @@ public class UserService {
     }
 
     public User createUser(UserRequestDTO user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username is already taken");
+        }
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email is already in use");
+        }
+
         return userRepository.save(toEntity(user));
     }
 
@@ -66,15 +79,16 @@ public class UserService {
 
     public User updateUser(UUID id, UserRequestDTO userDetails) {
         if (id == null)
-            throw new IllegalArgumentException("User ID cannot be null");  
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+            throw new IllegalArgumentException("User ID cannot be null");
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         user.setUsername(userDetails.getUsername());
         user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
         user.setEmail(userDetails.getEmail());
         user.setRoles(userDetails.getRoles());
         user.setEnabled(userDetails.isEnabled());
         return userRepository.save(user);
-        
+
     }
 
     public List<User> updateUsers(List<UserRequestDTO> users) {
@@ -98,6 +112,28 @@ public class UserService {
                 userRequest.getEmail());
         user.setRoles(userRequest.getRoles());
         return user;
+    }
+
+    public Long getTotalUsers() {
+        return userRepository.count();
+    }
+
+    public Long getTotalActiveUsers() {
+        User probe = new User();
+        probe.setActive(true);
+
+        Example<User> example = Example.of(probe);
+
+        return userRepository.count(example);
+    }
+
+    public Long getTotalInactiveUsers() {
+        User probe = new User();
+        probe.setActive(false);
+
+        Example<User> example = Example.of(probe);
+
+        return userRepository.count(example);
     }
 
 }

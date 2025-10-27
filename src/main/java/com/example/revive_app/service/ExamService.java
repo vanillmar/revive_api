@@ -67,4 +67,9 @@ public class ExamService {
     public boolean deleteBySubject(String subject) {
         return examRepository.findAll().removeIf(exam -> exam.getSubject().getName().equals(subject));
     }
+
+    public Long getTotalExams() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getTotalExams'");
+    }
 }

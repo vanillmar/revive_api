@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +36,11 @@ public class JwtService {
      */
     public String generateAccessToken(UserDetails userDetails) {
         User user = (User) userDetails;
+        String[] roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .toArray(String[]::new);
         return JWT.create().withIssuer("auth-api").withSubject(userDetails.getUsername())
                 .withClaim("id", user.getId().toString()).withIssuedAt(new Date()).withClaim("email", user.getEmail())
-                .withIssuedAt(new Date()).withClaim("roles", userDetails.getAuthorities().toString())
-                .withIssuedAt(new Date()).withIssuedAt(new Date())
+                .withIssuedAt(new Date()).withArrayClaim("roles", roles).withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + accessExpirationMinutes * 60 * 1000))
                 .sign(getAlgorithm());
     }

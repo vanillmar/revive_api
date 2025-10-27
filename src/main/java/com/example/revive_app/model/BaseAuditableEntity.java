@@ -1,9 +1,8 @@
+/* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
-
+import java.time.LocalDateTime;
 import org.springframework.data.annotation.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

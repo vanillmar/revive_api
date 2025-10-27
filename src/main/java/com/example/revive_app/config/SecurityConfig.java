@@ -29,13 +29,13 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/exams/**").permitAll().requestMatchers("/api/questions/**").permitAll()
-                        .requestMatchers("/api/subjects/**").permitAll().requestMatchers("/api/exams/**").permitAll()
-                        .requestMatchers("/api/exam-statuses/**").permitAll().requestMatchers("/api/admin/**")
-                        .hasRole("ADMIN").requestMatchers("/api/users/**").authenticated()
-                        .requestMatchers("/api/employees/**").authenticated().requestMatchers("/api/departments/**")
-                        .authenticated().requestMatchers("/api/addresses/**").authenticated().anyRequest()
-                        .authenticated())
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN").requestMatchers("/api/users/**")
+                        .authenticated().requestMatchers("/api/students/**").authenticated()
+                        .requestMatchers("/api/users/**").authenticated().requestMatchers("/api/addresses/**")
+                        .authenticated().requestMatchers("/api/exams/**").authenticated()
+                        .requestMatchers("/api/questions/**").authenticated().requestMatchers("/api/subjects/**")
+                        .authenticated().requestMatchers("/api/exams/**").authenticated()
+                        .requestMatchers("/api/exam-statuses/**").authenticated().anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
