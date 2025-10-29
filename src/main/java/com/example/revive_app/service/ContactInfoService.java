@@ -6,11 +6,9 @@ import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.ContactInfo;
 import com.example.revive_app.repository.ContactInfoRepository;
 import com.example.revive_app.request.ContactInfoRequestDTO;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,7 +32,6 @@ public class ContactInfoService {
     public Optional<ContactInfo> getByUserId(UUID id) {
         return contactInfoRepository.findByUserId(id);
     }
-
 
     public List<ContactInfo> getAll() {
         return contactInfoRepository.findAll();

@@ -15,5 +15,7 @@ import org.mapstruct.Mapping;
 @Mapping(target = "createdBy", ignore = true)
 @Mapping(target = "updatedBy", ignore = true)
 @Mapping(target = "deletedBy", ignore = true)
+@Mapping(target = "deleted", ignore = true)
+
 public @interface IgnoreAuditMapping {
 }

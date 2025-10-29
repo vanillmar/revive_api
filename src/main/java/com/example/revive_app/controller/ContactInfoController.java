@@ -8,10 +8,8 @@ import com.example.revive_app.model.ContactInfo;
 import com.example.revive_app.request.ContactInfoRequestDTO;
 import com.example.revive_app.response.ContactInfoResponseDTO;
 import com.example.revive_app.service.ContactInfoService;
-
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -61,7 +59,7 @@ public class ContactInfoController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-        @GetMapping("/user/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<ResponseDTO<ContactInfoResponseDTO>> getByUserId(@PathVariable UUID id) {
         ContactInfo contactInfo = contactInfoService.getByUserId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Failed to fetch the ContactInfo"));

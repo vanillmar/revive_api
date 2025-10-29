@@ -9,6 +9,7 @@ import com.example.revive_app.request.AddressRequestDTO;
 import com.example.revive_app.response.AddressResponseDTO;
 import com.example.revive_app.service.AddressService;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,7 +41,33 @@ public class AddressController {
         ResponseDTO<AddressResponseDTO> response = new ResponseDTO<>();
         response.setData(addressResponse);
         response.setMessage("Address fetched successfully.");
-        response.setStatus(HttpStatus.CREATED.value());
+        response.setStatus(HttpStatus.OK.value());
+        response.setSuccess(true);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/person/{id}")
+    public ResponseEntity<ResponseDTO<AddressResponseDTO>> getPrimaryAddressByPersonId(@PathVariable Long id) {
+        Address address = addressService.getPrimaryAddressByPersonId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Failed to fetch the address"));
+        AddressResponseDTO addressResponse = addressMapper.toResponse(address);
+        ResponseDTO<AddressResponseDTO> response = new ResponseDTO<>();
+        response.setData(addressResponse);
+        response.setMessage("Address fetched successfully.");
+        response.setStatus(HttpStatus.OK.value());
+        response.setSuccess(true);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<ResponseDTO<AddressResponseDTO>> getPrimaryAddressByUserId(@PathVariable UUID id) {
+        Address address = addressService.getPrimaryAddressByUserId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Failed to fetch the address"));
+        AddressResponseDTO addressResponse = addressMapper.toResponse(address);
+        ResponseDTO<AddressResponseDTO> response = new ResponseDTO<>();
+        response.setData(addressResponse);
+        response.setMessage("Address fetched successfully.");
+        response.setStatus(HttpStatus.OK.value());
         response.setSuccess(true);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -50,8 +77,8 @@ public class AddressController {
         List<AddressResponseDTO> addresses = addressMapper.toResponseDTOs(addressService.getAll());
         ResponseDTO<List<AddressResponseDTO>> response = new ResponseDTO<>();
         response.setData(addresses);
-        response.setMessage("Persons fetched successfully.");
-        response.setStatus(HttpStatus.CREATED.value());
+        response.setMessage("Addresses fetched successfully.");
+        response.setStatus(HttpStatus.OK.value());
         response.setSuccess(true);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
