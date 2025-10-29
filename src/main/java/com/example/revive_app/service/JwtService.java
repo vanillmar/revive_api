@@ -39,8 +39,10 @@ public class JwtService {
         String[] roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .toArray(String[]::new);
         return JWT.create().withIssuer("auth-api").withSubject(userDetails.getUsername())
-                .withClaim("id", user.getId().toString()).withIssuedAt(new Date()).withClaim("email", user.getEmail())
-                .withIssuedAt(new Date()).withArrayClaim("roles", roles).withIssuedAt(new Date())
+                .withClaim("id", user.getId().toString()).withIssuedAt(new Date())
+                .withClaim("email", user.getEmail()).withIssuedAt(new Date())
+                .withClaim("avatar", user.getAvatar()).withIssuedAt(new Date())
+                .withArrayClaim("roles", roles).withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + accessExpirationMinutes * 60 * 1000))
                 .sign(getAlgorithm());
     }

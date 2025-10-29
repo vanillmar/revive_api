@@ -6,6 +6,7 @@ import com.example.revive_app.data.dto.ResponseDTO;
 import com.example.revive_app.data.dto.UserRequestDTO;
 import com.example.revive_app.data.dto.UserResponseDTO;
 import com.example.revive_app.data.mapper.UserMapper;
+import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.User;
 import com.example.revive_app.service.UserService;
 import java.util.List;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/users")
@@ -61,6 +64,20 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PostMapping("/{id}/upload-profile-picture")
+    public ResponseEntity<ResponseDTO<Map<String, String>>> uploadProfilePicture(
+            @PathVariable UUID id,
+            @RequestParam("file") MultipartFile file
+    ) {
+        ResponseDTO<Map<String, String>> response = new ResponseDTO<>();
+        String url = userService.saveAvatar(id, file);
+        response.setData(Map.of("url", url));
+        response.setMessage("profile picture updateed sucessfully");
+        response.setStatus(HttpStatus.CREATED.value());
+        response.setSuccess(true);
+        return ResponseEntity.ok().body(response);
+    }
+
     @PreAuthorize("hasAuthority('" + Permissions.READ_USERS + "')")
     @GetMapping
     public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> getAllUsers() {
@@ -76,8 +93,16 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('" + Permissions.READ_USER + "')")
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable UUID id) {
-        return userService.getUserById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> getUserById(@PathVariable String id) {
+        UUID newId = UUID.fromString(id);
+        UserResponseDTO userResponse = userService.getUserById(newId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
+        response.setData(userResponse);
+        response.setSuccess(true);
+        response.setMessage("User retrived successfully.");
+        response.setStatus(HttpStatus.OK.value());
+        
+        return ResponseEntity.ok().body(response);
     }
 
     @PreAuthorize("hasAuthority('" + Permissions.CREATE_USER + "')")

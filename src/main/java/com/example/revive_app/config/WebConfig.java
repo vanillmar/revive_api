@@ -4,6 +4,7 @@ package com.example.revive_app.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -18,5 +19,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(@NonNull InterceptorRegistry registry) {
         // Register the rate limiter for all or specific endpoints
         registry.addInterceptor(rateLimitInterceptor).addPathPatterns("/api/**"); // You can customize the pattern
+    }
+
+    @Override
+    public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/api/uploads/**")
+                .addResourceLocations("file:uploads/");
     }
 }

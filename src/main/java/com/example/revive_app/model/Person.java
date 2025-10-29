@@ -50,6 +50,9 @@ public class Person extends BaseAuditableEntity {
 
     @Column(unique = true)
     private String nationalId; // e.g. BI, passport, or national document
+    
+    @Column(columnDefinition = "TEXT")
+    private String bio;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ContactInfo> contactInfos = new ArrayList<>();

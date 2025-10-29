@@ -2,10 +2,18 @@
 package com.example.revive_app.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.AccessLevel;
+import lombok.Setter;
+
+@Getter
+@Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseAuditableEntity {
@@ -19,6 +27,7 @@ public abstract class BaseAuditableEntity {
 
     private LocalDateTime deletedAt;
 
+    @Setter(AccessLevel.NONE)
     @CreatedBy
     @Column(updatable = false)
     private String createdBy;

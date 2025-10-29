@@ -51,6 +51,9 @@ public class User extends BaseAuditableEntity implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
+    // URL or file path
+    private String avatar;
+
     @Column(nullable = false)
     private boolean enabled = true;
 
