@@ -2,15 +2,12 @@
 package com.example.revive_app.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
-
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import lombok.AccessLevel;
-import lombok.Setter;
 
 @Getter
 @Setter

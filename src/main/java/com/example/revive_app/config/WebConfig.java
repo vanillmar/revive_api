@@ -23,7 +23,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/api/uploads/**")
-                .addResourceLocations("file:uploads/");
+        registry.addResourceHandler("/api/uploads/**").addResourceLocations("file:uploads/");
     }
 }

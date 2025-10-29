@@ -50,7 +50,7 @@ public class Person extends BaseAuditableEntity {
 
     @Column(unique = true)
     private String nationalId; // e.g. BI, passport, or national document
-    
+
     @Column(columnDefinition = "TEXT")
     private String bio;
 

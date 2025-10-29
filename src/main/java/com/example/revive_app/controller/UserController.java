@@ -65,10 +65,8 @@ public class UserController {
     }
 
     @PostMapping("/{id}/upload-profile-picture")
-    public ResponseEntity<ResponseDTO<Map<String, String>>> uploadProfilePicture(
-            @PathVariable UUID id,
-            @RequestParam("file") MultipartFile file
-    ) {
+    public ResponseEntity<ResponseDTO<Map<String, String>>> uploadProfilePicture(@PathVariable UUID id,
+            @RequestParam("file") MultipartFile file) {
         ResponseDTO<Map<String, String>> response = new ResponseDTO<>();
         String url = userService.saveAvatar(id, file);
         response.setData(Map.of("url", url));
@@ -95,13 +93,14 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> getUserById(@PathVariable String id) {
         UUID newId = UUID.fromString(id);
-        UserResponseDTO userResponse = userService.getUserById(newId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        UserResponseDTO userResponse = userService.getUserById(newId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
         response.setData(userResponse);
         response.setSuccess(true);
         response.setMessage("User retrived successfully.");
         response.setStatus(HttpStatus.OK.value());
-        
+
         return ResponseEntity.ok().body(response);
     }
 

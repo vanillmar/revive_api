@@ -6,7 +6,6 @@ import com.example.revive_app.data.dto.UserResponseDTO;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -149,7 +147,7 @@ public class UserService {
 
     public String saveAvatar(UUID id, MultipartFile file) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
 
         try {
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
@@ -163,7 +161,7 @@ public class UserService {
             user.setUpdatedAt(LocalDateTime.now());
 
             userRepository.save(user);
-            
+
             return url;
         } catch (IOException e) {
             throw new java.io.UncheckedIOException("Error saving file", e);
