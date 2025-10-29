@@ -26,6 +26,7 @@ public class Address extends BaseAuditableEntity {
     private String city;
     private String state;
     private String zipCode;
+    private String country;
 
     @Column(nullable = false)
     private boolean isPrimary = false;

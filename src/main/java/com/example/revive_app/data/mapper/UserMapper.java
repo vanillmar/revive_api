@@ -16,6 +16,7 @@ public interface UserMapper {
     @Mapping(target = "person", ignore = true)
     @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "authorities", ignore = true)
+    @IgnoreAuditMapping
     User toEntity(UserRequestDTO request);
     List<User> toEntityList(List<UserRequestDTO> requests);
 
