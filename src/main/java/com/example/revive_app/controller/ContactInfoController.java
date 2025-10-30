@@ -72,6 +72,30 @@ public class ContactInfoController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/principal/user/{id}")
+    public ResponseEntity<ResponseDTO<ContactInfoResponseDTO>> getPrimaryByUserId(@PathVariable UUID id) {
+        ContactInfo contactInfo = contactInfoService.getPrimaryByUserId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Failed to fetch the ContactInfo"));
+        ContactInfoResponseDTO contactInfoResponse = contactInfoMapper.toResponse(contactInfo);
+        ResponseDTO<ContactInfoResponseDTO> response = new ResponseDTO<>();
+        response.setData(contactInfoResponse);
+        response.setMessage("ContactInfo fetched successfully.");
+        response.setStatus(HttpStatus.OK.value());
+        response.setSuccess(true);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<ResponseDTO<List<ContactInfoResponseDTO>>> getAllByUserId(@PathVariable UUID id) {
+        List<ContactInfo> contactInfos = contactInfoService.getAllByUserId(id);
+        List<ContactInfoResponseDTO> contactInfoResponse = contactInfoMapper.toListResponse(contactInfos);
+        ResponseDTO<List<ContactInfoResponseDTO>> response = new ResponseDTO<>();
+        response.setData(contactInfoResponse);
+        response.setMessage("ContactInfo fetched successfully.");
+        response.setStatus(HttpStatus.OK.value());
+        response.setSuccess(true);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @GetMapping
     public ResponseEntity<ResponseDTO<List<ContactInfoResponseDTO>>> getAll() {
         List<ContactInfo> contactInfos = contactInfoService.getAll();

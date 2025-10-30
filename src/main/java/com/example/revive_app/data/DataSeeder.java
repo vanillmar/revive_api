@@ -90,6 +90,8 @@ public class DataSeeder implements ApplicationRunner {
         ContactInfo contactOne = new ContactInfo();
         contactOne.setEmail("test@google.com");
         contactOne.setPhoneNumber("+244 923 456 789");
+        contactOne.setPrimary(true);
+
         ContactInfo contactTwo = new ContactInfo();
         contactTwo.setEmail("qa@google.com");
         contactTwo.setPhoneNumber("+244 923 333 789");

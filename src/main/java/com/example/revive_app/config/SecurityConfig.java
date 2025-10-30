@@ -31,9 +31,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/uploads/**").permitAll().requestMatchers("/api/exams/**").permitAll()
                         .requestMatchers("/api/questions/**").permitAll().requestMatchers("/api/subjects/**")
-                        .permitAll().requestMatchers("/api/exams/**").permitAll()
-                        .requestMatchers("/api/exam-statuses/**").permitAll().requestMatchers("/api/users/**")
-                        .permitAll().requestMatchers("/api/students/**").permitAll()
+                        .permitAll().requestMatchers("/api/exams/**").permitAll().requestMatchers("/api/addresses/**")
+                        .permitAll().requestMatchers("/api/persons/**").permitAll().requestMatchers("/api/contacts/**")
+                        .permitAll().requestMatchers("/api/exam-statuses/**").permitAll()
+                        .requestMatchers("/api/users/**").permitAll().requestMatchers("/api/students/**").permitAll()
                         .requestMatchers("/api/addresses/**").authenticated().requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")
 

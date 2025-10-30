@@ -33,6 +33,14 @@ public class ContactInfoService {
         return contactInfoRepository.findByUserId(id);
     }
 
+    public Optional<ContactInfo> getPrimaryByUserId(UUID id) {
+        return contactInfoRepository.findPrimaryContactInfoByUserId(id);
+    }
+
+    public List<ContactInfo> getAllByUserId(UUID id) {
+        return contactInfoRepository.findAllContactInfoByUserId(id);
+    }
+
     public List<ContactInfo> getAll() {
         return contactInfoRepository.findAll();
     }
@@ -57,4 +65,5 @@ public class ContactInfoService {
             return true;
         }).orElse(false);
     }
+
 }

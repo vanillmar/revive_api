@@ -30,6 +30,9 @@ public class ContactInfo extends BaseAuditableEntity {
     private String emergencyContactName;
     private String emergencyContactPhone;
 
+    @Column(nullable = false)
+    private boolean isPrimary = false;
+
     // --- RELATIONSHIP ---
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", nullable = true)

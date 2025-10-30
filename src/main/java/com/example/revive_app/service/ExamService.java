@@ -3,7 +3,8 @@ package com.example.revive_app.service;
 
 import com.example.revive_app.model.Exam;
 import com.example.revive_app.repository.ExamRepository;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,8 +46,7 @@ public class ExamService {
         if (existsByTitle(exam.getTitle())) {
             throw new IllegalArgumentException("Exam with title " + exam.getTitle() + " already exists");
         }
-        Exam savedExam = examRepository.save(exam);
-        return savedExam;
+        return examRepository.save(exam);
     }
 
     public Exam update(String subject, Exam update) {
@@ -69,7 +69,6 @@ public class ExamService {
     }
 
     public Long getTotalExams() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTotalExams'");
+        return examRepository.count();
     }
 }

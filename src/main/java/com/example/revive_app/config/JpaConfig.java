@@ -38,7 +38,7 @@ public class JpaConfig {
         em.setJpaVendorAdapter(vendorAdapter);
 
         Properties jpaProps = new Properties();
-        jpaProps.setProperty("hibernate.hbm2ddl.auto", "update");
+        jpaProps.setProperty("hibernate.hbm2ddl.auto", "create");
         jpaProps.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
         jpaProps.setProperty("hibernate.show_sql", "true");
         em.setJpaProperties(jpaProps);

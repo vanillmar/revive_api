@@ -78,4 +78,20 @@ public class Person extends BaseAuditableEntity {
         return this.addresses.stream().filter(Address::isPrimary).findFirst().orElse(null);
     }
 
+    public void addContactInfo(ContactInfo contactInfo) {
+        contactInfo.setPerson(this);
+        if (contactInfo.isPrimary()) {
+            // ensure only one primary address
+            this.contactInfos.forEach(a -> a.setPrimary(false));
+        }
+        this.contactInfos.add(contactInfo);
+    }
+
+    public void setPrimaryContactInfo(Long contactInfoId) {
+        this.contactInfos.forEach(a -> a.setPrimary(a.getId().equals(contactInfoId)));
+    }
+
+    public ContactInfo getPrimaryContactInfo() {
+        return this.contactInfos.stream().filter(ContactInfo::isPrimary).findFirst().orElse(null);
+    }
 }
