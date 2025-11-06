@@ -1,20 +1,21 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.request;
 
+import com.example.revive_app.model.BaseAuditableEntity;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContactInfoRequestDTO {
+public class ContactInfoRequestDTO extends BaseAuditableEntity {
     private String phoneNumber;
     private String email;
     private String alternateEmail;
     private String emergencyContactName;
     private String emergencyContactPhone;
-    private long personId;
+    private Long personId;
+    private boolean isPrimary;
+    private String updatedBy;
 }

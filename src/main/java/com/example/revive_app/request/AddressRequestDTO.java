@@ -1,6 +1,7 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.request;
 
+import com.example.revive_app.model.BaseAuditableEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressRequestDTO {
+public class AddressRequestDTO extends BaseAuditableEntity {
     private String street;
     private String city;
     private String state;
@@ -18,4 +19,5 @@ public class AddressRequestDTO {
     private String country;
     private Long personId;
     private boolean isPrimary;
+    private String updatedBy;
 }

@@ -3,12 +3,11 @@ package com.example.revive_app.response;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+// ...existing code...
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContactInfoResponseDTO {
@@ -19,6 +18,7 @@ public class ContactInfoResponseDTO {
     private String emergencyContactName;
     private String emergencyContactPhone;
     private long personId;
+    private boolean isPrimary;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;

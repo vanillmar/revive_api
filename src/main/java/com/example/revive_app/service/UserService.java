@@ -2,7 +2,7 @@
 package com.example.revive_app.service;
 
 import com.example.revive_app.data.dto.UserRequestDTO;
-import com.example.revive_app.data.dto.UserResponseDTO;
+import com.example.revive_app.data.mapper.UserMapper;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
@@ -25,12 +25,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+
     @Value("${app.upload.dir}")
     private String uploadDir;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
     }
 
     public boolean existsById(UUID id) {
@@ -59,16 +62,16 @@ public class UserService {
         return users;
     }
 
-    public Optional<UserResponseDTO> getUserById(UUID id) {
+    public Optional<User> getUserById(UUID id) {
         if (id == null)
             throw new IllegalArgumentException("User ID cannot be null");
         if (!userRepository.existsById(id))
             throw new ResourceNotFoundException("User not found with ID: " + id);
 
-        return userRepository.findById(id).map(this::toDto);
+        return userRepository.findById(id);
     }
 
-    public User createUser(UserRequestDTO user) {
+    public User create(UserRequestDTO user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("Username is already taken");
         }
@@ -86,18 +89,25 @@ public class UserService {
         return userRepository.saveAll(usersDTO.stream().map(this::toEntity).toList());
     }
 
-    public User updateUser(UUID id, UserRequestDTO userDetails) {
+    public User update(UUID id, UserRequestDTO dto) {
         if (id == null)
             throw new IllegalArgumentException("User ID cannot be null");
-        User user = userRepository.findById(id)
+        User existing = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
-        user.setUsername(userDetails.getUsername());
-        user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
-        user.setEmail(userDetails.getEmail());
-        user.setRoles(userDetails.getRoles());
-        user.setEnabled(userDetails.isEnabled());
-        return userRepository.save(user);
-
+        User incoming = userMapper.toEntity(dto);
+        existing.setUsername(incoming.getUsername());
+        // if (incoming.getPassword()!= null || !incoming.getPassword().isEmpty())
+        // existing.setPassword(passwordEncoder.encode(incoming.getPassword()));
+        existing.setEmail(incoming.getEmail());
+        if (incoming.getRoles() != null || !incoming.getRoles().isEmpty())
+            existing.setRoles(incoming.getRoles());
+        if (incoming.isEnabled())
+            existing.setEnabled(incoming.isEnabled());
+        existing.setNotifications(incoming.isNotifications());
+        existing.setUpdatedAt(LocalDateTime.now());
+        existing.setUpdatedBy(incoming.getUpdatedBy());
+        existing.setActive(incoming.getActive());
+        return userRepository.save(existing);
     }
 
     public List<User> updateUsers(List<UserRequestDTO> users) {
@@ -109,11 +119,6 @@ public class UserService {
             userRepository.delete(user);
             return true;
         }).orElse(false);
-    }
-
-    private UserResponseDTO toDto(User user) {
-        return UserResponseDTO.builder().id(user.getId()).username(user.getUsername()).email(user.getEmail())
-                .enabled(user.isEnabled()).roles(user.getRoles()).build();
     }
 
     private User toEntity(UserRequestDTO userRequest) {

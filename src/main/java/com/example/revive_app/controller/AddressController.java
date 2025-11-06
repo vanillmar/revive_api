@@ -60,6 +60,18 @@ public class AddressController {
     }
 
     @GetMapping("/user/{id}")
+    public ResponseEntity<ResponseDTO<List<AddressResponseDTO>>> getAllAddressByUserId(@PathVariable UUID id) {
+        List<Address> addresses = addressService.getAllAddressesByUserId(id);
+        List<AddressResponseDTO> addressResponse = addressMapper.toResponseDTOs(addresses);
+        ResponseDTO<List<AddressResponseDTO>> response = new ResponseDTO<>();
+        response.setData(addressResponse);
+        response.setMessage("Address fetched successfully.");
+        response.setStatus(HttpStatus.OK.value());
+        response.setSuccess(true);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/primary/user/{id}")
     public ResponseEntity<ResponseDTO<AddressResponseDTO>> getPrimaryAddressByUserId(@PathVariable UUID id) {
         Address address = addressService.getPrimaryAddressByUserId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Failed to fetch the address"));
@@ -102,7 +114,7 @@ public class AddressController {
         AddressResponseDTO addressResponse = addressMapper.toResponse(address);
         ResponseDTO<AddressResponseDTO> response = new ResponseDTO<>();
         response.setData(addressResponse);
-        response.setMessage("Address created successfully.");
+        response.setMessage("Address updated successfully.");
         response.setStatus(HttpStatus.OK.value());
         response.setSuccess(true);
         return ResponseEntity.status(HttpStatus.OK).body(response);

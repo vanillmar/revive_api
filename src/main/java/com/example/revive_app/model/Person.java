@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -60,6 +61,8 @@ public class Person extends BaseAuditableEntity {
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Address> addresses = new ArrayList<>();
 
+    @OneToOne(mappedBy = "person", fetch = FetchType.EAGER)
+    private User user;
     // --- UTILITY METHODS ---
     public void addAddress(Address address) {
         address.setPerson(this);
@@ -76,22 +79,5 @@ public class Person extends BaseAuditableEntity {
 
     public Address getPrimaryAddress() {
         return this.addresses.stream().filter(Address::isPrimary).findFirst().orElse(null);
-    }
-
-    public void addContactInfo(ContactInfo contactInfo) {
-        contactInfo.setPerson(this);
-        if (contactInfo.isPrimary()) {
-            // ensure only one primary address
-            this.contactInfos.forEach(a -> a.setPrimary(false));
-        }
-        this.contactInfos.add(contactInfo);
-    }
-
-    public void setPrimaryContactInfo(Long contactInfoId) {
-        this.contactInfos.forEach(a -> a.setPrimary(a.getId().equals(contactInfoId)));
-    }
-
-    public ContactInfo getPrimaryContactInfo() {
-        return this.contactInfos.stream().filter(ContactInfo::isPrimary).findFirst().orElse(null);
     }
 }

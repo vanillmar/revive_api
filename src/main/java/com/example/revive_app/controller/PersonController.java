@@ -9,6 +9,7 @@ import com.example.revive_app.request.PersonRequestDTO;
 import com.example.revive_app.response.PersonResponseDTO;
 import com.example.revive_app.service.PersonService;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,6 +37,19 @@ public class PersonController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<PersonResponseDTO>> getById(@PathVariable Long id) {
         Person person = personService.getPersonById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Failed to fetch the person"));
+        PersonResponseDTO personResponse = personMapper.toResponse(person);
+        ResponseDTO<PersonResponseDTO> response = new ResponseDTO<>();
+        response.setData(personResponse);
+        response.setMessage("Person fetched successfully.");
+        response.setStatus(HttpStatus.CREATED.value());
+        response.setSuccess(true);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<ResponseDTO<PersonResponseDTO>> getByUserId(@PathVariable UUID id) {
+        Person person = personService.getPersonByUserId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Failed to fetch the person"));
         PersonResponseDTO personResponse = personMapper.toResponse(person);
         ResponseDTO<PersonResponseDTO> response = new ResponseDTO<>();
@@ -76,8 +90,8 @@ public class PersonController {
         PersonResponseDTO personResponse = personMapper.toResponse(person);
         ResponseDTO<PersonResponseDTO> response = new ResponseDTO<>();
         response.setData(personResponse);
-        response.setMessage("Person created successfully.");
-        response.setStatus(HttpStatus.CREATED.value());
+        response.setMessage("Person updated successfully.");
+        response.setStatus(HttpStatus.OK.value());
         response.setSuccess(true);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

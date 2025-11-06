@@ -29,9 +29,6 @@ public class ContactInfoService {
     public Optional<ContactInfo> getByPersonId(Long id) {
         return contactInfoRepository.findByPersonId(id);
     }
-    public Optional<ContactInfo> getByUserId(UUID id) {
-        return contactInfoRepository.findByUserId(id);
-    }
 
     public Optional<ContactInfo> getPrimaryByUserId(UUID id) {
         return contactInfoRepository.findPrimaryContactInfoByUserId(id);
@@ -53,10 +50,20 @@ public class ContactInfoService {
     public ContactInfo update(Long id, ContactInfoRequestDTO dto) {
         if (id == null)
             throw new IllegalArgumentException("ContactInfo ID cannot be null");
-        if (!contactInfoRepository.existsById(id))
-            throw new ResourceNotFoundException("ContactInfo not found with User ID: " + id);
-        ContactInfo contactInfo = contactInfoMapper.toEntity(dto);
-        return contactInfoRepository.save(contactInfo);
+        ContactInfo existing = contactInfoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ContactInfo not found with User ID: " + id));
+        ContactInfo incoming = contactInfoMapper.toEntity(dto);
+        existing.setEmail(incoming.getEmail());
+        existing.setAlternateEmail(incoming.getAlternateEmail());
+        existing.setPrimary(incoming.isPrimary());
+        existing.setAlternateEmail(incoming.getAlternateEmail());
+        existing.setEmergencyContactName(incoming.getEmergencyContactName());
+        existing.setEmergencyContactPhone(incoming.getEmergencyContactPhone());
+        existing.setPerson(incoming.getPerson());
+        existing.setActive(incoming.getActive());
+        existing.setUpdatedBy(incoming.getUpdatedBy());
+        existing.setUpdatedAt(incoming.getUpdatedAt());
+        return contactInfoRepository.save(existing);
     }
 
     public boolean delete(Long id) {

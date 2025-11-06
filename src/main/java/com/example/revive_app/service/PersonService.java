@@ -6,6 +6,7 @@ import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.Person;
 import com.example.revive_app.repository.PersonRepository;
 import com.example.revive_app.request.PersonRequestDTO;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,10 +54,20 @@ public class PersonService {
     public Person update(Long id, PersonRequestDTO dto) {
         if (id == null)
             throw new IllegalArgumentException("Person ID cannot be null");
-        if (!personRepository.existsById(id))
-            throw new ResourceNotFoundException("Person not found with User ID: " + id);
-        Person person = personMapper.toEntity(dto);
-        return personRepository.save(person);
+        Person existing = personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Person not found with User ID: " + id));
+        Person incoming = personMapper.toEntity(dto);
+        existing.setBio(incoming.getBio());
+        existing.setFirstName(incoming.getFirstName());
+        existing.setLastName(incoming.getLastName());
+        existing.setGender(incoming.getGender());
+        existing.setMaritalStatus(incoming.getMaritalStatus());
+        existing.setDateOfBirth(incoming.getDateOfBirth());
+        existing.setBio(incoming.getBio());
+        existing.setNationalId(incoming.getNationalId());
+        existing.setUpdatedBy(incoming.getUpdatedBy());
+        existing.setUpdatedAt(LocalDateTime.now());
+        return personRepository.save(existing);
     }
 
     public boolean delete(Long id) {

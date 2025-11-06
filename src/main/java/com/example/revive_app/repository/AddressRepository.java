@@ -12,21 +12,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
+    @Query("SELECT a FROM Address a JOIN a.person p JOIN User u ON u.person.id = p.id WHERE u.id = :userId")
+    List<Address> findAllAddressesByUserId(@Param("userId") UUID userId);
 
-    Optional<Address> findByPersonIdAndIsPrimaryTrue(Long id);
-    // You can add custom query methods here if needed
-
-    // Query through the User -> Person -> Address relationship
-    @Query("SELECT a FROM Address a " + "WHERE a.person.id = (SELECT u.person.id FROM User u WHERE u.id = :userId) "
-            + "AND a.isPrimary = true")
+    @Query("SELECT a FROM Address a JOIN a.person p JOIN User u ON u.person.id = p.id WHERE u.id = :userId AND a.isPrimary = true")
     Optional<Address> findPrimaryAddressByUserId(@Param("userId") UUID userId);
 
-    // Alternative: More explicit join syntax
-    @Query("SELECT a FROM Address a " + "JOIN a.person p " + "JOIN User u ON u.person.id = p.id "
-            + "WHERE u.id = :userId AND a.isPrimary = true")
-    Optional<Address> findPrimaryAddressByUserIdWithJoin(@Param("userId") UUID userId);
-
-    // If you also want to get all addresses for a user
-    @Query("SELECT a FROM Address a " + "WHERE a.person.id = (SELECT u.person.id FROM User u WHERE u.id = :userId)")
-    List<Address> findAllAddressesByUserId(@Param("userId") UUID userId);
+    @Query("SELECT a FROM Address a JOIN a.person p WHERE p.id = :personId AND a.isPrimary = true")
+    Optional<Address> findPrimaryAddressByPersonId(@Param("personId") Long personId);
 }

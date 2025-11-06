@@ -10,19 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ContactInfoRepository extends JpaRepository<ContactInfo, Long> {
-    // Query through the User -> Person -> Address relationship
-    @Query("SELECT a FROM ContactInfo a " + "WHERE a.person.id = (SELECT u.person.id FROM User u WHERE u.id = :userId) "
-            + "AND a.isPrimary = true")
+    @Query("SELECT a FROM ContactInfo a WHERE a.person.id = (SELECT u.person.id FROM User u WHERE u.id = :userId) AND a.isPrimary = true")
     Optional<ContactInfo> findPrimaryContactInfoByUserId(@Param("userId") UUID userId);
 
-    @Query("SELECT a FROM ContactInfo a "
-            + "WHERE a.person.id = (SELECT u.person.id FROM User u WHERE u.id = :userId) ")
-    Optional<ContactInfo> findByUserId(@Param("userId") UUID userId);
-
-    // If you also want to get all addresses for a user
-    @Query("SELECT a FROM ContactInfo a " + "WHERE a.person.id = (SELECT u.person.id FROM User u WHERE u.id = :userId)")
+    @Query("SELECT a FROM ContactInfo a WHERE a.person.id = (SELECT u.person.id FROM User u WHERE u.id = :userId)")
     List<ContactInfo> findAllContactInfoByUserId(@Param("userId") UUID userId);
 
-    @Query("SELECT a FROM Address a " + "WHERE a.person.id = :id ")
+    @Query("SELECT a FROM Address a WHERE a.person.id = :id ")
     Optional<ContactInfo> findByPersonId(Long id);
 }

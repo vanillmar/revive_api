@@ -59,20 +59,7 @@ public class ContactInfoController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<ResponseDTO<ContactInfoResponseDTO>> getByUserId(@PathVariable UUID id) {
-        ContactInfo contactInfo = contactInfoService.getByUserId(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Failed to fetch the ContactInfo"));
-        ContactInfoResponseDTO contactInfoResponse = contactInfoMapper.toResponse(contactInfo);
-        ResponseDTO<ContactInfoResponseDTO> response = new ResponseDTO<>();
-        response.setData(contactInfoResponse);
-        response.setMessage("ContactInfo fetched successfully.");
-        response.setStatus(HttpStatus.OK.value());
-        response.setSuccess(true);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
-    @GetMapping("/principal/user/{id}")
+    @GetMapping("/primary/user/{id}")
     public ResponseEntity<ResponseDTO<ContactInfoResponseDTO>> getPrimaryByUserId(@PathVariable UUID id) {
         ContactInfo contactInfo = contactInfoService.getPrimaryByUserId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Failed to fetch the ContactInfo"));
@@ -126,7 +113,7 @@ public class ContactInfoController {
         ContactInfoResponseDTO contactInfoResponse = contactInfoMapper.toResponse(contactInfo);
         ResponseDTO<ContactInfoResponseDTO> response = new ResponseDTO<>();
         response.setData(contactInfoResponse);
-        response.setMessage("Person created successfully.");
+        response.setMessage("Contact updated successfully.");
         response.setStatus(HttpStatus.CREATED.value());
         response.setSuccess(true);
         return ResponseEntity.status(HttpStatus.OK).body(response);

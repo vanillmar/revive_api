@@ -1,5 +1,6 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.request;
+import com.example.revive_app.model.BaseAuditableEntity;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonRequestDTO {
+public class PersonRequestDTO extends BaseAuditableEntity {
     private String firstName;
     private String lastName;
     private String gender;

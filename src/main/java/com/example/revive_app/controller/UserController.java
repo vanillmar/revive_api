@@ -76,7 +76,7 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PreAuthorize("hasAuthority('" + Permissions.READ_USERS + "')")
+    // @PreAuthorize("hasAuthority('" + Permissions.READ_USERS + "')")
     @GetMapping
     public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -89,12 +89,12 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PreAuthorize("hasAuthority('" + Permissions.READ_USER + "')")
+    // @PreAuthorize("hasAuthority('" + Permissions.READ_USER + "')")
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> getUserById(@PathVariable String id) {
         UUID newId = UUID.fromString(id);
-        UserResponseDTO userResponse = userService.getUserById(newId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = userService.getUserById(newId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        UserResponseDTO userResponse = userMapper.toResponse(user);
         ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
         response.setData(userResponse);
         response.setSuccess(true);
@@ -104,10 +104,10 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PreAuthorize("hasAuthority('" + Permissions.CREATE_USER + "')")
+    // @PreAuthorize("hasAuthority('" + Permissions.CREATE_USER + "')")
     @PostMapping
     public ResponseEntity<ResponseDTO<UserResponseDTO>> createUser(@RequestBody UserRequestDTO userDTO) {
-        User createdUser = userService.createUser(userDTO);
+        User createdUser = userService.create(userDTO);
         UserResponseDTO createdUserDTO = userMapper.toResponse(createdUser);
         ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
         response.setSuccess(true);
@@ -117,7 +117,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PreAuthorize("hasAuthority('" + Permissions.CREATE_USERS + "')")
+    // @PreAuthorize("hasAuthority('" + Permissions.CREATE_USERS + "')")
     @PostMapping("/batch")
     public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> createUsers(@RequestBody List<UserRequestDTO> users) {
         List<User> createdUsers = userService.createUsers(users);
@@ -130,21 +130,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USER + "')")
+    // @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USER + "')")
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> updateUser(@PathVariable UUID id,
             @RequestBody UserRequestDTO userDetails) {
         ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
-        User updatedUser = userService.updateUser(id, userDetails);
+        User updatedUser = userService.update(id, userDetails);
         UserResponseDTO updatedUserDTO = userMapper.toResponse(updatedUser);
         response.setSuccess(true);
-        response.setMessage("User updated successfully");
+        response.setMessage("User updated successfully.");
         response.setStatus(HttpStatus.OK.value());
         response.setData(updatedUserDTO);
         return ResponseEntity.ok().body(response);
     }
 
-    @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USERS + "')")
+    // @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USERS + "')")
     @PutMapping("/batch")
     public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> updateUsers(@RequestBody List<UserRequestDTO> users) {
         List<User> updateUsers = userService.updateUsers(users);
@@ -157,7 +157,7 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PreAuthorize("hasAuthority('" + Permissions.DELETE_USER + "')")
+    // @PreAuthorize("hasAuthority('" + Permissions.DELETE_USER + "')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable UUID id) {
         boolean deleted = userService.deleteUser(id);

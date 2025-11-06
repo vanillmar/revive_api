@@ -4,15 +4,15 @@ package com.example.revive_app.data.dto;
 import com.example.revive_app.model.Role;
 import java.util.Set;
 import java.util.UUID;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
-@Builder
+@Data
 public class UserResponseDTO {
-    private final UUID id;
-    private final String username;
-    private final String email;
-    private final boolean enabled;
-    private final Set<Role> roles;
+    private UUID id;
+    private String username;
+    private String email;
+    private boolean enabled;
+    private Set<Role> roles;
+    private boolean notifications;
+    private String avatar;
 }

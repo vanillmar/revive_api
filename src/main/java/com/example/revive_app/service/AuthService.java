@@ -52,7 +52,7 @@ public class AuthService {
 
         UserRequestDTO userRequestDTO = authRegisterMapper.toUserRequestDTO(request);
         userRequestDTO.setRoles(roles);
-        User user = userService.createUser(userRequestDTO);
+        User user = userService.create(userRequestDTO);
 
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), userRequestDTO.getPassword()));

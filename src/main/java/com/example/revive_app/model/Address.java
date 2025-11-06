@@ -35,7 +35,7 @@ public class Address extends BaseAuditableEntity {
     private boolean isPrimary = false;
 
     // --- RELATIONSHIP ---
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id", nullable = true)
     private Person person;
 }

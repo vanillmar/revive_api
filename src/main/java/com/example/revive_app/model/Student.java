@@ -3,6 +3,7 @@ package com.example.revive_app.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,6 +17,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "Student")
+@DiscriminatorValue("STUDENT")
 @Getter
 @Setter
 @NoArgsConstructor

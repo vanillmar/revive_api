@@ -112,7 +112,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>com.speedment.jpastreamer</groupId>
+			<artifactId>jpastreamer-core</artifactId>
+			<version>3.0.4</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -154,7 +158,24 @@
 					</java>
 				</configuration>
 			</plugin>
-
+	    <plugin> 
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>build-helper-maven-plugin</artifactId>
+			<version>3.6.1</version>
+			<executions>
+				<execution>
+					<phase>generate-sources</phase>
+					<goals>
+						<goal>add-source</goal>
+					</goals>
+					<configuration>
+						<sources>
+							<source>${project.build.directory}/generated-sources/annotations</source>
+						</sources>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

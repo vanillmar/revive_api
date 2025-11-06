@@ -15,7 +15,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.HashSet;
@@ -61,9 +61,11 @@ public class User extends BaseAuditableEntity implements UserDetails {
     @JoinTable(name = "AppUserRole", joinColumns = @JoinColumn(name = "appuser_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @OneToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     private Person person;
+
+    private boolean notifications;
 
     private Boolean active = true;
     // Constructor

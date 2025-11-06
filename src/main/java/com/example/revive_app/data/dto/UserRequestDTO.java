@@ -1,6 +1,7 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.dto;
 
+import com.example.revive_app.model.BaseAuditableEntity;
 import com.example.revive_app.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDTO {
+public class UserRequestDTO extends BaseAuditableEntity {
     private UUID id;
 
     @NotBlank(message = "Username is required")
@@ -29,5 +30,13 @@ public class UserRequestDTO {
 
     private boolean enabled;
 
+    private boolean active;
+
     private Set<Role> roles = new HashSet<>();
+
+    private boolean notifications;
+
+    private String bio;
+
+    private Long personId;
 }

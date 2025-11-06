@@ -15,7 +15,7 @@ public interface PersonMapper {
     @Mapping(target = "contactInfos", ignore = true)
     @Mapping(target = "addresses", ignore = true)
     @Mapping(target = "primaryAddress", ignore = true)
-    @IgnoreAuditMapping
+    @Mapping(target = "user", ignore = true)
     Person toEntity(PersonRequestDTO dto);
     List<Person> toListEntity(List<PersonRequestDTO> dtos);
 
