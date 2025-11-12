@@ -1,16 +1,20 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.response;
 
-import java.time.LocalDateTime;
+
+import com.example.revive_app.model.BaseAuditableEntity;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 // ...existing code...
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContactInfoResponseDTO {
+public class ContactInfoResponseDTO extends BaseAuditableEntity {
     private long id;
     private String phoneNumber;
     private String email;
@@ -18,11 +22,6 @@ public class ContactInfoResponseDTO {
     private String emergencyContactName;
     private String emergencyContactPhone;
     private long personId;
-    private boolean isPrimary;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
-    private String createdBy;
-    private String updatedBy;
-    private String deletedBy;
+    private boolean primary;
+
 }

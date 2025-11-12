@@ -1,14 +1,16 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.mapper;
 
+import java.util.List;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
 import com.example.revive_app.model.Address;
 import com.example.revive_app.model.Person;
 import com.example.revive_app.request.AddressRequestDTO;
 import com.example.revive_app.response.AddressResponseDTO;
-import java.util.List;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface AddressMapper {
@@ -19,10 +21,11 @@ public interface AddressMapper {
     @Mapping(target = "deleted", ignore = true)
     Address toEntity(AddressRequestDTO dto);
 
-    List<Address> toListEntities(List<AddressRequestDTO> dtos);
-
     @Mapping(target = "personId", source = "person.id")
+    @Mapping(target = "deleted", ignore = true)
     AddressResponseDTO toResponse(Address entity);
+
+    List<Address> toListEntities(List<AddressRequestDTO> dtos);
 
     List<AddressResponseDTO> toResponseDTOs(List<Address> entities);
 

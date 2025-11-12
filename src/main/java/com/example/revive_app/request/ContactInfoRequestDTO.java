@@ -2,11 +2,14 @@
 package com.example.revive_app.request;
 
 import com.example.revive_app.model.BaseAuditableEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContactInfoRequestDTO extends BaseAuditableEntity {
@@ -16,6 +19,6 @@ public class ContactInfoRequestDTO extends BaseAuditableEntity {
     private String emergencyContactName;
     private String emergencyContactPhone;
     private Long personId;
-    private boolean isPrimary;
+    private boolean primary;
     private String updatedBy;
 }

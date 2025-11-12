@@ -1,16 +1,18 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
 import com.example.revive_app.data.mapper.PersonMapper;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.Person;
 import com.example.revive_app.repository.PersonRepository;
 import com.example.revive_app.request.PersonRequestDTO;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PersonService {
@@ -62,7 +64,7 @@ public class PersonService {
         existing.setLastName(incoming.getLastName());
         existing.setGender(incoming.getGender());
         existing.setMaritalStatus(incoming.getMaritalStatus());
-        existing.setDateOfBirth(incoming.getDateOfBirth());
+        existing.setBirthDate(incoming.getBirthDate());
         existing.setBio(incoming.getBio());
         existing.setNationalId(incoming.getNationalId());
         existing.setUpdatedBy(incoming.getUpdatedBy());

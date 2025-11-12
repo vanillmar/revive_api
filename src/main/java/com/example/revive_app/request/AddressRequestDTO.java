@@ -2,6 +2,7 @@
 package com.example.revive_app.request;
 
 import com.example.revive_app.model.BaseAuditableEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,6 @@ public class AddressRequestDTO extends BaseAuditableEntity {
     private String zipCode;
     private String country;
     private Long personId;
-    private boolean isPrimary;
+    private boolean primary;
     private String updatedBy;
 }

@@ -1,15 +1,17 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
 import com.example.revive_app.data.mapper.ContactInfoMapper;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.ContactInfo;
 import com.example.revive_app.repository.ContactInfoRepository;
 import com.example.revive_app.request.ContactInfoRequestDTO;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ContactInfoService {

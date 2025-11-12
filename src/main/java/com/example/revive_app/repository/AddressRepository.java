@@ -15,9 +15,9 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     @Query("SELECT a FROM Address a JOIN a.person p JOIN User u ON u.person.id = p.id WHERE u.id = :userId")
     List<Address> findAllAddressesByUserId(@Param("userId") UUID userId);
 
-    @Query("SELECT a FROM Address a JOIN a.person p JOIN User u ON u.person.id = p.id WHERE u.id = :userId AND a.isPrimary = true")
+    @Query("SELECT a FROM Address a JOIN a.person p JOIN User u ON u.person.id = p.id WHERE u.id = :userId AND a.primary = true")
     Optional<Address> findPrimaryAddressByUserId(@Param("userId") UUID userId);
 
-    @Query("SELECT a FROM Address a JOIN a.person p WHERE p.id = :personId AND a.isPrimary = true")
+    @Query("SELECT a FROM Address a JOIN a.person p WHERE p.id = :personId AND a.primary = true")
     Optional<Address> findPrimaryAddressByPersonId(@Param("personId") Long personId);
 }

@@ -1,6 +1,12 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.model;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,13 +20,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "Persons")
@@ -44,7 +46,7 @@ public class Person extends BaseAuditableEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private LocalDate dateOfBirth;
+    private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     private MaritalStatus maritalStatus;
@@ -63,21 +65,4 @@ public class Person extends BaseAuditableEntity {
 
     @OneToOne(mappedBy = "person", fetch = FetchType.EAGER)
     private User user;
-    // --- UTILITY METHODS ---
-    public void addAddress(Address address) {
-        address.setPerson(this);
-        if (address.isPrimary()) {
-            // ensure only one primary address
-            this.addresses.forEach(a -> a.setPrimary(false));
-        }
-        this.addresses.add(address);
-    }
-
-    public void setPrimaryAddress(Long addressId) {
-        this.addresses.forEach(a -> a.setPrimary(a.getId().equals(addressId)));
-    }
-
-    public Address getPrimaryAddress() {
-        return this.addresses.stream().filter(Address::isPrimary).findFirst().orElse(null);
-    }
 }

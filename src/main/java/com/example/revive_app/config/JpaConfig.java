@@ -41,6 +41,7 @@ public class JpaConfig {
         jpaProps.setProperty("hibernate.hbm2ddl.auto", "update");
         jpaProps.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
         jpaProps.setProperty("hibernate.show_sql", "true");
+        jpaProps.setProperty("hibernate.globally_quoted_identifiers", "true");
         em.setJpaProperties(jpaProps);
 
         return em;

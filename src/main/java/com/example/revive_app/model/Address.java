@@ -32,7 +32,7 @@ public class Address extends BaseAuditableEntity {
     private String country;
 
     @Column(nullable = false)
-    private boolean isPrimary = false;
+    private boolean primary = false;
 
     // --- RELATIONSHIP ---
     @ManyToOne(fetch = FetchType.EAGER)

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ContactInfoRepository extends JpaRepository<ContactInfo, Long> {
-    @Query("SELECT a FROM ContactInfo a WHERE a.person.id = (SELECT u.person.id FROM User u WHERE u.id = :userId) AND a.isPrimary = true")
+    @Query("SELECT a FROM ContactInfo a WHERE a.person.id = (SELECT u.person.id FROM User u WHERE u.id = :userId) AND a.primary = true")
     Optional<ContactInfo> findPrimaryContactInfoByUserId(@Param("userId") UUID userId);
 
     @Query("SELECT a FROM ContactInfo a WHERE a.person.id = (SELECT u.person.id FROM User u WHERE u.id = :userId)")

@@ -34,7 +34,7 @@ public class ContactInfo extends BaseAuditableEntity {
     private String emergencyContactPhone;
 
     @Column(nullable = false)
-    private boolean isPrimary = false;
+    private boolean primary = false;
 
     // --- RELATIONSHIP ---
     @ManyToOne(fetch = FetchType.EAGER)

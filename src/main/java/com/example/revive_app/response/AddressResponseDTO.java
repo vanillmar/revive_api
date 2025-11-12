@@ -1,6 +1,8 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.response;
 
+import com.example.revive_app.model.BaseAuditableEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressResponseDTO {
+public class AddressResponseDTO extends BaseAuditableEntity{
     private Long id;
     private String street;
     private String city;
@@ -18,4 +20,5 @@ public class AddressResponseDTO {
     private String zipCode;
     private String country;
     private Long personId;
+    private boolean primary;
 }
