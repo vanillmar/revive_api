@@ -32,9 +32,9 @@ public class UserRequestDTO extends BaseAuditableEntity {
 
     private boolean active;
 
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
-    private boolean notifications;
+    private boolean notifications; // Email Notification
 
     private String bio;
 

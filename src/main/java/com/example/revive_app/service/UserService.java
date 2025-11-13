@@ -3,9 +3,12 @@ package com.example.revive_app.service;
 
 import com.example.revive_app.data.dto.UserRequestDTO;
 import com.example.revive_app.data.mapper.UserMapper;
+import com.example.revive_app.exception.EmailAlreadyExistsException;
 import com.example.revive_app.exception.ResourceNotFoundException;
+import com.example.revive_app.exception.UsernameAlreadyExistsException;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,12 +17,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -88,18 +94,25 @@ public class UserService {
     public List<User> createUsers(List<UserRequestDTO> usersDTO) {
         return userRepository.saveAll(usersDTO.stream().map(this::toEntity).toList());
     }
-
+    @Transactional
     public User update(UUID id, UserRequestDTO dto) {
-        if (id == null)
-            throw new IllegalArgumentException("User ID cannot be null");
+        if (id == null) throw new IllegalArgumentException("User ID cannot be null");
+         // 1. Retrieve the existing user
         User existing = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         User incoming = userMapper.toEntity(dto);
+        // 2. Check if the new username is already taken by another user
+        if (userRepository.findByUsernameAndIdNot(incoming.getUsername(), id).isPresent()) {
+            throw new UsernameAlreadyExistsException("Username '" + incoming.getUsername() + "' is already taken.");
+        }
+        if (userRepository.findByEmailAndIdNot(incoming.getEmail(), id).isPresent()) {
+            throw new EmailAlreadyExistsException("Email '" + incoming.getEmail() + "' is already taken.");
+        }            
         existing.setUsername(incoming.getUsername());
         // if (incoming.getPassword()!= null || !incoming.getPassword().isEmpty())
         // existing.setPassword(passwordEncoder.encode(incoming.getPassword()));
         existing.setEmail(incoming.getEmail());
-        if (incoming.getRoles() != null || !incoming.getRoles().isEmpty())
+        if (incoming.getRoles() != null && !incoming.getRoles().isEmpty())
             existing.setRoles(incoming.getRoles());
         if (incoming.isEnabled())
             existing.setEnabled(incoming.isEnabled());
@@ -107,6 +120,7 @@ public class UserService {
         existing.setUpdatedAt(LocalDateTime.now());
         existing.setUpdatedBy(incoming.getUpdatedBy());
         existing.setActive(incoming.getActive());
+        // 3. Update the username and save
         return userRepository.save(existing);
     }
 
