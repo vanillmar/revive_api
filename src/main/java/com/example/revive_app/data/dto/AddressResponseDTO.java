@@ -1,19 +1,23 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.dto;
 
-import java.util.UUID;
-import lombok.Builder;
+import com.example.revive_app.model.BaseAuditableEntity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-public class AddressResponseDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class AddressResponseDTO extends BaseAuditableEntity {
     private Long id;
     private String street;
     private String city;
     private String state;
     private String zipCode;
-    private UUID employeeId; // Assuming this is used to link to an Employee entity
+    private String country;
+    private Long personId;
+    private boolean primary;
 }

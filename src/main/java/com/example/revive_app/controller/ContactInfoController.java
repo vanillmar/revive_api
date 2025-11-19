@@ -1,12 +1,12 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.controller;
 
+import com.example.revive_app.data.dto.ContactInfoRequestDTO;
+import com.example.revive_app.data.dto.ContactInfoResponseDTO;
 import com.example.revive_app.data.dto.ResponseDTO;
 import com.example.revive_app.data.mapper.ContactInfoMapper;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.ContactInfo;
-import com.example.revive_app.request.ContactInfoRequestDTO;
-import com.example.revive_app.response.ContactInfoResponseDTO;
 import com.example.revive_app.service.ContactInfoService;
 import java.util.List;
 import java.util.UUID;

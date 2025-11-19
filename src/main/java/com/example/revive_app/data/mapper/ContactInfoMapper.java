@@ -1,16 +1,14 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.mapper;
 
+import com.example.revive_app.data.dto.ContactInfoRequestDTO;
+import com.example.revive_app.data.dto.ContactInfoResponseDTO;
+import com.example.revive_app.model.ContactInfo;
+import com.example.revive_app.model.Person;
 import java.util.List;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-
-import com.example.revive_app.model.ContactInfo;
-import com.example.revive_app.model.Person;
-import com.example.revive_app.request.ContactInfoRequestDTO;
-import com.example.revive_app.response.ContactInfoResponseDTO;
 
 @Mapper(componentModel = "spring")
 public interface ContactInfoMapper {

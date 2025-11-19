@@ -1,12 +1,12 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.controller;
 
+import com.example.revive_app.data.dto.AddressRequestDTO;
+import com.example.revive_app.data.dto.AddressResponseDTO;
 import com.example.revive_app.data.dto.ResponseDTO;
 import com.example.revive_app.data.mapper.AddressMapper;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.Address;
-import com.example.revive_app.request.AddressRequestDTO;
-import com.example.revive_app.response.AddressResponseDTO;
 import com.example.revive_app.service.AddressService;
 import java.util.List;
 import java.util.UUID;

@@ -23,5 +23,15 @@ public class ResponseDTO<T> {
     public ResponseDTO() {
         this.timestamp = Instant.now();
         this.success = false;
+        this.total = 0;
+        this.page = 0;
+        this.pageSize = 0;
+    }
+
+    public ResponseDTO(Boolean success, String message, T data) {
+        this();
+        this.success = success;
+        this.message = message;
+        this.data = data;
     }
 }

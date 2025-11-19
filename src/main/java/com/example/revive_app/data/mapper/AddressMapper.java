@@ -1,16 +1,14 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.mapper;
 
+import com.example.revive_app.data.dto.AddressRequestDTO;
+import com.example.revive_app.data.dto.AddressResponseDTO;
+import com.example.revive_app.model.Address;
+import com.example.revive_app.model.Person;
 import java.util.List;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-
-import com.example.revive_app.model.Address;
-import com.example.revive_app.model.Person;
-import com.example.revive_app.request.AddressRequestDTO;
-import com.example.revive_app.response.AddressResponseDTO;
 
 @Mapper(componentModel = "spring")
 public interface AddressMapper {

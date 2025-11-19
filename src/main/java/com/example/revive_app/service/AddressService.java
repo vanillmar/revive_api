@@ -1,19 +1,17 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-
+import com.example.revive_app.data.dto.AddressRequestDTO;
 import com.example.revive_app.data.mapper.AddressMapper;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.Address;
 import com.example.revive_app.repository.AddressRepository;
 import com.example.revive_app.repository.AddressRepositoryCustom;
-import com.example.revive_app.request.AddressRequestDTO;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AddressService {

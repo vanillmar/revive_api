@@ -5,7 +5,6 @@ import com.example.revive_app.model.BaseAuditableEntity;
 import com.example.revive_app.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.AllArgsConstructor;

@@ -8,7 +8,6 @@ import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.exception.UsernameAlreadyExistsException;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,15 +16,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService {
@@ -96,8 +93,9 @@ public class UserService {
     }
     @Transactional
     public User update(UUID id, UserRequestDTO dto) {
-        if (id == null) throw new IllegalArgumentException("User ID cannot be null");
-         // 1. Retrieve the existing user
+        if (id == null)
+            throw new IllegalArgumentException("User ID cannot be null");
+        // 1. Retrieve the existing user
         User existing = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         User incoming = userMapper.toEntity(dto);
@@ -107,7 +105,7 @@ public class UserService {
         }
         if (userRepository.findByEmailAndIdNot(incoming.getEmail(), id).isPresent()) {
             throw new EmailAlreadyExistsException("Email '" + incoming.getEmail() + "' is already taken.");
-        }            
+        }
         existing.setUsername(incoming.getUsername());
         // if (incoming.getPassword()!= null || !incoming.getPassword().isEmpty())
         // existing.setPassword(passwordEncoder.encode(incoming.getPassword()));

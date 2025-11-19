@@ -1,8 +1,7 @@
 /* Copyright (C)2025  Vanilson Marcos */
-package com.example.revive_app.request;
+package com.example.revive_app.data.dto;
 
 import com.example.revive_app.model.BaseAuditableEntity;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,12 +11,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressRequestDTO extends BaseAuditableEntity {
-    private String street;
-    private String city;
-    private String state;
-    private String zipCode;
-    private String country;
+public class ContactInfoRequestDTO extends BaseAuditableEntity {
+    private String phoneNumber;
+    private String email;
+    private String alternateEmail;
+    private String emergencyContactName;
+    private String emergencyContactPhone;
     private Long personId;
     private boolean primary;
     private String updatedBy;

@@ -1,9 +1,7 @@
 /* Copyright (C)2025  Vanilson Marcos */
-package com.example.revive_app.request;
-import java.time.LocalDate;
-
+package com.example.revive_app.data.dto;
 import com.example.revive_app.model.BaseAuditableEntity;
-
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
