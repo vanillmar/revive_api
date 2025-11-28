@@ -8,10 +8,15 @@ import com.example.revive_app.data.dto.UserResponseDTO;
 import com.example.revive_app.data.mapper.UserMapper;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.User;
+import com.example.revive_app.repository.AddressRepository;
 import com.example.revive_app.service.UserService;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,16 +36,19 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/users")
 public class UserController {
 
+    private final AddressRepository addressRepository;
+
     private final UserService userService;
     private final UserMapper userMapper;
 
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService, UserMapper userMapper, AddressRepository addressRepository) {
         this.userService = userService;
         this.userMapper = userMapper;
+        this.addressRepository = addressRepository;
     }
 
     @GetMapping("/stats/total")
-    public ResponseEntity<ResponseDTO<Map<String, Long>>> getTotalQuestions() {
+    public ResponseEntity<ResponseDTO<Map<String, Long>>> getTotalUsers() {
         ResponseDTO<Map<String, Long>> response = new ResponseDTO<>();
         Long totalUsers = userService.getTotalUsers();
         response.setData(Map.of("total", totalUsers));
@@ -78,14 +86,25 @@ public class UserController {
 
     // @PreAuthorize("hasAuthority('" + Permissions.READ_USERS + "')")
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        List<UserResponseDTO> usersDTO = userMapper.toResponseList(users);
+    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> getAllUsers(@RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortOrder, @RequestParam(defaultValue = "") String search) {
+
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(direction, sortBy));
+        Page<User> userPage = userService.findAllWithFilters(search, pageable);
+
+        List<UserResponseDTO> usersDTO = userMapper.toResponseList(userPage.getContent());
         ResponseDTO<List<UserResponseDTO>> response = new ResponseDTO<>();
         response.setSuccess(true);
-        response.setMessage("Users retrieved successfully");
+        response.setMessage("Users retrieved successfully.");
         response.setStatus(HttpStatus.OK.value());
         response.setData(usersDTO);
+
+        response.setTotal((int) userPage.getTotalElements());
+        response.setPage(page);
+        response.setPageSize(pageSize);
+
         return ResponseEntity.ok().body(response);
     }
 
@@ -107,7 +126,8 @@ public class UserController {
     // @PreAuthorize("hasAuthority('" + Permissions.CREATE_USER + "')")
     @PostMapping
     public ResponseEntity<ResponseDTO<UserResponseDTO>> createUser(@RequestBody UserRequestDTO userDTO) {
-        User createdUser = userService.create(userDTO);
+        User incoming = userMapper.toEntity(userDTO);
+        User createdUser = userService.create(incoming);
         UserResponseDTO createdUserDTO = userMapper.toResponse(createdUser);
         ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
         response.setSuccess(true);
@@ -119,7 +139,8 @@ public class UserController {
 
     // @PreAuthorize("hasAuthority('" + Permissions.CREATE_USERS + "')")
     @PostMapping("/batch")
-    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> createUsers(@RequestBody List<UserRequestDTO> users) {
+    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> dtos(@RequestBody List<UserRequestDTO> dtos) {
+        List<User> users = userMapper.toEntityList(dtos);
         List<User> createdUsers = userService.createUsers(users);
         List<UserResponseDTO> createdUsersDTO = userMapper.toResponseList(createdUsers);
         ResponseDTO<List<UserResponseDTO>> response = new ResponseDTO<>();
@@ -133,9 +154,10 @@ public class UserController {
     // @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USER + "')")
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> updateUser(@PathVariable UUID id,
-            @RequestBody UserRequestDTO userDetails) {
+            @RequestBody UserRequestDTO dto) {
+        User incoming = userMapper.toEntity(dto);
+        User updatedUser = userService.update(id, incoming);
         ResponseDTO<UserResponseDTO> response = new ResponseDTO<>();
-        User updatedUser = userService.update(id, userDetails);
         UserResponseDTO updatedUserDTO = userMapper.toResponse(updatedUser);
         response.setSuccess(true);
         response.setMessage("User updated successfully.");
@@ -146,7 +168,8 @@ public class UserController {
 
     // @PreAuthorize("hasAuthority('" + Permissions.UPDATE_USERS + "')")
     @PutMapping("/batch")
-    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> updateUsers(@RequestBody List<UserRequestDTO> users) {
+    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> updateUsers(@RequestBody List<UserRequestDTO> dtos) {
+        List<User> users = userMapper.toEntityList(dtos);
         List<User> updateUsers = userService.updateUsers(users);
         List<UserResponseDTO> updatedUsersDTO = userMapper.toResponseList(updateUsers);
         ResponseDTO<List<UserResponseDTO>> response = new ResponseDTO<>();
@@ -159,8 +182,21 @@ public class UserController {
 
     // @PreAuthorize("hasAuthority('" + Permissions.DELETE_USER + "')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteUser(@PathVariable UUID id) {
-        boolean deleted = userService.deleteUser(id);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<ResponseDTO<Map<String, UUID>>> deleteUser(@PathVariable UUID id) {
+        boolean deleted = userService.deleteById(id);
+        ResponseDTO<Map<String, UUID>> response = new ResponseDTO<>();
+        if (deleted) {
+            response.setMessage("User deleted successfully.");
+            response.setStatus(HttpStatus.OK.value());
+            response.setData(Map.of("UserId", id));
+            response.setSuccess(true);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.setMessage("User not found.");
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+            response.setData(Map.of());
+            response.setSuccess(false);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 }

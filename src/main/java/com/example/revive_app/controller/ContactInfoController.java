@@ -106,6 +106,20 @@ public class ContactInfoController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<ResponseDTO<List<ContactInfo>>> bulkInsertContacts(
+            @RequestBody List<ContactInfoRequestDTO> dtos) {
+        List<ContactInfo> contacts = contactInfoMapper.toListEntity(dtos);
+        List<ContactInfo> savedContacts = contactInfoService.bulkInsertContacts(contacts);
+        ResponseDTO<List<ContactInfo>> response = new ResponseDTO<>();
+        response.setData(savedContacts);
+        response.setMessage("Contacts created successfully.");
+        response.setStatus(HttpStatus.CREATED.value());
+        response.setSuccess(true);
+        response.setTotal(savedContacts.size());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO<ContactInfoResponseDTO>> update(@PathVariable Long id,
             @RequestBody ContactInfoRequestDTO dto) {

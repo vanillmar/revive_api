@@ -21,7 +21,7 @@ public interface ContactInfoMapper {
     @Mapping(target = "personId", source = "person.id")
     @Mapping(target = "deleted", ignore = true)
     ContactInfoResponseDTO toResponse(ContactInfo entity);
-
+    @Named("toContactInfoListEntity")
     List<ContactInfo> toListEntity(List<ContactInfoRequestDTO> dtos);
     List<ContactInfoResponseDTO> toListResponse(List<ContactInfo> entities);
 

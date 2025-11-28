@@ -46,8 +46,7 @@ public class PersonService {
         return persons;
     }
 
-    public Person create(PersonRequestDTO dto) {
-        Person person = personMapper.toEntity(dto);
+    public Person create(Person person) {
         return personRepository.save(person);
     }
 

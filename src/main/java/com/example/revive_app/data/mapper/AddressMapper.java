@@ -22,9 +22,8 @@ public interface AddressMapper {
     @Mapping(target = "personId", source = "person.id")
     @Mapping(target = "deleted", ignore = true)
     AddressResponseDTO toResponse(Address entity);
-
+    @Named("toAddressListEntity")
     List<Address> toListEntities(List<AddressRequestDTO> dtos);
-
     List<AddressResponseDTO> toResponseDTOs(List<Address> entities);
 
     @Named("idToPerson")

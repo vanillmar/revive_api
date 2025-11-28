@@ -7,6 +7,7 @@ import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.Address;
 import com.example.revive_app.repository.AddressRepository;
 import com.example.revive_app.repository.AddressRepositoryCustom;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -46,9 +47,14 @@ public class AddressService {
         return addressRepository.findAll();
     }
 
-    public Address create(AddressRequestDTO dto) {
-        Address address = addressMapper.toEntity(dto);
+    public Address create(Address address) {
         return addressRepository.save(address);
+    }
+
+    @Transactional
+    public List<Address> bulkInsertAddresses(List<Address> addresses) {
+        // Save all addresses in bulk
+        return addressRepository.saveAll(addresses);
     }
 
     public Address update(Long id, AddressRequestDTO dto) {

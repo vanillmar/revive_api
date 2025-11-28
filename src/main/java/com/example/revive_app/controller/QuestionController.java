@@ -57,21 +57,21 @@ public class QuestionController {
     public ResponseEntity<ResponseDTO<List<QuestionResponseDTO>>> getAll(@RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortOrder, @RequestParam(defaultValue = "") String search) {
+
         Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(direction, sortBy));
-
         Page<Question> questionPage = questionService.findAllWithFilters(search, pageable);
 
-        ResponseDTO<List<QuestionResponseDTO>> responseDTO = new ResponseDTO<>();
-        responseDTO.setData(questionMapper.toResponseList(questionPage.getContent()));
-        responseDTO.setMessage("Questions retrieved successfully");
-        responseDTO.setStatus(HttpStatus.OK.value());
-        responseDTO.setSuccess(true);
+        ResponseDTO<List<QuestionResponseDTO>> response = new ResponseDTO<>();
+        response.setData(questionMapper.toResponseList(questionPage.getContent()));
+        response.setMessage("Questions retrieved successfully");
+        response.setStatus(HttpStatus.OK.value());
+        response.setSuccess(true);
 
-        responseDTO.setTotal((int) questionPage.getTotalElements());
-        responseDTO.setPage(page);
-        responseDTO.setPageSize(pageSize);
-        return ResponseEntity.ok(responseDTO);
+        response.setTotal((int) questionPage.getTotalElements());
+        response.setPage(page);
+        response.setPageSize(pageSize);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

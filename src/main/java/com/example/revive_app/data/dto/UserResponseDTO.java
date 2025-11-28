@@ -12,6 +12,7 @@ public class UserResponseDTO {
     private String username;
     private String email;
     private boolean enabled;
+    private Long personId;
     private Set<Role> roles;
     private boolean notifications;
     private String avatar;

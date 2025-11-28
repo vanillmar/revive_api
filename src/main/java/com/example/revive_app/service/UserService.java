@@ -1,13 +1,12 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.service;
 
-import com.example.revive_app.data.dto.UserRequestDTO;
-import com.example.revive_app.data.mapper.UserMapper;
 import com.example.revive_app.exception.EmailAlreadyExistsException;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.exception.UsernameAlreadyExistsException;
 import com.example.revive_app.model.User;
 import com.example.revive_app.repository.UserRepository;
+import com.example.revive_app.repository.specifications.UserSpecifications;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,25 +17,26 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserMapper userMapper;
 
     @Value("${app.upload.dir}")
     private String uploadDir;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userMapper = userMapper;
     }
 
     public boolean existsById(UUID id) {
@@ -59,7 +59,7 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAll(UserSpecifications.isNotDeleted());
         if (users.isEmpty())
             throw new ResourceNotFoundException("No users found");
         return users;
@@ -74,7 +74,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User create(UserRequestDTO user) {
+    public User create(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("Username is already taken");
         }
@@ -85,20 +85,22 @@ public class UserService {
             throw new IllegalArgumentException("Email is already in use");
         }
 
-        return userRepository.save(toEntity(user));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        return userRepository.save(user);
     }
 
-    public List<User> createUsers(List<UserRequestDTO> usersDTO) {
-        return userRepository.saveAll(usersDTO.stream().map(this::toEntity).toList());
+    public List<User> createUsers(List<User> users) {
+        return userRepository.saveAll(users);
     }
+
     @Transactional
-    public User update(UUID id, UserRequestDTO dto) {
+    public User update(UUID id, User incoming) {
         if (id == null)
             throw new IllegalArgumentException("User ID cannot be null");
         // 1. Retrieve the existing user
         User existing = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
-        User incoming = userMapper.toEntity(dto);
         // 2. Check if the new username is already taken by another user
         if (userRepository.findByUsernameAndIdNot(incoming.getUsername(), id).isPresent()) {
             throw new UsernameAlreadyExistsException("Username '" + incoming.getUsername() + "' is already taken.");
@@ -122,22 +124,18 @@ public class UserService {
         return userRepository.save(existing);
     }
 
-    public List<User> updateUsers(List<UserRequestDTO> users) {
-        return userRepository.saveAll(users.stream().map(this::toEntity).toList());
+    public List<User> updateUsers(List<User> users) {
+        return userRepository.saveAll(users);
     }
 
-    public boolean deleteUser(UUID id) {
-        return userRepository.findById(id).map(user -> {
-            userRepository.delete(user);
-            return true;
-        }).orElse(false);
-    }
-
-    private User toEntity(UserRequestDTO userRequest) {
-        User user = new User(userRequest.getUsername(), passwordEncoder.encode(userRequest.getPassword()),
-                userRequest.getEmail());
-        user.setRoles(userRequest.getRoles());
-        return user;
+    @Transactional
+    public boolean deleteById(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        user.setDeleted(currentUser);
+        user.setEnabled(false);
+        return userRepository.save(user) != null;
     }
 
     public Long getTotalUsers() {
@@ -183,7 +181,16 @@ public class UserService {
         } catch (IOException e) {
             throw new java.io.UncheckedIOException("Error saving file", e);
         }
+    }
 
+    public Page<User> findAllWithFilters(String search, Pageable pageable) {
+        if (search == null || search.isEmpty()) {
+            // Combine specifications
+            Specification<User> spec = UserSpecifications.isNotDeleted().and(UserSpecifications.searchByUser(search));
+
+            return userRepository.findAll(spec, pageable);
+        }
+        return userRepository.findByUserContainingIgnoreCase(UserSpecifications.isNotDeleted(), search, pageable);
     }
 
 }

@@ -97,14 +97,27 @@ public class AddressController {
 
     @PostMapping
     public ResponseEntity<ResponseDTO<AddressResponseDTO>> create(@RequestBody AddressRequestDTO dto) {
-        AddressResponseDTO addressResponse = addressMapper.toResponse(addressService.create(dto));
+        Address address = addressMapper.toEntity(dto);
+        AddressResponseDTO addressResponse = addressMapper.toResponse(addressService.create(address));
         ResponseDTO<AddressResponseDTO> response = new ResponseDTO<>();
         response.setData(addressResponse);
         response.setMessage("Address created successfully.");
         response.setStatus(HttpStatus.CREATED.value());
         response.setSuccess(true);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<ResponseDTO<List<Address>>> bulkInsertAddresses(@RequestBody List<AddressRequestDTO> dtos) {
+        List<Address> addresses = addressMapper.toListEntities(dtos);
+        List<Address> savedAddresses = addressService.bulkInsertAddresses(addresses);
+        ResponseDTO<List<Address>> response = new ResponseDTO<>();
+        response.setData(savedAddresses);
+        response.setMessage("Addresses created successfully.");
+        response.setStatus(HttpStatus.CREATED.value());
+        response.setSuccess(true);
+        response.setTotal(savedAddresses.size());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{id}")

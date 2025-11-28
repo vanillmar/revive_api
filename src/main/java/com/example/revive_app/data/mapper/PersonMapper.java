@@ -8,12 +8,12 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ContactInfoMapper.class, AddressMapper.class})
 public interface PersonMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "contactInfos", ignore = true)
-    @Mapping(target = "addresses", ignore = true)
+    @Mapping(source = "addresses", target = "addresses", qualifiedByName = "toAddressListEntity")
+    @Mapping(source = "contactInfos", target = "contactInfos", qualifiedByName = "toContactInfoListEntity")
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "deleted", ignore = true)
     Person toEntity(PersonRequestDTO dto);

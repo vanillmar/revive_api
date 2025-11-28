@@ -35,7 +35,5 @@ public class UserRequestDTO extends BaseAuditableEntity {
 
     private boolean notifications; // Email Notification
 
-    private String bio;
-
     private Long personId;
 }

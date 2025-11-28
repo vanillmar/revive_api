@@ -6,6 +6,7 @@ import com.example.revive_app.data.mapper.ContactInfoMapper;
 import com.example.revive_app.exception.ResourceNotFoundException;
 import com.example.revive_app.model.ContactInfo;
 import com.example.revive_app.repository.ContactInfoRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,6 +46,11 @@ public class ContactInfoService {
     public ContactInfo create(ContactInfoRequestDTO dto) {
         ContactInfo contactInfo = contactInfoMapper.toEntity(dto);
         return contactInfoRepository.save(contactInfo);
+    }
+    @Transactional
+    public List<ContactInfo> bulkInsertContacts(List<ContactInfo> contacts) {
+        // Save all Contacts in bulk
+        return contactInfoRepository.saveAll(contacts);
     }
 
     public ContactInfo update(Long id, ContactInfoRequestDTO dto) {

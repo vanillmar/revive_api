@@ -6,6 +6,7 @@ import com.example.revive_app.data.dto.AuthRequest;
 import com.example.revive_app.data.dto.AuthResponse;
 import com.example.revive_app.data.dto.UserRequestDTO;
 import com.example.revive_app.data.mapper.AuthRegisterMapper;
+import com.example.revive_app.data.mapper.UserMapper;
 import com.example.revive_app.model.Role;
 import com.example.revive_app.model.User;
 import java.util.Optional;
@@ -25,14 +26,16 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthRegisterMapper authRegisterMapper;
     private final RoleService roleService;
+    private final UserMapper userMapper;
+
     public AuthService(AuthenticationManager authenticationManager, JwtService jwtService, UserService userService,
-            AuthRegisterMapper authRegisterMapper, RoleService roleService) {
+            AuthRegisterMapper authRegisterMapper, RoleService roleService, UserMapper userMapper) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userService = userService;
         this.authRegisterMapper = authRegisterMapper;
         this.roleService = roleService;
-
+        this.userMapper = userMapper;
     }
 
     public AuthResponse authenticate(AuthRequest request) throws AuthenticationException {
@@ -52,10 +55,11 @@ public class AuthService {
 
         UserRequestDTO userRequestDTO = authRegisterMapper.toUserRequestDTO(request);
         userRequestDTO.setRoles(roles);
-        User user = userService.create(userRequestDTO);
+        User user = userMapper.toEntity(userRequestDTO);
+        User userSaved = userService.create(user);
 
         Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), userRequestDTO.getPassword()));
+                new UsernamePasswordAuthenticationToken(userSaved.getUsername(), userRequestDTO.getPassword()));
         UserDetails authenticatedUser = (UserDetails) auth.getPrincipal();
         String jwt = jwtService.generateAccessToken(authenticatedUser);
         String refreshToken = jwtService.generateRefreshToken(authenticatedUser);

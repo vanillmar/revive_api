@@ -73,8 +73,9 @@ public class PersonController {
 
     @PostMapping
     public ResponseEntity<ResponseDTO<PersonResponseDTO>> create(@RequestBody PersonRequestDTO dto) {
-        Person person = personService.create(dto);
-        PersonResponseDTO personResponse = personMapper.toResponse(person);
+        Person person = personMapper.toEntity(dto);
+        Person personSaved = personService.create(person);
+        PersonResponseDTO personResponse = personMapper.toResponse(personSaved);
         ResponseDTO<PersonResponseDTO> response = new ResponseDTO<>();
         response.setData(personResponse);
         response.setMessage("Person created successfully.");

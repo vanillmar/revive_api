@@ -5,11 +5,12 @@ import com.example.revive_app.data.dto.AuthRegisterRequestDTO;
 import com.example.revive_app.data.dto.AuthRequest;
 import com.example.revive_app.data.dto.AuthResponse;
 import com.example.revive_app.data.dto.ResponseDTO;
-import com.example.revive_app.data.dto.RoleResponseDTO;
+import com.example.revive_app.model.Role;
 import com.example.revive_app.service.AuthService;
 import com.example.revive_app.service.JwtService;
 import com.example.revive_app.service.RoleService;
 import java.util.Map;
+import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -81,13 +82,14 @@ public class AuthController {
     }
 
     @PostMapping("/roles")
-    public ResponseEntity<ResponseDTO<RoleResponseDTO>> getRoles() {
-        ResponseDTO<RoleResponseDTO> response = new ResponseDTO<>();
-        RoleResponseDTO data = new RoleResponseDTO(roleService.getAllRoles());
+    public ResponseEntity<ResponseDTO<Set<Role>>> getRoles() {
+        ResponseDTO<Set<Role>> response = new ResponseDTO<>();
+        Set<Role> roles = roleService.getAllRoles();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Roles fetched successfully");
         response.setSuccess(true);
-        response.setData(data);
+        response.setData(roles);
+        response.setTotal(roles.size());
         return ResponseEntity.ok(response);
     }
 }

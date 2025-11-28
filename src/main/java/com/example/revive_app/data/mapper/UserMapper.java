@@ -19,9 +19,12 @@ public interface UserMapper {
     @Mapping(target = "avatar", ignore = true)
     @Mapping(target = "deleted", ignore = true)
     User toEntity(UserRequestDTO request);
+
+    @Mapping(source = "person.id", target = "personId")
+    UserResponseDTO toResponse(User user);
+
     List<User> toEntityList(List<UserRequestDTO> requests);
 
-    UserResponseDTO toResponse(User user);
     List<UserResponseDTO> toResponseList(List<User> users);
 
     @Named("idToPerson")

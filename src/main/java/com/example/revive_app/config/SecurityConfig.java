@@ -28,16 +28,18 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/uploads/**").permitAll().requestMatchers("/api/exams/**").permitAll()
-                        .requestMatchers("/api/questions/**").permitAll().requestMatchers("/api/subjects/**")
-                        .permitAll().requestMatchers("/api/exams/**").permitAll().requestMatchers("/api/addresses/**")
+                .authorizeHttpRequests(auth -> auth
+                        // Public endpoints
+                        .requestMatchers("/api/auth/**").permitAll().requestMatchers("/api/uploads/**").permitAll()
+                        .requestMatchers("/api/exams/**").permitAll().requestMatchers("/api/questions/**").permitAll()
+                        .requestMatchers("/api/subjects/**").permitAll().requestMatchers("/api/addresses/**")
                         .permitAll().requestMatchers("/api/persons/**").permitAll().requestMatchers("/api/contacts/**")
                         .permitAll().requestMatchers("/api/exam-statuses/**").permitAll()
                         .requestMatchers("/api/users/**").permitAll().requestMatchers("/api/students/**").permitAll()
-                        .requestMatchers("/api/addresses/**").authenticated().requestMatchers("/api/admin/**")
-                        .hasRole("ADMIN")
+                        // Admin endpoints
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
+                        // All other requests need authentication
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }

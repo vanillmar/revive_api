@@ -4,13 +4,19 @@ import java.util.Optional;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Configuration
 public class AuditConfig {
 
     @Bean
     public AuditorAware<String> auditorProvider() {
-        // Replace this with your actual authentication logic
-        return () -> Optional.of("system"); // e.g. SecurityContextHolder.getContext().getAuthentication().getName()
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return () -> Optional.of("anonymous"); // Ou null, dependendo da sua lógica
+        }
+        // Assuma que o principal é o username ou email do usuário do token JWT
+        return () -> Optional.of(authentication.getName());
     }
 }
