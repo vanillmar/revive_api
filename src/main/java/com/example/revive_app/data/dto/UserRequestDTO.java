@@ -1,12 +1,14 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.data.dto;
 
-import com.example.revive_app.model.BaseAuditableEntity;
-import com.example.revive_app.model.Role;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import java.util.Set;
 import java.util.UUID;
+
+import com.example.revive_app.model.BaseAuditableEntity;
+import com.example.revive_app.model.Role;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,5 +37,5 @@ public class UserRequestDTO extends BaseAuditableEntity {
 
     private boolean notifications; // Email Notification
 
-    private Long personId;
+    private PersonRequestDTO person;
 }
