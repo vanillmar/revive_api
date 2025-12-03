@@ -1,10 +1,17 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.controller;
 
+import com.example.revive_app.data.Permissions;
+import com.example.revive_app.data.dto.ResponseDTO;
+import com.example.revive_app.data.dto.UserRequestDTO;
+import com.example.revive_app.data.dto.UserResponseDTO;
+import com.example.revive_app.data.mapper.UserMapper;
+import com.example.revive_app.exception.ResourceNotFoundException;
+import com.example.revive_app.model.User;
+import com.example.revive_app.service.UserService;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,19 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.revive_app.data.Permissions;
-import com.example.revive_app.data.dto.ResponseDTO;
-import com.example.revive_app.data.dto.UserRequestDTO;
-import com.example.revive_app.data.dto.UserResponseDTO;
-import com.example.revive_app.data.mapper.UserMapper;
-import com.example.revive_app.exception.ResourceNotFoundException;
-import com.example.revive_app.model.User;
-import com.example.revive_app.service.UserService;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-
 
     private final UserService userService;
     private final UserMapper userMapper;

@@ -2,7 +2,6 @@
 package com.example.revive_app.data.dto;
 
 import com.example.revive_app.model.BaseAuditableEntity;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +17,7 @@ public class AuthRegisterRequestDTO extends BaseAuditableEntity {
     private String password;
     private int roleId;
     private boolean isActive;
-    private boolean notifications; 
+    private boolean notifications;
     private boolean enabled;
     private Long personId;
 }
