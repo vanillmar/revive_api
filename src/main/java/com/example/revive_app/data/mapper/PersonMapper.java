@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {ContactInfoMapper.class, AddressMapper.class})
 public interface PersonMapper {
+
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "addresses", target = "addresses", qualifiedByName = "toAddressListEntity")
     @Mapping(source = "contactInfos", target = "contactInfos", qualifiedByName = "toContactInfoListEntity")
@@ -17,8 +18,7 @@ public interface PersonMapper {
     @Mapping(target = "deleted", ignore = true)
     Person toEntity(PersonRequestDTO dto);
 
-    @Mapping(source = "addresses", target = "addresses")
-    @Mapping(source = "contactInfos", target = "contactInfos")
+    @Mapping(target = "deleted", ignore = true)
     PersonResponseDTO toResponse(Person entity);
 
     List<Person> toListEntity(List<PersonRequestDTO> dtos);
