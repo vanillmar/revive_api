@@ -12,20 +12,13 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "Spring")
 public interface AuthRegisterMapper {
     @Mapping(target = "id", ignore = true) // ID is not present in source; can be set to null or generated elsewhere
-    @Mapping(source = "username", target = "username")
-    @Mapping(source = "email", target = "email")
-    @Mapping(source = "password", target = "password")
-    @Mapping(target = "enabled", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "roles", expression = "java(mapRoles(source.getRoleId()))")
     UserRequestDTO toUserRequestDTO(AuthRegisterRequestDTO source);
 
-    // Default method to handle roleId to Set<Role> mapping
-    // Assumes Role has a no-arg constructor and a setter for ID (adjust if Role's
-    // ID type differs;
-    // here assuming Integer/Long)
     default Set<Role> mapRoles(int roleId) {
         Role role = new Role();
-        role.setId((long) roleId); // Cast to Long if Role ID is Long; adjust based on actual Role model
+        role.setId((long) roleId);
         return new HashSet<>(Set.of(role));
     }
 }
