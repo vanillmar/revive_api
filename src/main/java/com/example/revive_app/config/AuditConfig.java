@@ -14,9 +14,8 @@ public class AuditConfig {
     public AuditorAware<String> auditorProvider() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            return () -> Optional.of("anonymous"); // Ou null, dependendo da sua lógica
+            return () -> Optional.of("anonymous");
         }
-        // Assuma que o principal é o username ou email do usuário do token JWT
         return () -> Optional.of(authentication.getName());
     }
 }
