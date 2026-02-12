@@ -21,14 +21,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final AuthRegisterMapper authRegisterMapper;
     private final RoleService roleService;
     private final UserMapper userMapper;
 
-    public AuthService(AuthenticationManager authenticationManager, JwtService jwtService, UserService userService,
+    public AuthService(AuthenticationManager authenticationManager, JwtService jwtService, UserServiceImpl userService,
             AuthRegisterMapper authRegisterMapper, RoleService roleService, UserMapper userMapper) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
