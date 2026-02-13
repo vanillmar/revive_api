@@ -1,6 +1,17 @@
 /* Copyright (C)2025  Vanilson Marcos */
 package com.example.revive_app.controller;
 
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.revive_app.data.dto.AuthRegisterRequestDTO;
 import com.example.revive_app.data.dto.AuthRequest;
 import com.example.revive_app.data.dto.AuthResponse;
@@ -9,15 +20,6 @@ import com.example.revive_app.model.Role;
 import com.example.revive_app.service.AuthService;
 import com.example.revive_app.service.JwtService;
 import com.example.revive_app.service.RoleService;
-import java.util.Map;
-import java.util.Set;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
